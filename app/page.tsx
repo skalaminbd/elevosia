@@ -1,70 +1,59 @@
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
-import { Badge } from "@/components/ui/badge";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { DashboardMockup } from "@/components/blocks/dashboard-mockup";
+import { ScaleToFit } from "@/components/blocks/scale-to-fit";
+import { SiteFooter } from "@/components/kit/watermelon/site-footer";
+import { SiteHeader } from "@/components/kit/watermelon/site-header";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
-export default function DesignTestPage() {
+export const metadata: Metadata = {
+  title: "Elevosia — Run your whole business from one screen",
+  description:
+    "Custom dashboards for growing service businesses. Staff, clients, jobs, invoices and numbers in one place, with a client portal and website connected to it.",
+};
+
+export default function HomePage() {
   return (
-    <main className="mx-auto w-full max-w-5xl space-y-12 px-4 py-12 sm:px-6">
-      <header className="flex items-center justify-between">
-        <span className="font-heading text-xl font-bold">elevosia</span>
-        <ThemeToggle />
-      </header>
+    <>
+      <SiteHeader />
 
-      <section className="space-y-4">
-        <h1 className="text-4xl font-bold sm:text-5xl">Make every client count.</h1>
-        <p className="max-w-2xl text-lg text-muted-foreground">
-          Body text is Inter. The heading above is Geist. Buttons use Inter too.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Button>Primary</Button>
-          <Button variant="highlight">Highlight</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="destructive">Delete</Button>
-          <Button variant="link">Link</Button>
-        </div>
-      </section>
+      <main className="relative overflow-hidden">
+        <section className="relative mx-auto w-full max-w-7xl px-4 pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-24 lg:pb-16">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+              <span className="size-1.5 rounded-full bg-highlight" />
+              Custom dashboards for growing service businesses
+            </span>
 
-      <section className="space-y-3">
-        <h2 className="text-2xl font-semibold">Status badges</h2>
-        <div className="flex flex-wrap gap-2">
-          <Badge className="bg-success/10 text-success">Paid</Badge>
-          <Badge className="bg-warning/10 text-warning">Pending</Badge>
-          <Badge className="bg-info/10 text-info">In review</Badge>
-          <Badge className="bg-destructive/10 text-destructive">Overdue</Badge>
-          <Badge variant="outline">Draft</Badge>
-        </div>
-      </section>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+              Run your whole business from one screen.
+            </h1>
 
-      <section className="grid gap-6 sm:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>New client</CardTitle>
-            <CardDescription>White card on cream background.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Company name</Label>
-              <Input id="name" placeholder="Acme Inc." />
+            <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
+              We build the dashboard your team uses every day, around the way
+              you already work. Staff, clients, jobs, invoices and numbers in
+              one place, with a client portal and website connected to it.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Button asChild>
+                <Link href="/start">Start a project</Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/demo">Try the live demo</Link>
+              </Button>
             </div>
-            <Button className="w-full">Save client</Button>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card className="bg-accent">
-          <CardHeader>
-            <CardTitle>Accent surface</CardTitle>
-            <CardDescription>Soft lime tint for highlights.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="font-mono text-sm">INV-2026-0042 · $4,800.00</p>
-          </CardContent>
-        </Card>
-      </section>
-    </main>
+          <div className="mt-12 lg:mt-16">
+            <ScaleToFit designWidth={1152}>
+              <DashboardMockup />
+            </ScaleToFit>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </>
   );
 }
