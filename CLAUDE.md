@@ -84,10 +84,12 @@ Rules:
 - Body and buttons: Inter (`font-sans`, the default)
 - Headings: Geist (`font-heading`). h1 to h4 get it automatically
 - Code, IDs, numbers in tables: Geist Mono (`font-mono`)
+- Eyebrow: always `<Eyebrow>` from `@/components/shared/Eyebrow`, never hand-rolled markup. Style: tinted pill with `rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-success` — no border, no icon or dot inside, same in light and dark mode, on every page. Inside dark sections use `<Eyebrow tone="inverse">` (`bg-highlight/10 text-highlight`)
 - Fonts load only in `app/layout.tsx`
 
 | Use | Classes |
 |---|---|
+| Eyebrow | `rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-success` |
 | Hero title | `text-4xl sm:text-5xl lg:text-6xl font-bold` |
 | Page title | `text-3xl font-semibold` |
 | Section title | `text-2xl font-semibold` |

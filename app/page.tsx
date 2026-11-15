@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DashboardMockup } from "@/components/blocks/dashboard-mockup";
+import { ModulesSection } from "@/components/blocks/modules-section";
+import { PictureThisSection } from "@/components/blocks/picture-this-section";
 import { ScaleToFit } from "@/components/blocks/scale-to-fit";
+import { StorySection } from "@/components/blocks/story-section";
+import { WhatWeBuildSection } from "@/components/blocks/what-we-build-section";
 import { SiteFooter } from "@/components/kit/watermelon/site-footer";
 import { SiteHeader } from "@/components/kit/watermelon/site-header";
+import { Eyebrow } from "@/components/shared/Eyebrow";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -20,10 +25,7 @@ export default function HomePage() {
       <main className="relative overflow-hidden">
         <section className="relative mx-auto w-full max-w-7xl px-4 pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-24 lg:pb-16">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-highlight" />
-              Custom dashboards for growing service businesses
-            </span>
+            <Eyebrow>Custom dashboards for growing service businesses</Eyebrow>
 
             <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Run your whole business from one screen.
@@ -51,6 +53,14 @@ export default function HomePage() {
             </ScaleToFit>
           </div>
         </section>
+
+        <StorySection />
+
+        <PictureThisSection />
+
+        <WhatWeBuildSection />
+
+        <ModulesSection />
       </main>
 
       <SiteFooter />

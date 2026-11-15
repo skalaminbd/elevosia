@@ -6,6 +6,7 @@ import { ArrowRight, Lock, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { SocialAuthButtons } from "@/components/shared/SocialAuthButtons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -43,14 +44,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Button type="button" variant="outline" className="h-12">
-          Continue with Google
-        </Button>
-        <Button type="button" variant="outline" className="h-12">
-          Continue with OTP
-        </Button>
-      </div>
+      <SocialAuthButtons />
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />

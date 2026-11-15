@@ -278,10 +278,24 @@ function megaPanel(menu: MegaMenu) {
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
+    let lastY = window.scrollY;
+
     function onScroll() {
-      setScrolled(window.scrollY > 8);
+      const y = window.scrollY;
+      setScrolled(y > 8);
+
+      if (y <= 8) {
+        setHidden(false);
+      } else if (y > lastY + 6) {
+        setHidden(true);
+      } else if (y < lastY - 6) {
+        setHidden(false);
+      }
+
+      lastY = y;
     }
 
     onScroll();
@@ -293,7 +307,8 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-colors",
+        "sticky top-0 z-50 w-full transition-[transform,colors] duration-300 ease-out motion-reduce:transition-none",
+        hidden ? "-translate-y-full" : "translate-y-0",
         "has-[[data-state=open]]:bg-card",
       )}
     >
@@ -304,7 +319,7 @@ export function SiteHeader() {
           scrolled ? "opacity-100" : "opacity-0",
         )}
       />
-      <div className="mx-auto flex h-14 w-full max-w-7xl lg:h-21 items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 md:h-18.5 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary font-heading text-base font-bold text-primary-foreground">
             e

@@ -30,6 +30,18 @@
   --success: #2f8f5b;
   --warning: #d97706;
   --info: #2563eb;
+  --destructive-foreground: #ffffff;
+  --success-foreground: #ffffff;
+  --warning-foreground: #ffffff;
+  --info-foreground: #ffffff;
+  --module-staff: #378add;
+  --module-bookings: #1d9e75;
+  --module-clients: #d85a30;
+  --module-invoices: #639922;
+  --module-reports: #ba7517;
+  --module-portal: #d4537e;
+  --module-operations: #5f5e5a;
+  --module-ai: #7f77dd;
   --border: #e3e1d6;
   --input: #e3e1d6;
   --ring: var(--brand-forest);
@@ -70,6 +82,18 @@
   --success: #4ade80;
   --warning: #f59e0b;
   --info: #60a5fa;
+  --destructive-foreground: var(--brand-forest);
+  --success-foreground: var(--brand-forest);
+  --warning-foreground: var(--brand-forest);
+  --info-foreground: var(--brand-forest);
+  --module-staff: #378add;
+  --module-bookings: #1d9e75;
+  --module-clients: #d85a30;
+  --module-invoices: #639922;
+  --module-reports: #ba7517;
+  --module-portal: #d4537e;
+  --module-operations: #5f5e5a;
+  --module-ai: #7f77dd;
   --border: rgb(255 255 255 / 10%);
   --input: rgb(255 255 255 / 15%);
   --ring: var(--brand-lime);
@@ -114,6 +138,19 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-info: var(--info);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info-foreground: var(--info-foreground);
+  --color-module-staff: var(--module-staff);
+  --color-module-bookings: var(--module-bookings);
+  --color-module-clients: var(--module-clients);
+  --color-module-invoices: var(--module-invoices);
+  --color-module-reports: var(--module-reports);
+  --color-module-portal: var(--module-portal);
+  --color-module-operations: var(--module-operations);
+  --color-module-ai: var(--module-ai);
+  --animate-fade-in: fade-in 200ms ease-out;
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -141,6 +178,15 @@
   --radius-lg: var(--radius);
   --radius-xl: var(--radius);
   --radius-2xl: var(--radius);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @layer base {
