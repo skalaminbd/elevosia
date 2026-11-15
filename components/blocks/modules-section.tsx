@@ -289,12 +289,12 @@ function ModulePanel({
         {module.description}
       </p>
 
-      <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+      <ul className="mt-5 grid grid-cols-2 gap-3">
         {module.chips.map(({ label, icon: Icon }) => (
           <li
             key={label}
             className={cn(
-              "flex items-center gap-2 rounded-lg border px-4 py-3 text-sm",
+              "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm",
               module.classes.chip,
             )}
           >
@@ -326,9 +326,9 @@ function ModulePanel({
 
 export function ModulesSection() {
   return (
-    <section className="py-16 sm:py-24">
+    <section className="pt-8 pb-16 sm:py-24">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-left md:text-center">
           <Eyebrow>Dashboard modules</Eyebrow>
 
           <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
@@ -412,7 +412,7 @@ export function ModulesSection() {
             ))}
           </Accordion>
 
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-start">
             <Button asChild>
               <Link href="/demo">
                 See them in the live demo

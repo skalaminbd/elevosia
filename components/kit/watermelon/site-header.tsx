@@ -416,7 +416,7 @@ export function SiteHeader() {
                 <Menu className="size-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:max-w-sm">
+            <SheetContent side="left" className="w-full!">
               <SheetHeader className="border-b border-border">
                 <SheetTitle className="font-heading text-lg">elevosia</SheetTitle>
                 <SheetDescription className="sr-only">
