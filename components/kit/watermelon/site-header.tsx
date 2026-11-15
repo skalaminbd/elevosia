@@ -418,7 +418,7 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="left" className="w-full!">
               <SheetHeader className="border-b border-border">
-                <SheetTitle className="font-heading text-lg">elevosia</SheetTitle>
+                <SheetTitle className="font-heading text-xl">elevosia</SheetTitle>
                 <SheetDescription className="sr-only">
                   Site navigation
                 </SheetDescription>
@@ -436,18 +436,18 @@ export function SiteHeader() {
                       value={menu.id}
                       className="border-border"
                     >
-                      <AccordionTrigger className="rounded-lg px-0 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:no-underline">
+                      <AccordionTrigger className="rounded-lg px-0 py-2.5 text-base font-medium text-foreground/80 hover:text-foreground hover:no-underline">
                         {menu.label}
                       </AccordionTrigger>
                       <AccordionContent className="flex h-auto! flex-col gap-4 pb-4 [&_a]:no-underline!">
                         <div className="flex flex-col">
                           <Link
                             href={menu.href}
-                            className="text-sm font-semibold text-foreground"
+                            className="text-base font-semibold text-foreground"
                           >
                             {menu.title}
                           </Link>
-                          <p className="mt-1 text-sm text-muted-foreground">
+                          <p className="mt-1 text-base text-muted-foreground">
                             {menu.description}
                           </p>
                           <div className="mt-0.5 flex flex-wrap gap-2">
@@ -457,7 +457,7 @@ export function SiteHeader() {
                                 asChild
                                 variant="outline"
                                 size="sm"
-                                className="h-7 rounded-full px-3 text-xs"
+                                className="h-8 rounded-full px-3 text-sm"
                               >
                                 <Link href={chip.href}>{chip.label}</Link>
                               </Button>
@@ -471,7 +471,7 @@ export function SiteHeader() {
                               key={column.title}
                               className="flex flex-col gap-3 last:pb-4"
                             >
-                              <span className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
+                              <span className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
                                 {column.title}
                               </span>
                               <div className="flex flex-col gap-2 border-l border-border pl-4">
@@ -479,7 +479,7 @@ export function SiteHeader() {
                                   <Link
                                     key={`${column.title}-${link.label}`}
                                     href={link.href}
-                                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                                    className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
                                   >
                                     {link.label}
                                   </Link>
@@ -497,7 +497,7 @@ export function SiteHeader() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="border-b border-border py-2.5 text-sm font-medium text-foreground/80 transition-colors last:border-b-0 hover:text-foreground"
+                    className="border-b border-border py-2.5 text-base font-medium text-foreground/80 transition-colors last:border-b-0 hover:text-foreground"
                   >
                     {link.label}
                   </Link>
@@ -505,13 +505,13 @@ export function SiteHeader() {
               </nav>
 
               <SheetFooter>
-                <Button asChild variant="outline">
+                <Button asChild variant="outline" className="text-base">
                   <Link href="/login">
                     <User className="size-4" aria-hidden="true" />
                     Login
                   </Link>
                 </Button>
-                <Button asChild>
+                <Button asChild className="text-base">
                   <Link href="/start">Start a project</Link>
                 </Button>
               </SheetFooter>

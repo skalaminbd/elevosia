@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { Eyebrow } from "@/components/shared/Eyebrow";
+import { ShineBorder } from "@/components/ui/shine-border";
 
 const BEFORE = [
   "Five tabs to answer one question",
@@ -53,7 +54,19 @@ export function PictureThisSection() {
             </ul>
           </div>
 
-          <div className="rounded-lg border border-highlight bg-highlight/5 p-6">
+          <div className="relative overflow-hidden rounded-lg bg-highlight/5 p-6">
+            <ShineBorder
+              borderWidth={1}
+              duration={24}
+              shineColor={[
+                "var(--highlight)",
+                "var(--accent)",
+                "var(--highlight)",
+                "var(--success)",
+                "var(--highlight)",
+              ]}
+            />
+
             <h3 className="text-lg font-semibold text-highlight">
               After Elevosia
             </h3>

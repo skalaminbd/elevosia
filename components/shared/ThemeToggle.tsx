@@ -1,21 +1,35 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const emptySubscribe = () => () => {};
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
 
+  // False during SSR and hydration, true afterwards. Keeps the first client
+  // render identical to the server markup instead of flipping on hydration.
+  const isClient = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+
+  const theme = isClient && resolvedTheme === "dark" ? "dark" : "light";
+
   return (
-    <Button
-      variant="ghost"
-      size="icon"
+    <AnimatedThemeToggler
+      theme={theme}
+      onThemeChange={setTheme}
       aria-label="Toggle theme"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-    >
-      <Moon className="size-4 dark:hidden" />
-      <Sun className="hidden size-4 dark:block" />
-    </Button>
+      className={cn(
+        buttonVariants({ variant: "ghost", size: "icon" }),
+        "[&_svg]:size-4",
+      )}
+    />
   );
 }

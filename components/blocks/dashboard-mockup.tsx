@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowUpRight,
   BarChart3,
@@ -12,6 +14,10 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { ShineBorder } from "@/components/ui/shine-border";
+import { LiveNumber } from "@/components/blocks/live-number";
+import { cn } from "@/lib/utils";
 
 const NAV = [
   { icon: LayoutDashboard, label: "Dashboard", active: true },
@@ -25,7 +31,7 @@ const NAV = [
 const STATS = [
   {
     label: "Revenue (30d)",
-    value: "$48.2k",
+    live: { value: 48.2, prefix: "$", suffix: "k", decimals: 1, step: 0.3 },
     delta: "+12.4%",
     trend: "up" as const,
     note: "vs last month",
@@ -33,7 +39,7 @@ const STATS = [
   },
   {
     label: "Open jobs",
-    value: "28",
+    live: { value: 28, step: 1, min: 24 },
     delta: "6 due today",
     trend: "flat" as const,
     note: "across 4 crews",
@@ -41,7 +47,7 @@ const STATS = [
   },
   {
     label: "Invoices due",
-    value: "$12.6k",
+    live: { value: 12.6, prefix: "$", suffix: "k", decimals: 1, step: 0.2 },
     delta: "3 overdue",
     trend: "down" as const,
     note: "$4.8k past 30d",
@@ -49,7 +55,7 @@ const STATS = [
   },
   {
     label: "Team utilisation",
-    value: "87%",
+    live: { value: 87, suffix: "%", step: 1, min: 80, max: 96 },
     delta: "+4%",
     trend: "up" as const,
     note: "this week",
@@ -64,13 +70,15 @@ const REVENUE_MIX = [
 ];
 
 const MINI_STATS = [
-  { label: "New clients", value: "+6", note: "this month" },
-  { label: "Jobs completed", value: "42", note: "this month" },
-  { label: "Avg. invoice", value: "$1.8k", note: "paid in 6 days" },
-  { label: "Client rating", value: "4.9", note: "from 38 reviews" },
+  { label: "New clients", live: { value: 6, prefix: "+", step: 1, min: 4 }, note: "this month" },
+  { label: "Jobs completed", live: { value: 42, step: 1, min: 38 }, note: "this month" },
+  { label: "Avg. invoice", live: { value: 1.8, prefix: "$", suffix: "k", decimals: 1, step: 0.1 }, note: "paid in 6 days" },
+  { label: "Client rating", live: { value: 4.9, decimals: 1, step: 0.1, max: 5 }, note: "from 38 reviews" },
 ];
 
 function Sparkline({ path, className }: { path: string; className: string }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <svg
       viewBox="0 0 100 32"
@@ -81,9 +89,20 @@ function Sparkline({ path, className }: { path: string; className: string }) {
       <path
         d={path}
         fill="none"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        className={cn(className, "opacity-30")}
+      />
+      <motion.path
+        d={path}
+        fill="none"
         strokeWidth="2"
         strokeLinecap="round"
+        pathLength={100}
+        strokeDasharray="22 78"
         className={className}
+        animate={reduceMotion ? undefined : { strokeDashoffset: [124, 0] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
       />
     </svg>
   );
@@ -142,12 +161,26 @@ function AiSummary() {
 }
 
 export function DashboardMockup() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div
       role="img"
       aria-label="Preview of the Elevosia dashboard with revenue, jobs, invoices and an AI summary"
-      className="mx-auto w-full max-w-6xl overflow-hidden rounded-lg border border-white/10 bg-[var(--brand-forest)] text-white shadow-md"
+      className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-lg border border-white/10 bg-[var(--brand-forest)] text-white shadow-md"
     >
+      <ShineBorder
+        borderWidth={1}
+        duration={24}
+        shineColor={[
+          "var(--highlight)",
+          "var(--accent)",
+          "var(--highlight)",
+          "var(--success)",
+          "var(--highlight)",
+        ]}
+      />
+
       <div className="flex">
         <aside className="flex w-52 shrink-0 flex-col gap-1 border-r border-white/10 bg-black/20 p-4">
           <div className="mb-4 flex items-center gap-2">
@@ -195,7 +228,15 @@ export function DashboardMockup() {
               <h3 className="font-heading text-xl font-semibold">
                 Business overview
               </h3>
-              <p className="mt-1 text-xs text-white/50">
+              <p className="mt-1 flex items-center gap-1.5 text-xs text-white/50">
+                <span className="relative flex size-1.5">
+                  <span className="absolute inset-0 rounded-full bg-success" />
+                  <motion.span
+                    className="absolute inset-0 rounded-full bg-success"
+                    animate={{ scale: [1, 2.6, 1], opacity: [0.7, 0, 0.7] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </span>
                 Updated today, 9:42 AM · Demo data
               </p>
             </div>
@@ -219,7 +260,7 @@ export function DashboardMockup() {
               >
                 <p className="text-xs text-white/50">{stat.label}</p>
                 <p className="mt-1 font-heading text-2xl font-semibold">
-                  {stat.value}
+                  <LiveNumber {...stat.live} />
                 </p>
                 <div className="mt-1 flex items-center gap-2">
                   <Trend trend={stat.trend} label={stat.delta} />
@@ -291,6 +332,17 @@ export function DashboardMockup() {
                     strokeLinecap="round"
                     className="stroke-highlight"
                   />
+                  <motion.path
+                    d="M0 152 C40 144 60 128 90 132 C120 136 150 104 180 108 C210 112 240 74 270 82 C300 90 330 116 360 102 C390 88 420 50 450 58 C480 66 510 44 540 34 C570 24 590 30 600 24"
+                    fill="none"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    pathLength={100}
+                    strokeDasharray="18 82"
+                    className="stroke-white"
+                    animate={reduceMotion ? undefined : { strokeDashoffset: [124, 0] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                  />
                   <path
                     d="M0 168 C60 160 120 156 180 150 C240 144 300 140 360 134 C420 128 480 122 540 114 C560 112 580 110 600 108"
                     fill="none"
@@ -334,35 +386,50 @@ export function DashboardMockup() {
                     strokeWidth="14"
                     className="stroke-white/10"
                   />
-                  <circle
+                  <motion.circle
                     cx="50"
                     cy="50"
                     r="40"
                     fill="none"
                     strokeWidth="14"
-                    strokeDasharray="130.6 251.2"
                     transform="rotate(-90 50 50)"
                     className="stroke-chart-2"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : { strokeDasharray: ["130.6 251.2", "118 251.2", "130.6 251.2"] }
+                    }
+                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  <circle
+                  <motion.circle
                     cx="50"
                     cy="50"
                     r="40"
                     fill="none"
                     strokeWidth="14"
-                    strokeDasharray="70.3 251.2"
                     transform="rotate(97.2 50 50)"
                     className="stroke-info"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : { strokeDasharray: ["70.3 251.2", "82 251.2", "70.3 251.2"] }
+                    }
+                    transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  <circle
+                  <motion.circle
                     cx="50"
                     cy="50"
                     r="40"
                     fill="none"
                     strokeWidth="14"
-                    strokeDasharray="50.2 251.2"
                     transform="rotate(198 50 50)"
                     className="stroke-warning"
+                    animate={
+                      reduceMotion
+                        ? undefined
+                        : { strokeDasharray: ["50.2 251.2", "60 251.2", "50.2 251.2"] }
+                    }
+                    transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
                   />
                   <text
                     x="50"
@@ -392,7 +459,12 @@ export function DashboardMockup() {
                     className="flex items-center justify-between text-xs"
                   >
                     <span className="flex items-center gap-2 text-white/70">
-                      <span className={`size-2 rounded-full ${item.className}`} />
+                      <span
+                        className={cn(
+                          "size-2 rounded-full animate-pulse-soft motion-reduce:animate-none",
+                          item.className,
+                        )}
+                      />
                       {item.label}
                     </span>
                     <span className="flex items-center gap-3">
@@ -415,7 +487,7 @@ export function DashboardMockup() {
               >
                 <p className="text-[11px] text-white/50">{item.label}</p>
                 <p className="mt-1 font-heading text-lg font-semibold">
-                  {item.value}
+                  <LiveNumber {...item.live} />
                 </p>
                 <p className="text-[11px] text-white/40">{item.note}</p>
               </div>

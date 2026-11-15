@@ -125,9 +125,13 @@ export function WhatWeBuildSection() {
                   <TabsTrigger
                     key={value}
                     value={value}
-                    className="h-auto w-full cursor-pointer justify-start rounded-none border-x-0! border-t-0! border-b-0 border-border px-0 py-4 text-left text-xl font-normal whitespace-normal text-muted-foreground shadow-none! after:hidden hover:bg-transparent hover:text-foreground not-last:border-b data-active:bg-transparent! data-active:font-semibold data-active:text-primary data-active:border-b-foreground! dark:data-active:border-b-foreground!"
+                    className="group h-auto w-full cursor-pointer justify-start rounded-none border-x-0! border-t-0! border-b-0 border-border px-0 py-4 text-left text-xl font-normal whitespace-normal text-muted-foreground shadow-none! outline-none! after:hidden transition-colors duration-300 focus:outline-none focus-visible:border-transparent focus-visible:bg-muted focus-visible:ring-0 focus-visible:outline-none hover:bg-transparent hover:text-foreground not-last:border-b data-active:bg-transparent! data-active:font-semibold data-active:text-primary data-active:border-b-foreground! dark:data-active:border-b-foreground!"
                   >
                     {label}
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-primary transition-transform duration-300 group-data-[state=active]:scale-x-100 motion-reduce:transition-none"
+                    />
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -135,7 +139,11 @@ export function WhatWeBuildSection() {
 
             <div className="col-span-3">
               {ITEMS.map((item) => (
-                <TabsContent key={item.value} value={item.value} className="mt-0">
+                <TabsContent
+                  key={item.value}
+                  value={item.value}
+                  className="mt-0 data-[state=active]:animate-fade-up data-[state=active]:motion-reduce:animate-none"
+                >
                   <ItemPanel item={item} />
                 </TabsContent>
               ))}

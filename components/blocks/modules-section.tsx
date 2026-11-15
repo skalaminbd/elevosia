@@ -2,47 +2,20 @@
 
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
-  BadgeCheck,
-  BellRing,
   BookUser,
-  Briefcase,
-  CalendarCheck,
   CalendarDays,
-  CalendarOff,
-  CalendarPlus,
   ChartColumn,
-  CheckCheck,
   ChevronDown,
-  Clock,
-  Contact,
-  CreditCard,
-  FileBarChart,
-  FileText,
-  Globe,
-  History,
-  Languages,
-  Layers,
-  LineChart,
-  ListChecks,
-  Mail,
-  MapPin,
-  MessageCircleQuestion,
-  MessageSquare,
-  Package,
+  CircleCheck,
   Receipt,
-  RefreshCw,
-  Shield,
   Smartphone,
   Sparkles,
-  Truck,
-  UserPlus,
   Users,
   Warehouse,
-  Zap,
   type LucideIcon,
 } from "lucide-react";
+import { ModulePreview } from "@/components/blocks/module-previews";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import {
   Accordion,
@@ -60,21 +33,18 @@ import {
 } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-type Chip = { label: string; icon: LucideIcon };
-
 type Module = {
   value: string;
   title: string;
-  description: string;
+  benefit: string;
+  checklist: string[];
   icon: LucideIcon;
-  chips: Chip[];
   isNew?: boolean;
   classes: {
     tile: string;
     solid: string;
-    panel: string;
-    chip: string;
     accent: string;
+    preview: string;
   };
 };
 
@@ -82,155 +52,135 @@ const MODULES: Module[] = [
   {
     value: "staff",
     title: "Staff & scheduling",
-    description: "Roles, shifts, availability, time off and tasks.",
-    icon: Users,
-    chips: [
-      { label: "Roles", icon: Shield },
-      { label: "Shifts", icon: Clock },
-      { label: "Availability", icon: CalendarCheck },
-      { label: "Time off", icon: CalendarOff },
-      { label: "Tasks", icon: ListChecks },
+    benefit: "Build the week in minutes. Everyone knows where to be.",
+    checklist: [
+      "Roles and permissions",
+      "Drag-and-drop shifts",
+      "Availability and time off",
+      "Tasks per shift",
     ],
+    icon: Users,
     classes: {
       tile: "bg-module-staff/15 text-module-staff",
       solid: "bg-module-staff",
-      panel: "bg-module-staff/12",
-      chip: "border border-module-staff/20 bg-module-staff/15",
       accent: "text-module-staff",
+      preview: "bg-module-staff/10",
     },
   },
   {
     value: "bookings",
     title: "Services & bookings",
-    description: "Service catalog, online booking, jobs and status.",
-    icon: CalendarDays,
-    chips: [
-      { label: "Service catalog", icon: Layers },
-      { label: "Online booking", icon: Globe },
-      { label: "Jobs", icon: Briefcase },
-      { label: "Status tracking", icon: Activity },
+    benefit: "Let clients book online while you sleep.",
+    checklist: [
+      "Service catalog",
+      "Online booking",
+      "Jobs and status",
+      "Automatic reminders",
     ],
+    icon: CalendarDays,
     classes: {
       tile: "bg-module-bookings/15 text-module-bookings",
       solid: "bg-module-bookings",
-      panel: "bg-module-bookings/12",
-      chip: "border border-module-bookings/20 bg-module-bookings/15",
       accent: "text-module-bookings",
+      preview: "bg-module-bookings/10",
     },
   },
   {
     value: "clients",
     title: "Clients & CRM",
-    description: "Client records, leads, follow-ups and full history.",
-    icon: BookUser,
-    chips: [
-      { label: "Client records", icon: Contact },
-      { label: "Leads", icon: UserPlus },
-      { label: "Follow-ups", icon: BellRing },
-      { label: "Full history", icon: History },
+    benefit: "Every client, lead and follow-up in one place.",
+    checklist: [
+      "Client records",
+      "Lead tracking",
+      "Follow-up reminders",
+      "Full history",
     ],
+    icon: BookUser,
     classes: {
       tile: "bg-module-clients/15 text-module-clients",
       solid: "bg-module-clients",
-      panel: "bg-module-clients/12",
-      chip: "border border-module-clients/20 bg-module-clients/15",
       accent: "text-module-clients",
+      preview: "bg-module-clients/10",
     },
   },
   {
     value: "invoices",
     title: "Invoices & payments",
-    description: "Quotes, invoices, online payments and QuickBooks sync.",
+    benefit: "Get paid faster, with less chasing.",
+    checklist: ["Quotes", "Invoices", "Online payments", "QuickBooks sync"],
     icon: Receipt,
-    chips: [
-      { label: "Quotes", icon: FileText },
-      { label: "Invoices", icon: Receipt },
-      { label: "Online payments", icon: CreditCard },
-      { label: "QuickBooks sync", icon: RefreshCw },
-    ],
     classes: {
       tile: "bg-module-invoices/15 text-module-invoices",
       solid: "bg-module-invoices",
-      panel: "bg-module-invoices/12",
-      chip: "border border-module-invoices/20 bg-module-invoices/15",
       accent: "text-module-invoices",
+      preview: "bg-module-invoices/10",
     },
   },
   {
     value: "reports",
     title: "Reports & KPIs",
-    description: "Live numbers, custom reports and scheduled emails.",
+    benefit: "Know your numbers without opening a spreadsheet.",
+    checklist: ["Live numbers", "Custom reports", "Scheduled emails"],
     icon: ChartColumn,
-    chips: [
-      { label: "Live numbers", icon: Activity },
-      { label: "Custom reports", icon: FileBarChart },
-      { label: "Scheduled emails", icon: Mail },
-    ],
     classes: {
       tile: "bg-module-reports/15 text-module-reports",
       solid: "bg-module-reports",
-      panel: "bg-module-reports/12",
-      chip: "border border-module-reports/20 bg-module-reports/15",
       accent: "text-module-reports",
+      preview: "bg-module-reports/10",
     },
   },
   {
     value: "portal",
     title: "Client portal",
-    description: "Clients log in to book, pay, approve and message.",
-    icon: Smartphone,
-    chips: [
-      { label: "Book", icon: CalendarPlus },
-      { label: "Pay", icon: CreditCard },
-      { label: "Approve", icon: CheckCheck },
-      { label: "Message", icon: MessageSquare },
+    benefit: "Give clients a place to book, pay and approve.",
+    checklist: [
+      "Book appointments",
+      "Pay invoices",
+      "Approve quotes",
+      "Message your team",
     ],
+    icon: Smartphone,
     classes: {
       tile: "bg-module-portal/15 text-module-portal",
       solid: "bg-module-portal",
-      panel: "bg-module-portal/12",
-      chip: "border border-module-portal/20 bg-module-portal/15",
       accent: "text-module-portal",
+      preview: "bg-module-portal/10",
     },
   },
   {
     value: "operations",
     title: "Operations",
-    description: "Inventory, vendors, documents, approvals and locations.",
-    icon: Warehouse,
-    chips: [
-      { label: "Inventory", icon: Package },
-      { label: "Vendors", icon: Truck },
-      { label: "Documents", icon: FileText },
-      { label: "Approvals", icon: BadgeCheck },
-      { label: "Locations", icon: MapPin },
+    benefit: "Stock, vendors and paperwork, under control.",
+    checklist: [
+      "Inventory",
+      "Vendors",
+      "Documents and approvals",
+      "Multiple locations",
     ],
+    icon: Warehouse,
     classes: {
       tile: "bg-module-operations/15 text-module-operations",
       solid: "bg-module-operations",
-      panel: "bg-module-operations/12",
-      chip: "border border-module-operations/20 bg-module-operations/15",
       accent: "text-module-operations",
+      preview: "bg-module-operations/10",
     },
   },
   {
     value: "ai",
     title: "AI assistant",
-    description: "Ask questions about your business in plain English.",
+    benefit: "Ask your business anything. Get answers in seconds.",
+    checklist: [
+      "Ask in plain English",
+      "Instant answers",
+      "Insights from your data",
+    ],
     icon: Sparkles,
     isNew: true,
-    chips: [
-      { label: "Ask anything", icon: MessageCircleQuestion },
-      { label: "Instant answers", icon: Zap },
-      { label: "Insights from your data", icon: LineChart },
-      { label: "Plain English", icon: Languages },
-    ],
     classes: {
       tile: "bg-module-ai/15 text-module-ai",
       solid: "bg-module-ai",
-      panel: "bg-module-ai/12",
-      chip: "border border-module-ai/20 bg-module-ai/15",
       accent: "text-module-ai",
+      preview: "bg-module-ai/10",
     },
   },
 ];
@@ -248,78 +198,76 @@ function ModuleIconTile({
     <span
       className={cn(
         "flex shrink-0 items-center justify-center rounded-lg",
-        size === "lg" ? "size-12 text-white" : "size-7",
-        size === "lg" ? module.classes.solid : module.classes.tile,
+        size === "lg" ? "size-11" : "size-7",
+        size === "lg"
+          ? cn(module.classes.solid, "text-white")
+          : module.classes.tile,
       )}
     >
-      <Icon className={size === "lg" ? "size-6" : "size-4"} aria-hidden="true" />
+      <Icon className={size === "lg" ? "size-5" : "size-4"} aria-hidden="true" />
     </span>
   );
 }
 
-function ModulePanel({
-  module,
-  index,
-  showFooter,
-}: {
-  module: Module;
-  index: number;
-  showFooter: boolean;
-}) {
+function ModulePanel({ module, index }: { module: Module; index: number }) {
   return (
-    <div
-      className={cn(
-        "flex min-h-85 h-full flex-col rounded-lg p-6 sm:p-8",
-        module.classes.panel,
-      )}
-    >
-      <div className="flex items-center gap-4">
-        <ModuleIconTile module={module} size="lg" />
+    <div className="grid gap-7 rounded-lg border border-border bg-card p-5 md:grid-cols-9 md:grid-rows-[1fr_auto] md:p-7">
+      <div className="md:col-span-4 md:col-start-1 md:row-start-1">
+        <div className="flex items-center gap-3">
+          <ModuleIconTile module={module} size="lg" />
 
-        <div>
-          <p className={cn("text-xs font-medium", module.classes.accent)}>
-            Module {String(index + 1).padStart(2, "0")}
-          </p>
+          <div>
+            <p className={cn("text-xs font-medium", module.classes.accent)}>
+              Module {String(index + 1).padStart(2, "0")}
+            </p>
 
-          <h3 className="mt-1 text-xl font-semibold">{module.title}</h3>
+            <h3 className="text-xl font-medium">{module.title}</h3>
+          </div>
+        </div>
+
+        <p className="mt-4 text-base">{module.benefit}</p>
+
+        <ul className="mt-4">
+          {module.checklist.map((item) => (
+            <li
+              key={item}
+              className="flex items-center gap-2 border-b border-dashed border-border py-2.5 text-sm last:border-0"
+            >
+              <CircleCheck
+                className={cn("size-4 shrink-0", module.classes.accent)}
+                aria-hidden="true"
+              />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="h-full md:col-span-5 md:col-start-5 md:row-span-2 md:row-start-1">
+        <div
+          className={cn(
+            "flex h-full animate-fade-up flex-col justify-center rounded-lg p-4 group-data-[state=active]:animate-fade-up group-data-[state=active]:motion-reduce:animate-none motion-reduce:animate-none",
+            module.classes.preview,
+          )}
+        >
+          <ModulePreview module={module.value} />
         </div>
       </div>
 
-      <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-        {module.description}
-      </p>
-
-      <ul className="mt-5 grid grid-cols-2 gap-3">
-        {module.chips.map(({ label, icon: Icon }) => (
-          <li
-            key={label}
-            className={cn(
-              "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm",
-              module.classes.chip,
-            )}
-          >
-            <Icon
-              className={cn("size-4 shrink-0", module.classes.accent)}
-              aria-hidden="true"
-            />
-            <span>{label}</span>
-          </li>
-        ))}
-      </ul>
-
-      {showFooter ? (
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-8">
-          <p className="text-xs text-muted-foreground">
-            {index + 1} of {MODULES.length} modules
-          </p>
+      <div className="md:col-span-4 md:col-start-1 md:row-start-2">
+        <div className="flex flex-wrap items-center gap-4 pt-1 md:pt-7">
           <Button asChild>
             <Link href="/demo">
               See them in the live demo
               <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </Button>
+
+          <p className="text-xs text-muted-foreground">
+            {index + 1} of {MODULES.length}
+          </p>
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }
@@ -328,12 +276,21 @@ export function ModulesSection() {
   return (
     <section className="pt-8 pb-16 sm:py-24">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-left md:text-center">
-          <Eyebrow>Dashboard modules</Eyebrow>
+        <div className="grid gap-6 md:grid-cols-2 md:items-end md:gap-12">
+          <div>
+            <Eyebrow>Dashboard modules</Eyebrow>
 
-          <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Pick what you need. Add more as you grow.
-          </h2>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+              Pick what you need. Add more as you grow.
+            </h2>
+          </div>
+
+          <p className="max-w-md text-base text-muted-foreground md:justify-self-end">
+            Every module runs on the same dashboard, the same data and the same
+            login, so staff, clients, jobs and invoices never live in two
+            places. Start with what you need today and switch on more as the
+            business grows. Pick a module to see what is inside.
+          </p>
         </div>
 
         <div className="mt-12 hidden md:block">
@@ -366,9 +323,9 @@ export function ModulesSection() {
                   key={module.value}
                   value={module.value}
                   forceMount
-                  className="mt-0 h-full w-full data-[state=inactive]:hidden data-[state=active]:animate-fade-in data-[state=active]:motion-reduce:animate-none"
+                  className="group mt-0 h-full w-full data-[state=inactive]:hidden"
                 >
-                  <ModulePanel module={module} index={index} showFooter />
+                  <ModulePanel module={module} index={index} />
                 </TabsContent>
               ))}
             </div>
@@ -402,11 +359,7 @@ export function ModulesSection() {
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-5 [&_a]:no-underline [&_a:hover]:text-primary-foreground!">
-                  <ModulePanel
-                    module={module}
-                    index={index}
-                    showFooter={false}
-                  />
+                  <ModulePanel module={module} index={index} />
                 </AccordionContent>
               </AccordionItem>
             ))}

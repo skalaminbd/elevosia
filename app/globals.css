@@ -1,3 +1,9 @@
+@property --shine-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -150,7 +156,8 @@
   --color-module-portal: var(--module-portal);
   --color-module-operations: var(--module-operations);
   --color-module-ai: var(--module-ai);
-  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-fade-up: fade-up 250ms ease-out;
+  --animate-pulse-soft: pulse-soft 4s ease-in-out infinite;
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -178,15 +185,69 @@
   --radius-lg: var(--radius);
   --radius-xl: var(--radius);
   --radius-2xl: var(--radius);
+  --animate-shine: shine-spin var(--duration) infinite linear;
+  @keyframes shine-spin {
+    to {
+      --shine-angle: 360deg;
+    }
+  }
 }
 
-@keyframes fade-in {
+@keyframes pulse-soft {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fade-up {
   from {
     opacity: 0;
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
+}
+
+@keyframes point-fill-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@utility dot-grid {
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+@utility point-fill {
+  animation-name: point-fill-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@utility shine-mask {
+  background-image: conic-gradient(
+    from var(--shine-angle),
+    transparent 0deg,
+    var(--shine-tone) 120deg,
+    transparent 200deg,
+    transparent 360deg
+  );
+  padding: var(--border-width);
+  mask: linear-gradient(white 0 0) content-box, linear-gradient(white 0 0);
+  -webkit-mask: linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
 }
 
 @layer base {
@@ -205,4 +266,8 @@
   h4 {
     @apply font-heading tracking-tight;
   }
+}
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
 }

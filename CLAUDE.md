@@ -22,10 +22,11 @@ Four sources are allowed. Each has one job. Pick in this order.
 | 2 | Watermelon UI (ui.watermelon.sh) | Dashboard layouts, landing blocks, animated sections | `npx shadcn@latest add https://registry.watermelon.sh/r/<name>.json` |
 | 3 | OpenSourceUI (opensourceui.in) | Widgets, loaders, device mockups, social cards | Copy source by hand |
 | 4 | OriginKit (originkit.dev) | Hero effects and showy marketing animation only | Copy source by hand |
+| 5 | vengenceui
 
 Rules:
 - Never take a primitive (button, input, select, dialog) from sources 2 to 4. Use the shadcn one and keep the layout
-- No other UI library. Not allowed: MUI, Chakra, Mantine, Ant Design, DaisyUI, Bootstrap, Aceternity, Magic UI, styled-components, emotion
+- No other UI library. Not allowed: MUI, Chakra, Mantine, Ant Design, DaisyUI, Bootstrap, styled-components, emotion
 - Do not install a package without asking. Each imported component lists its own dependencies. Tell me what it needs first
 
 ## Folder structure
