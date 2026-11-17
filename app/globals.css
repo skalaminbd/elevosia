@@ -159,8 +159,6 @@
   --animate-fade-up: fade-up 250ms ease-out;
   --animate-pulse-soft: pulse-soft 4s ease-in-out infinite;
   --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
-  --animate-marquee: marquee var(--duration) infinite linear;
-  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   --animate-ripple: ripple 2.4s ease-in-out infinite;
   --color-border: var(--border);
   --color-input: var(--input);
@@ -215,15 +213,6 @@
   50%,
   100% {
     opacity: 0;
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(calc(-100% - var(--gap)));
   }
 }
 
@@ -379,15 +368,6 @@
   }
   50% {
     transform: translate(-50%, -50%) scale(0.9);
-  }
-}
-
-@keyframes marquee-vertical {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(calc(-100% - var(--gap)));
   }
 }
 
