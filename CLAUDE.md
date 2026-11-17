@@ -103,14 +103,17 @@ Rules:
 The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pattern. Every marketing page uses this hero and this type scale — do not invent a new hero or a new heading size per page.
 
 ### Hero
-Full-bleed brand band, centred display headline, lead line, then the page's live visual.
+Full-bleed brand band. Two layouts are allowed — pick one per page, never invent a third:
+
+- **Centered** (Custom Dashboards): text in `mx-auto max-w-4xl text-center`, visual below, bleeding off the bottom edge (`pb-0`).
+- **Split** (About): `grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16`, content left-aligned in `lg:col-span-7`, visual in `lg:col-span-5`; stacks content-first on mobile.
 
 | Part | Classes |
 |---|---|
 | Band | `relative overflow-hidden bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground` |
 | Texture | `line-grid` overlay, `opacity-[0.07]`, masked to the top |
 | Container | `mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24`. Use `pb-0` when the visual bleeds off the bottom edge |
-| Text block | `mx-auto max-w-4xl text-center` |
+| Text block | Centered: `mx-auto max-w-4xl text-center`. Split: `lg:col-span-7`, left aligned, lead `max-w-xl` |
 | Eyebrow | `<Eyebrow tone="inverse">` |
 | H1 | `mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance` |
 | Lead | `mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75` |

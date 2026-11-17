@@ -7,8 +7,8 @@ import { useInViewLoop } from "@/hooks/use-in-view-loop";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 /**
- * The shared page hero: full-bleed brand band, centred display headline, lead
- * line, and the live visual below.
+ * The page hero on the shared brand band: content on the left, the live visual
+ * on the right, splitting to a stack on small screens.
  */
 export function AboutHero() {
   const reduceMotion = useReducedMotion();
@@ -22,26 +22,28 @@ export function AboutHero() {
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24">
-        <div className="mx-auto max-w-4xl text-center">
-          <Eyebrow tone="inverse">{aboutHero.eyebrow}</Eyebrow>
-          <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
-            {aboutHero.title}
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
-            {heroLead}
-          </p>
-        </div>
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+          <div className="lg:col-span-7">
+            <Eyebrow tone="inverse">{aboutHero.eyebrow}</Eyebrow>
+            <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.2vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.04em] text-balance">
+              {aboutHero.title}
+            </h1>
+            <p className="mt-6 max-w-xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
+              {heroLead}
+            </p>
+          </div>
 
-        <div ref={ref} className="relative mt-14 lg:mt-20">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -inset-x-8 top-0 h-40 bg-highlight/20 blur-3xl"
-          />
-          <div className="relative mx-auto max-w-2xl">
-            <BrowserFlip
-              active={inView && !reduceMotion}
-              reduceMotion={reduceMotion}
+          <div ref={ref} className="relative lg:col-span-5">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-6 rounded-3xl bg-highlight/20 blur-3xl"
             />
+            <div className="relative">
+              <BrowserFlip
+                active={inView && !reduceMotion}
+                reduceMotion={reduceMotion}
+              />
+            </div>
           </div>
         </div>
       </div>
