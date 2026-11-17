@@ -52,12 +52,12 @@ export function RemoteTeamSection() {
             <Eyebrow>{remote.eyebrow}</Eyebrow>
           </Reveal>
           <Reveal delay={0.07}>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+            <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
               {remote.title}
             </h2>
           </Reveal>
           <Reveal delay={0.14}>
-            <p className="mt-5 text-base text-muted-foreground">{remote.body}</p>
+            <p className="mt-5 text-base text-muted-foreground sm:text-lg">{remote.body}</p>
           </Reveal>
         </div>
 

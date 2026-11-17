@@ -54,7 +54,7 @@ export function PricingSection() {
               <Eyebrow>{pricing.eyebrow}</Eyebrow>
             </Reveal>
             <Reveal delay={0.07}>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+              <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
                 {pricing.title}
               </h2>
             </Reveal>

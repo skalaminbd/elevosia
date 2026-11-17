@@ -433,7 +433,7 @@ export function HowItWorksSection() {
               <div>
                 <Eyebrow tone="inverse">How it works</Eyebrow>
 
-                <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+                <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] sm:text-5xl">
                   From messy to managed in three steps
                 </h2>
 

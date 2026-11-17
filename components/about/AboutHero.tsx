@@ -25,7 +25,7 @@ export function AboutHero() {
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
           <div className="lg:col-span-7">
             <Eyebrow tone="inverse">{aboutHero.eyebrow}</Eyebrow>
-            <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.2vw,4.75rem)] leading-[0.98] font-bold tracking-[-0.04em] text-balance">
+            <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
               {aboutHero.title}
             </h1>
             <p className="mt-6 max-w-xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">

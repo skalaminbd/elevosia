@@ -33,10 +33,10 @@ export default function HomePage() {
 
       <main className="relative overflow-x-clip">
         <section className="relative mx-auto w-full max-w-7xl px-4 py-15 sm:px-6 md:py-20 lg:px-8 lg:py-25">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           <Eyebrow>Custom dashboards for growing service businesses</Eyebrow>
 
-          <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
             Run your whole business from one screen.
           </h1>
 

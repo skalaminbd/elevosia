@@ -88,16 +88,27 @@ Rules:
 - Eyebrow: always `<Eyebrow>` from `@/components/shared/Eyebrow`, never hand-rolled markup. Style: tinted pill with `rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-success` — no border, no icon or dot inside, same in light and dark mode, on every page. Inside dark sections use `<Eyebrow tone="inverse">` (`bg-highlight/10 text-highlight`)
 - Fonts load only in `app/layout.tsx`
 
+**The type scale is identical on every page.** Do not adjust a heading size per page or per section. If a new size is genuinely needed, change this table first and then apply it everywhere.
+
 | Use | Classes |
 |---|---|
-| Eyebrow | `rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-success` |
-| Hero title | `text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] tracking-[-0.04em] font-bold` |
-| Section title (H2) | `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl` |
-| Sub-heading | `text-2xl font-semibold sm:text-3xl` |
+| H1, page hero | `text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] tracking-[-0.04em] font-bold text-balance` |
+| H2, section title | `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl` |
+| H2, closing band | `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl lg:text-6xl` |
+| H3, section sub-heading / large item | `text-2xl font-heading font-semibold tracking-tight sm:text-3xl` |
+| List item title | `text-xl font-heading font-semibold tracking-tight sm:text-2xl` |
 | Card title | `text-lg font-semibold` |
-| Body | `text-base`, section intros `text-base sm:text-lg` |
+| Section intro | `text-base text-muted-foreground sm:text-lg` |
+| Body | `text-base` |
 | Small, labels | `text-sm` |
 | Meta | `text-xs text-muted-foreground` |
+| Price, IDs, numbers | `font-mono tabular-nums` |
+| Eyebrow | `rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-success` |
+
+Rules:
+- Never use `text-3xl` for a section heading; the section H2 is always `text-4xl … sm:text-5xl`.
+- Headings are `font-heading` (Geist). `h1`–`h4` inherit it automatically, but keep it explicit on custom H1s.
+- Auth screens are exempt from the hero scale; they use `text-2xl` page titles.
 
 ## Marketing page pattern (use on every page)
 The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pattern. Every marketing page uses this hero and this type scale — do not invent a new hero or a new heading size per page.
@@ -122,9 +133,7 @@ Full-bleed brand band. Two layouts are allowed — pick one per page, never inve
 | Visual | `mt-14 lg:mt-20`, lime glow `absolute bg-highlight/20 blur-3xl`, window `rounded-t-xl border border-b-0 border-primary-foreground/15 bg-card shadow-md`, `mx-auto max-w-5xl` |
 
 ### Section rules
-- Section H2: `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl`. Never `text-3xl` for a section heading.
-- Section intro: `text-base text-muted-foreground sm:text-lg`
-- Closing band H2: `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl lg:text-6xl`
+- Headings, intros and card titles follow the type-scale table above exactly — every page uses the same sizes.
 - Surfaces follow the theme: light cards in light mode, dark cards in dark mode. Only full-bleed brand bands (hero, closing) stay dark in both.
 - Sections alternate layout (split, ruled list, full-width band, sticky sequence) and each carries one live item.
 

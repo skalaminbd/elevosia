@@ -55,7 +55,7 @@ export function BeliefsSection() {
                     style={{ animationDelay: `${index * 0.35}s` }}
                     aria-hidden="true"
                   />
-                  <h3 className="mt-4 font-heading text-xl font-semibold text-foreground">
+                  <h3 className="mt-4 text-lg font-semibold text-foreground">
                     {belief.title}
                   </h3>
                   <p className="mt-2 text-sm text-muted-foreground">

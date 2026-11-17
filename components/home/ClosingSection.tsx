@@ -48,7 +48,7 @@ export function ClosingSection() {
         <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
           <div ref={ref} className="lg:col-span-5">
             <Reveal>
-              <h2 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl">
+              <h2 className="font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl lg:text-6xl">
                 {closing.title}
               </h2>
             </Reveal>

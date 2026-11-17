@@ -137,7 +137,7 @@ export function ModuleLibrary() {
                     {String(library.modules.length).padStart(2, "0")} modules
                   </p>
                 </div>
-                <h3 className="mt-3 font-heading text-3xl font-bold tracking-[-0.02em] text-foreground sm:text-4xl">
+                <h3 className="mt-3 font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                   {selected.name}
                 </h3>
 
