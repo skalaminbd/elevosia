@@ -58,18 +58,15 @@ export function ModuleLibrary() {
               const isActive = active === index;
 
               return (
-                <li key={module.id} className="relative border-b border-border">
-                  {isActive ? (
-                    <span
-                      aria-hidden="true"
-                      className="absolute top-0 left-0 h-full w-0.5 bg-primary"
-                    />
-                  ) : null}
+                <li key={module.id} className="border-b border-border">
                   <button
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => pick(index)}
-                    className="flex w-full items-center gap-5 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    className={cn(
+                      "flex w-full items-center gap-5 border-l-2 py-5 pl-[15px] text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+                      isActive ? "border-primary" : "border-transparent",
+                    )}
                   >
                     <span className="font-mono text-xs text-muted-foreground">
                       {String(index + 1).padStart(2, "0")}
@@ -99,7 +96,7 @@ export function ModuleLibrary() {
                     )}
                   >
                     <div className="overflow-hidden">
-                      <ul className="flex flex-col gap-2 pb-4 pl-10">
+                      <ul className="flex flex-col gap-2 pb-4 pl-16">
                         {module.features.map((feature) => (
                           <li
                             key={feature}

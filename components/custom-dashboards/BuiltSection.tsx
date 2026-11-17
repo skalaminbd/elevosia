@@ -40,12 +40,12 @@ export function BuiltSection() {
         </div>
 
         <div ref={ref} className="lg:col-span-5">
-          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-primary-foreground/15 bg-primary text-primary-foreground shadow-md dark:border-border dark:bg-secondary dark:text-foreground">
-            <div className="flex items-center gap-2 border-b border-primary-foreground/15 px-4 py-3 dark:border-border">
-              <span className="size-2 rounded-full bg-primary-foreground/25 dark:bg-muted-foreground/40" />
-              <span className="size-2 rounded-full bg-primary-foreground/25 dark:bg-muted-foreground/40" />
-              <span className="size-2 rounded-full bg-primary-foreground/25 dark:bg-muted-foreground/40" />
-              <span className="ml-2 font-mono text-[11px] text-primary-foreground/60">
+          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-md">
+            <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+              <span className="size-2 rounded-full bg-muted-foreground/30" />
+              <span className="size-2 rounded-full bg-muted-foreground/30" />
+              <span className="size-2 rounded-full bg-muted-foreground/30" />
+              <span className="ml-2 font-mono text-[11px] text-muted-foreground">
                 security-check.sh
               </span>
             </div>
@@ -61,24 +61,24 @@ export function BuiltSection() {
                   style={{ animationDelay: `${index * 0.55}s` }}
                 >
                   <Check
-                    className="mt-0.5 size-3.5 shrink-0 text-highlight"
+                    className="mt-0.5 size-3.5 shrink-0 text-success"
                     aria-hidden="true"
                   />
-                  <span className="text-primary-foreground/85 dark:text-foreground/85">
+                  <span className="text-foreground/85">
                     {line}
                   </span>
                 </li>
               ))}
               <li
                 aria-hidden="true"
-                className="mt-1 flex items-center gap-2 text-primary-foreground/50"
+                className="mt-1 flex items-center gap-2 text-muted-foreground"
               >
                 <span>$</span>
-                <span className="inline-block h-3 w-1.5 animate-blink-cursor bg-highlight" />
+                <span className="inline-block h-3 w-1.5 animate-blink-cursor bg-primary" />
               </li>
             </ul>
 
-            <p className="border-t border-primary-foreground/15 px-4 py-2.5 text-[11px] text-primary-foreground/60 dark:border-border dark:text-muted-foreground">
+            <p className="border-t border-border px-4 py-2.5 text-[11px] text-muted-foreground">
               Runs nightly. Results go to your inbox.
             </p>
           </div>

@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 
 function Chip({ label }: { label: string }) {
   return (
-    <span className="flex items-center gap-2 rounded-full border border-highlight-foreground/25 px-4 py-2 text-sm font-medium whitespace-nowrap text-highlight-foreground">
-      <Check className="size-3.5 shrink-0" aria-hidden="true" />
+    <span className="flex items-center gap-2 rounded-full border border-highlight-foreground/25 px-4 py-2 text-sm font-medium whitespace-nowrap text-highlight-foreground dark:border-foreground/20 dark:text-foreground">
+      <Check className="size-3.5 shrink-0 dark:text-highlight" aria-hidden="true" />
       {label}
     </span>
   );
@@ -26,13 +26,13 @@ export function IncludedSection() {
   const running = inView && !reduceMotion;
 
   return (
-    <Section className="bg-highlight text-highlight-foreground">
+    <Section className="bg-highlight text-highlight-foreground dark:bg-secondary dark:text-foreground">
       <div ref={ref}>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="max-w-2xl font-heading text-4xl font-bold tracking-tight text-balance sm:text-5xl">
             {included.title}
           </h2>
-          <p className="max-w-xs text-sm text-highlight-foreground/75">
+          <p className="max-w-xs text-sm text-highlight-foreground/75 dark:text-foreground/70">
             Every build includes all of it. No add-ons, no per-seat maths.
           </p>
         </div>
