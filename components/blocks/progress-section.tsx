@@ -1,25 +1,21 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
 } from "motion/react";
-import {
-  ArrowRight,
-  Check,
+import {Check,
   CircleCheck,
   Eye,
   Folder,
   Lock,
   MessageSquare,
   MousePointer2,
-  Palette,
-} from "lucide-react";
+  Palette} from "lucide-react";
 import { Eyebrow } from "@/components/shared/Eyebrow";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 import { cn } from "@/lib/utils";
 
 const POINTS = [
@@ -317,7 +313,7 @@ export function ProgressSection() {
   const ringOffset = 100.5 - (view.ring / 100) * 100.5;
 
   return (
-    <section ref={sectionRef} className="py-12 sm:py-16">
+    <section ref={sectionRef} className="py-15 md:py-20 lg:py-25">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex w-full flex-col items-center text-center">
           <Eyebrow>No more &quot;how&apos;s it going?&quot; emails</Eyebrow>
@@ -601,12 +597,9 @@ export function ProgressSection() {
             })}
           </ul>
 
-          <Button asChild className="mt-8">
-            <Link href="/demo">
-              See how it works
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-          </Button>
+          <ButtonLink href="/demo" className="mt-8">
+            See how it works
+          </ButtonLink>
         </div>
       </div>
     </section>

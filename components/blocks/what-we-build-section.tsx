@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import {
   Accordion,
@@ -9,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 import {
   Tabs,
   TabsContent,
@@ -100,16 +99,16 @@ function ItemPanel({ item }: { item: Item }) {
         {item.body}
       </p>
 
-      <Button asChild className="mt-1 lg:mt-4">
-        <Link href={item.cta.href}>{item.cta.label}</Link>
-      </Button>
+      <ButtonLink href={item.cta.href} className="mt-1 lg:mt-4">
+        {item.cta.label}
+      </ButtonLink>
     </>
   );
 }
 
 export function WhatWeBuildSection() {
   return (
-    <section className="py-16 sm:py-24">
+    <section className="py-15 md:py-20 lg:py-25">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="hidden lg:block">
           <Tabs

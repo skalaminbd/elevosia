@@ -18,7 +18,7 @@ const AFTER = [
 
 export function PictureThisSection() {
   return (
-    <section className="bg-primary py-16 text-primary-foreground sm:py-24 dark:bg-secondary dark:text-foreground">
+    <section className="bg-primary py-15 text-primary-foreground md:py-20 lg:py-25 dark:bg-secondary dark:text-foreground">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <Eyebrow tone="inverse">Now picture this</Eyebrow>

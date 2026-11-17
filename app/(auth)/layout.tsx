@@ -20,7 +20,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               elevosia
             </span>
           </Link>
-          <ThemeToggle />
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="flex justify-center pt-25 pb-10">

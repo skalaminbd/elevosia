@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -399,9 +400,7 @@ export function SiteHeader() {
               Login
             </Link>
           </Button>
-          <Button asChild>
-            <Link href="/start">Start a project</Link>
-          </Button>
+          <ButtonLink href="/start">Start a project</ButtonLink>
         </div>
 
         <div className="flex items-center gap-1 lg:hidden">
@@ -511,9 +510,9 @@ export function SiteHeader() {
                     Login
                   </Link>
                 </Button>
-                <Button asChild className="text-base">
-                  <Link href="/start">Start a project</Link>
-                </Button>
+                <ButtonLink href="/start" className="text-base">
+                  Start a project
+                </ButtonLink>
               </SheetFooter>
             </SheetContent>
           </Sheet>

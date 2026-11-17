@@ -1,11 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import {
-  ArrowRight,
-  CalendarClock,
+import {CalendarClock,
   Check,
   CircleDollarSign,
   ClipboardList,
@@ -22,10 +19,9 @@ import {
   Route,
   Upload,
   Users,
-  type LucideIcon,
-} from "lucide-react";
+  type LucideIcon} from "lucide-react";
 import { Eyebrow } from "@/components/shared/Eyebrow";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 import { cn } from "@/lib/utils";
 
 type Stage = {
@@ -281,7 +277,7 @@ export function HowItWorksSection() {
   }
 
   return (
-    <section ref={sectionRef} className="py-15 lg:py-25">
+    <section ref={sectionRef} className="py-15 md:py-20 lg:py-25">
       <div className="relative overflow-hidden bg-primary py-14 text-primary-foreground sm:py-16 lg:py-24 dark:bg-secondary dark:text-foreground">
         <div
           className="dot-grid pointer-events-none absolute inset-0 text-primary-foreground opacity-10 dark:text-foreground"
@@ -348,8 +344,8 @@ export function HowItWorksSection() {
                         key={`${displayStage}-${index}`}
                         className="absolute -translate-x-1/2 -translate-y-1/2"
                         style={{
-                          left: `${50 + 26 * Math.cos(rad)}%`,
-                          top: `${50 + 26 * Math.sin(rad)}%`,
+                          left: `${(50 + 26 * Math.cos(rad)).toFixed(3)}%`,
+                          top: `${(50 + 26 * Math.sin(rad)).toFixed(3)}%`,
                         }}
                       >
                         <div
@@ -379,7 +375,7 @@ export function HowItWorksSection() {
                     <div
                       key={angle}
                       className="absolute -translate-x-1/2 -translate-y-1/2"
-                      style={{ left: `${x}%`, top: `${y}%` }}
+                      style={{ left: `${x.toFixed(3)}%`, top: `${y.toFixed(3)}%` }}
                     >
                       <div
                         className={cn(
@@ -499,12 +495,7 @@ export function HowItWorksSection() {
               </ul>
 
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <Button asChild variant="highlight">
-                  <Link href="/start">
-                    Start a project
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
+                <ButtonLink href="/start">Start a project</ButtonLink>
 
                 <span className="flex items-center gap-1.5 text-sm text-primary-foreground/70 dark:text-foreground/70">
                   <Check className="size-3.5 text-highlight" />

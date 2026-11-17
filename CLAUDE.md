@@ -102,7 +102,7 @@ Rules:
 ## Layout
 - Spacing on the 4px scale. No arbitrary spacing like `p-[13px]`
 - Page container: `mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8`
-- Marketing sections: `py-16 sm:py-24`
+- Marketing sections: `py-15 md:py-20 lg:py-25` — 60px phone / 80px tablet / 100px desktop above and below, the same on every section. The hero is the exception: it keeps its own full-height layout
 - Admin and portal pages: `p-4 sm:p-6`, gaps `gap-4` or `gap-6`
 - Card padding: `p-6`
 - Shadows: `shadow-sm` or `shadow-md` only

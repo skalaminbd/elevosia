@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import {
-  ArrowRight,
-  BookUser,
+import {BookUser,
   CalendarDays,
   ChartColumn,
   ChevronDown,
@@ -13,8 +10,7 @@ import {
   Sparkles,
   Users,
   Warehouse,
-  type LucideIcon,
-} from "lucide-react";
+  type LucideIcon} from "lucide-react";
 import { ModulePreview } from "@/components/blocks/module-previews";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import {
@@ -24,7 +20,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 import {
   Tabs,
   TabsContent,
@@ -256,12 +252,7 @@ function ModulePanel({ module, index }: { module: Module; index: number }) {
 
       <div className="md:col-span-4 md:col-start-1 md:row-start-2">
         <div className="flex flex-wrap items-center gap-4 pt-1 md:pt-7">
-          <Button asChild>
-            <Link href="/demo">
-              See them in the live demo
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-          </Button>
+          <ButtonLink href="/demo">See them in the live demo</ButtonLink>
 
           <p className="text-xs text-muted-foreground">
             {index + 1} of {MODULES.length}
@@ -274,7 +265,7 @@ function ModulePanel({ module, index }: { module: Module; index: number }) {
 
 export function ModulesSection() {
   return (
-    <section className="pt-8 pb-16 sm:py-24">
+    <section className="py-15 md:py-20 lg:py-25">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-6 md:grid-cols-2 md:items-end md:gap-12">
           <div>
@@ -366,12 +357,7 @@ export function ModulesSection() {
           </Accordion>
 
           <div className="mt-6 flex justify-start">
-            <Button asChild>
-              <Link href="/demo">
-                See them in the live demo
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-            </Button>
+            <ButtonLink href="/demo">See them in the live demo</ButtonLink>
           </div>
         </div>
       </div>

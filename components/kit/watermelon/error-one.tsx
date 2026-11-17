@@ -1,8 +1,9 @@
 // Source: https://registry.watermelon.sh/r/error-1.json (adapted to Elevosia tokens)
 
 import Link from "next/link";
-import { House } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 
 function GradientCode({ code }: { code: string }) {
   return (
@@ -38,6 +39,19 @@ export function ErrorOne({
 }) {
   return (
     <main className="relative flex min-h-svh items-center justify-center overflow-hidden px-4 py-16 sm:px-6">
+      <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between px-4 py-4 sm:px-6">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-highlight font-heading text-base font-bold text-highlight-foreground">
+            e
+          </span>
+          <span className="font-heading text-xl font-bold tracking-tight">
+            elevosia
+          </span>
+        </Link>
+
+        <ThemeToggle />
+      </div>
+
       <div
         className="pointer-events-none absolute -top-32 -right-32 size-96 rounded-full bg-highlight/10"
         aria-hidden="true"
@@ -65,12 +79,9 @@ export function ErrorOne({
           </p>
         </div>
 
-        <Button asChild className="mt-4 rounded-full">
-          <Link href="/">
-            Back to home
-            <House className="ml-1.5 size-4" aria-hidden="true" />
-          </Link>
-        </Button>
+        <ButtonLink href="/" className="mt-4 rounded-full">
+          Back to home
+        </ButtonLink>
       </section>
     </main>
   );

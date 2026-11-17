@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { DashboardMockup } from "@/components/blocks/dashboard-mockup";
 import { ModulesSection } from "@/components/blocks/modules-section";
 import { HowItWorksSection } from "@/components/blocks/how-it-works-section";
@@ -8,10 +7,18 @@ import { ProgressSection } from "@/components/blocks/progress-section";
 import { ScaleToFit } from "@/components/blocks/scale-to-fit";
 import { StorySection } from "@/components/blocks/story-section";
 import { WhatWeBuildSection } from "@/components/blocks/what-we-build-section";
+import { ComparisonSection } from "@/components/home/ComparisonSection";
+import { AiSection } from "@/components/home/AiSection";
+import { WhoWeBuildFor } from "@/components/home/WhoWeBuildFor";
+import { PricingSection } from "@/components/home/PricingSection";
+import { RemoteTeamSection } from "@/components/home/RemoteTeamSection";
+import { FounderSection } from "@/components/home/FounderSection";
+import { FaqSection } from "@/components/home/FaqSection";
+import { ClosingSection } from "@/components/home/ClosingSection";
 import { SiteFooter } from "@/components/kit/watermelon/site-footer";
 import { SiteHeader } from "@/components/kit/watermelon/site-header";
 import { Eyebrow } from "@/components/shared/Eyebrow";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 
 export const metadata: Metadata = {
   title: "Elevosia — Run your whole business from one screen",
@@ -24,8 +31,8 @@ export default function HomePage() {
     <>
       <SiteHeader />
 
-      <main className="relative overflow-hidden">
-        <section className="relative mx-auto w-full max-w-7xl px-4 pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-24 lg:pb-16">
+      <main className="relative overflow-x-clip">
+        <section className="relative mx-auto w-full max-w-7xl px-4 py-15 sm:px-6 md:py-20 lg:px-8 lg:py-25">
         <div className="mx-auto max-w-3xl text-center">
           <Eyebrow>Custom dashboards for growing service businesses</Eyebrow>
 
@@ -40,12 +47,10 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild>
-              <Link href="/start">Start a project</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/demo">Try the live demo</Link>
-            </Button>
+            <ButtonLink href="/start">Start a project</ButtonLink>
+            <ButtonLink href="/demo" variant="outline">
+              Try the live demo
+            </ButtonLink>
           </div>
         </div>
 
@@ -67,6 +72,22 @@ export default function HomePage() {
         <ProgressSection />
 
         <HowItWorksSection />
+
+        <ComparisonSection />
+
+        <AiSection />
+
+        <WhoWeBuildFor />
+
+        <PricingSection />
+
+        <RemoteTeamSection />
+
+        <FounderSection />
+
+        <FaqSection />
+
+        <ClosingSection />
       </main>
 
       <SiteFooter />

@@ -123,7 +123,7 @@ function ToolOrbit({ reduceMotion }: { reduceMotion: boolean }) {
               <motion.div
                 key={label}
                 className="absolute"
-                style={{ left: `${x}%`, top: `${y}%`, x: "-50%", y: "-50%" }}
+                style={{ left: `${x.toFixed(3)}%`, top: `${y.toFixed(3)}%`, x: "-50%", y: "-50%" }}
                 animate={reduceMotion ? undefined : { rotate: -360 }}
                 transition={{ duration, repeat: Infinity, ease: "linear" }}
               >
@@ -149,7 +149,7 @@ export function StorySection() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="py-16 sm:py-24">
+    <section className="py-15 md:py-20 lg:py-25">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-5 lg:items-center lg:gap-16">
           <div className="lg:col-span-2">
