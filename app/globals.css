@@ -222,6 +222,80 @@
   animation: none;
 }
 
+/* About page items */
+@keyframes about-option-left {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  40%,
+  75% {
+    transform: translateX(-16px);
+  }
+}
+
+@keyframes about-option-right {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  40%,
+  75% {
+    transform: translateX(16px);
+  }
+}
+
+@keyframes about-option-mid {
+  0%,
+  22% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+  42%,
+  82% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+}
+
+@keyframes about-beam {
+  from {
+    stroke-dashoffset: 14;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes about-slot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.75;
+  }
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility marquee-track {
+  animation: marquee-x 38s linear infinite;
+}
+
 /* Who we build for previews. Every loop is one 4.5s cycle; base styles are
    the final state, so reduced motion simply skips the animation class. */
 @keyframes who-progress {

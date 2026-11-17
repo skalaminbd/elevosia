@@ -26,7 +26,7 @@ type PointId = keyof typeof ICONS;
 const isPointId = (value: string): value is PointId => value in ICONS;
 
 // The dotted map renders thousands of nodes, so it never joins the server HTML.
-const TeamMap = dynamic(() => import("@/components/home/TeamMap"), {
+const TeamMap = dynamic(() => import("@/components/shared/TeamMap"), {
   ssr: false,
   loading: () => (
     <div
