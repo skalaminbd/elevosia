@@ -20,21 +20,15 @@ export function BuiltSection() {
     <Section id="built">
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-7">
-          <h2 className="max-w-2xl font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+          <h2 className="max-w-2xl font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
             {built.title}
           </h2>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-10 grid gap-x-10 sm:grid-cols-2">
             {built.cards.map((card) => (
-              <div
-                key={card.id}
-                className="rounded-lg border border-border bg-card p-5 shadow-sm"
-              >
-                <ShieldCheck
-                  className="size-5 text-primary"
-                  aria-hidden="true"
-                />
-                <h3 className="mt-4 text-base font-semibold text-foreground">
+              <div key={card.id} className="border-t border-border py-6">
+                <ShieldCheck className="size-4 text-primary" aria-hidden="true" />
+                <h3 className="mt-3 text-base font-semibold text-foreground">
                   {card.title}
                 </h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">

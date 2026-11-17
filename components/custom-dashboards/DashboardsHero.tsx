@@ -3,32 +3,37 @@
 import { Check } from "lucide-react";
 import { ButtonLink } from "@/components/shared/ButtonLink";
 import { Eyebrow } from "@/components/shared/Eyebrow";
-import { Section } from "@/components/shared/Section";
 import { dashboardsDemo, dashboardsHero } from "@/content/custom-dashboards";
 import { useInViewLoop } from "@/hooks/use-in-view-loop";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
-function DashboardScreen({ active }: { active: boolean }) {
+const TRUST = [
+  "Fixed price before we build",
+  "You own the code",
+  "Live in 6 to 10 weeks",
+];
+
+function Screen({ active }: { active: boolean }) {
   return (
-    <div className="overflow-hidden rounded-md border border-border bg-background text-foreground">
-      <div className="flex items-center gap-1.5 border-b border-border px-3 py-2">
-        <span className="size-1.5 rounded-full bg-muted-foreground/30" />
-        <span className="size-1.5 rounded-full bg-muted-foreground/30" />
-        <span className="size-1.5 rounded-full bg-muted-foreground/30" />
-        <span className="ml-1 text-[10px] text-muted-foreground">
-          Overview
+    <div className="overflow-hidden rounded-t-lg bg-card text-card-foreground">
+      <div className="flex items-center justify-between border-b border-border px-5 py-3">
+        <div className="flex items-center gap-2">
+          <span className="size-2 rounded-full bg-destructive/40" />
+          <span className="size-2 rounded-full bg-warning/50" />
+          <span className="size-2 rounded-full bg-success/50" />
+          <span className="ml-3 text-xs text-muted-foreground">Overview</span>
+        </div>
+        <span className="font-mono text-[11px] text-muted-foreground">
+          Mon 18 Nov
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 p-5 sm:grid-cols-4">
         {dashboardsDemo.kpis.map((kpi) => (
-          <div
-            key={kpi.id}
-            className="rounded-sm bg-muted px-2 py-1.5"
-          >
-            <p className="text-[9px] text-muted-foreground">{kpi.label}</p>
-            <p className="mt-0.5 font-mono text-sm font-semibold text-foreground">
+          <div key={kpi.id} className="rounded-md bg-muted/70 px-3 py-2.5">
+            <p className="text-[11px] text-muted-foreground">{kpi.label}</p>
+            <p className="mt-1 font-mono text-lg font-semibold text-foreground">
               {kpi.prefix}
               {kpi.value.toLocaleString("en-US")}
             </p>
@@ -36,62 +41,62 @@ function DashboardScreen({ active }: { active: boolean }) {
         ))}
       </div>
 
-      <div className="flex h-24 items-end gap-1.5 px-3 pb-3">
-        {dashboardsDemo.bars.map((height, index) => (
-          <span
-            key={index}
-            className={cn(
-              "flex-1 origin-bottom rounded-t-sm bg-primary",
-              active && "animate-[cd-bar_3200ms_ease-in-out_infinite]",
-            )}
-            style={{
-              height: `${height}%`,
-              animationDelay: `${index * 0.18}s`,
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function DayPlan({ active }: { active: boolean }) {
-  return (
-    <div className="w-32 overflow-hidden rounded-[20px] border-4 border-foreground/20 bg-background shadow-md sm:w-36">
-      <div className="mx-auto mt-1 h-1 w-8 rounded-full bg-foreground/20" />
-      <div className="px-2.5 py-2">
-        <p className="text-[9px] text-muted-foreground">Today</p>
-        <p className="font-mono text-[11px] font-semibold text-foreground">
-          3 jobs
-        </p>
-        <ul className="mt-1.5 flex flex-col gap-1">
-          {dashboardsDemo.jobs.map((job, index) => (
-            <li key={job.id} className="flex items-center gap-1.5 rounded-sm bg-muted px-1.5 py-1">
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-[9px] font-medium text-foreground">
-                  {job.title}
-                </span>
-                <span className="block truncate text-[8px] text-muted-foreground">
-                  {job.meta}
-                </span>
-              </span>
+      <div className="grid gap-5 px-5 pb-5 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          <p className="text-[11px] text-muted-foreground">Revenue this week</p>
+          <div className="mt-3 flex h-28 items-end gap-1.5">
+            {dashboardsDemo.bars.map((height, index) => (
               <span
+                key={index}
                 className={cn(
-                  "flex size-3 shrink-0 items-center justify-center rounded-full",
-                  job.done
-                    ? "bg-success text-success-foreground"
-                    : "border border-muted-foreground/40",
-                  job.done && active
-                    ? "animate-[who-pop_4500ms_ease-out_infinite]"
-                    : "",
+                  "flex-1 origin-bottom rounded-t-sm bg-primary",
+                  active && "animate-[cd-bar_3200ms_ease-in-out_infinite]",
                 )}
-                style={{ animationDelay: `${index * 0.55}s` }}
+                style={{
+                  height: `${height}%`,
+                  animationDelay: `${index * 0.16}s`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="lg:col-span-2">
+          <p className="text-[11px] text-muted-foreground">Today&apos;s jobs</p>
+          <ul className="mt-3 flex flex-col gap-1.5">
+            {dashboardsDemo.jobs.map((job, index) => (
+              <li
+                key={job.id}
+                className="flex items-center justify-between gap-2 rounded-md border border-border px-2.5 py-2"
               >
-                {job.done ? <Check className="size-2" aria-hidden="true" /> : null}
-              </span>
-            </li>
-          ))}
-        </ul>
+                <span className="min-w-0">
+                  <span className="block truncate text-xs font-medium text-foreground">
+                    {job.title}
+                  </span>
+                  <span className="block truncate text-[10px] text-muted-foreground">
+                    {job.meta}
+                  </span>
+                </span>
+                <span
+                  className={cn(
+                    "flex size-4 shrink-0 items-center justify-center rounded-full",
+                    job.done
+                      ? "bg-success text-success-foreground"
+                      : "border border-muted-foreground/40",
+                    job.done && active
+                      ? "animate-[who-pop_4500ms_ease-out_infinite]"
+                      : "",
+                  )}
+                  style={{ animationDelay: `${index * 0.5}s` }}
+                >
+                  {job.done ? (
+                    <Check className="size-2.5" aria-hidden="true" />
+                  ) : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -99,42 +104,65 @@ function DayPlan({ active }: { active: boolean }) {
 
 export function DashboardsHero() {
   const reduceMotion = useReducedMotion();
-  const { ref, inView } = useInViewLoop<HTMLDivElement>({ threshold: 0.15 });
+  const { ref, inView } = useInViewLoop<HTMLDivElement>({ threshold: 0.1 });
   const alive = inView && !reduceMotion;
 
   return (
-    <Section>
-      <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
-        <div className="lg:col-span-6">
-          <Eyebrow>{dashboardsHero.eyebrow}</Eyebrow>
-          <h1 className="mt-5 font-heading text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+    <section className="relative overflow-hidden bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
+      <div
+        aria-hidden="true"
+        className="line-grid pointer-events-none absolute inset-0 opacity-[0.07] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
+      />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 pt-16 sm:px-6 md:pt-20 lg:px-8 lg:pt-24">
+        <div className="mx-auto max-w-4xl text-center">
+          <Eyebrow tone="inverse">{dashboardsHero.eyebrow}</Eyebrow>
+          <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
             {dashboardsHero.title}
           </h1>
-          <p className="mt-6 max-w-xl text-base text-muted-foreground lg:text-lg">
+          <p className="mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
             {dashboardsHero.subhead}
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink href={dashboardsHero.primary.href}>
+
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <ButtonLink href={dashboardsHero.primary.href} variant="highlight">
               {dashboardsHero.primary.label}
             </ButtonLink>
-            <ButtonLink href={dashboardsHero.secondary.href} variant="outline">
+            <ButtonLink
+              href={dashboardsHero.secondary.href}
+              variant="outline"
+              className="text-foreground"
+            >
               {dashboardsHero.secondary.label}
             </ButtonLink>
           </div>
+
+          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {TRUST.map((line) => (
+              <li
+                key={line}
+                className="flex items-center gap-1.5 text-xs text-primary-foreground/70 dark:text-foreground/70"
+              >
+                <Check className="size-3.5 text-highlight" aria-hidden="true" />
+                {line}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <div ref={ref} className="lg:col-span-6">
-          <div className="relative rounded-lg bg-primary p-4 text-primary-foreground shadow-md sm:p-6">
-            <div className="sm:pr-36">
-              <DashboardScreen active={alive} />
-            </div>
+        <div ref={ref} className="relative mt-14 lg:mt-20">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-x-8 top-0 h-52 bg-highlight/20 blur-3xl"
+          />
 
-            <div className="mt-4 flex justify-end sm:absolute sm:right-3 sm:-bottom-8 sm:mt-0">
-              <DayPlan active={alive} />
+          <div className="relative mx-auto max-w-5xl">
+            <div className="overflow-hidden rounded-t-xl border border-b-0 border-primary-foreground/15 shadow-md dark:border-border">
+              <Screen active={alive} />
             </div>
           </div>
         </div>
       </div>
-    </Section>
+    </section>
   );
 }

@@ -44,7 +44,7 @@ export function ModuleLibrary() {
       <div ref={ref} className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-xl">
           <Eyebrow>Module library</Eyebrow>
-          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+          <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
             {library.title}
           </h2>
         </div>
@@ -69,14 +69,14 @@ export function ModuleLibrary() {
                     type="button"
                     aria-pressed={isActive}
                     onClick={() => pick(index)}
-                    className="flex w-full items-center gap-4 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    className="flex w-full items-center gap-5 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                   >
                     <span className="font-mono text-xs text-muted-foreground">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span
                       className={cn(
-                        "flex-1 text-base font-medium transition-colors",
+                        "flex-1 font-heading text-lg font-semibold tracking-tight transition-colors sm:text-xl",
                         isActive ? "text-foreground" : "text-muted-foreground",
                       )}
                     >
@@ -132,10 +132,15 @@ export function ModuleLibrary() {
                 exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
                 transition={{ duration: reduceMotion ? 0 : 0.35, ease: EASE }}
               >
-                <p className="font-mono text-xs text-muted-foreground">
-                  Module {String(active + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-3 font-heading text-2xl font-bold tracking-tight text-foreground">
+                <div className="flex items-center justify-between">
+                  <p className="font-mono text-xs text-muted-foreground">
+                    Module {String(active + 1).padStart(2, "0")}
+                  </p>
+                  <p className="rounded-full border border-border px-2.5 py-1 font-mono text-xs text-muted-foreground">
+                    {String(library.modules.length).padStart(2, "0")} modules
+                  </p>
+                </div>
+                <h3 className="mt-3 font-heading text-3xl font-bold tracking-[-0.02em] text-foreground sm:text-4xl">
                   {selected.name}
                 </h3>
 

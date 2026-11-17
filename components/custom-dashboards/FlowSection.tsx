@@ -20,7 +20,7 @@ type StepId = keyof typeof ICONS;
 const isStepId = (value: string): value is StepId => value in ICONS;
 
 /**
- * Website → dashboard → AI → portal: one chain, with the connection flowing.
+ * Website → dashboard → AI → portal, as a rail with four stations.
  */
 export function FlowSection() {
   const reduceMotion = useReducedMotion();
@@ -29,19 +29,20 @@ export function FlowSection() {
 
   return (
     <Section id="flow">
-      <div ref={ref} className="max-w-3xl">
+      <div ref={ref} className="max-w-2xl">
         <Eyebrow>Website + dashboard</Eyebrow>
-        <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+        <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
           {flow.title}
         </h2>
-        <p className="mt-4 text-base text-muted-foreground">{flow.body}</p>
+        <p className="mt-5 text-base text-muted-foreground sm:text-lg">
+          {flow.body}
+        </p>
       </div>
 
-      <div className="relative mt-12">
-        {/* The connector only needs to show between the cards */}
+      <div className="relative mt-16">
         <svg
           aria-hidden="true"
-          className="absolute inset-x-0 top-1/2 hidden h-px w-full lg:block"
+          className="absolute inset-x-0 top-0 hidden h-px w-full lg:block"
           viewBox="0 0 100 1"
           preserveAspectRatio="none"
         >
@@ -53,29 +54,31 @@ export function FlowSection() {
             stroke="var(--color-muted-foreground)"
             strokeOpacity="0.45"
             strokeWidth="1"
-            strokeDasharray="3 3"
+            strokeDasharray="2 2"
             className={cn(alive && "animate-[about-beam_2400ms_linear_infinite]")}
           />
         </svg>
 
-        <ol className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <ol className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {flow.steps.map((step, index) => {
             const Icon = isStepId(step.id) ? ICONS[step.id] : Globe;
 
             return (
               <li
                 key={step.id}
-                className="rounded-lg border border-border bg-card p-5 shadow-sm"
+                className="relative border-t border-border pt-6 lg:border-t-0 lg:pt-10"
               >
+                <span
+                  aria-hidden="true"
+                  className="absolute top-[-3px] left-0 hidden size-1.5 rounded-full bg-primary lg:block"
+                />
                 <div className="flex items-center justify-between">
-                  <span className="flex size-9 items-center justify-center rounded-full bg-accent text-accent-foreground">
-                    <Icon className="size-4" aria-hidden="true" />
-                  </span>
-                  <span className="font-mono text-xs text-muted-foreground">
+                  <span className="font-mono text-sm text-muted-foreground">
                     {String(index + 1).padStart(2, "0")}
                   </span>
+                  <Icon className="size-4 text-primary" aria-hidden="true" />
                 </div>
-                <p className="mt-4 text-base font-medium text-foreground">
+                <p className="mt-5 max-w-[16rem] font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
                   {step.label}
                 </p>
               </li>
