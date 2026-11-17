@@ -64,7 +64,7 @@ export function ModuleLibrary() {
                     aria-pressed={isActive}
                     onClick={() => pick(index)}
                     className={cn(
-                      "flex w-full items-center gap-5 border-l-2 py-5 pl-[15px] text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+                      "flex w-full cursor-pointer items-center gap-5 border-l-2 py-5 pl-[15px] text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
                       isActive ? "border-primary" : "border-transparent",
                     )}
                   >

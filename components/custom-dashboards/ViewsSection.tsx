@@ -55,8 +55,8 @@ function OwnerBody() {
         {[38, 54, 42, 66, 50, 72, 58, 84, 64, 90, 70, 96].map((h, i) => (
           <span
             key={i}
-            className="flex-1 rounded-t-sm bg-primary"
-            style={{ height: `${h}%` }}
+            className="flex-1 origin-bottom rounded-t-sm bg-primary motion-safe:animate-[cd-bar_3600ms_ease-in-out_infinite]"
+            style={{ height: `${h}%`, animationDelay: `${i * 0.12}s` }}
           />
         ))}
       </div>
@@ -73,7 +73,7 @@ function ManagerBody() {
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between">
         <p className="text-[11px] font-medium text-foreground">This week</p>
-        <span className="rounded-full bg-highlight/25 px-2 py-0.5 text-[10px] font-medium text-foreground">
+        <span className="rounded-full bg-highlight/25 px-2 py-0.5 text-[10px] font-medium text-foreground motion-safe:animate-pulse-soft">
           1 open shift
         </span>
       </div>
@@ -146,7 +146,7 @@ function StaffBody() {
                 "flex size-5 items-center justify-center rounded-full",
                 job.done
                   ? "bg-success text-success-foreground"
-                  : "border border-muted-foreground/40",
+                  : "border border-muted-foreground/40 motion-safe:animate-pulse",
               )}
             >
               {job.done ? <Check className="size-3" aria-hidden="true" /> : null}
@@ -173,7 +173,7 @@ function ClientBody() {
           <span className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-medium text-primary-foreground">
             Reschedule
           </span>
-          <span className="rounded-full border border-border px-2.5 py-1 text-[10px] font-medium text-foreground">
+          <span className="rounded-full border border-border px-2.5 py-1 text-[10px] font-medium text-foreground motion-safe:animate-pulse-soft">
             Pay invoice
           </span>
         </div>
@@ -243,7 +243,7 @@ function ScreenWindow({
     <div className="overflow-hidden rounded-xl border border-border bg-card text-card-foreground shadow-md">
       <div className="flex items-center justify-between border-b border-border px-5 py-3">
         <div className="flex items-center gap-2.5">
-          <span className="size-2 rounded-full bg-highlight" />
+          <span className="size-2 rounded-full bg-highlight motion-safe:animate-[who-blink_1800ms_ease-in-out_infinite]" />
           <span className="text-xs font-medium text-card-foreground">
             {tab.label} view
           </span>
@@ -358,13 +358,16 @@ export function ViewsSection() {
         </div>
 
         <div className="hidden lg:col-span-7 lg:block">
-          <div className="sticky top-24">
+          <div className="lg:sticky lg:top-[max(6rem,calc(50vh-16rem))]">
             <div className="relative">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -inset-6 rounded-3xl bg-highlight/15 blur-3xl"
               />
-              <div className="relative">
+              <div
+                key={tab.id}
+                className="relative motion-safe:animate-[cd-swap_300ms_ease-out]"
+              >
                 <ScreenWindow roleId={tab.id} />
               </div>
             </div>
