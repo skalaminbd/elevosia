@@ -1,6 +1,6 @@
 "use client";
 
-import { aboutHero } from "@/content/about";
+import { aboutHero, heroLead } from "@/content/about";
 import { BrowserFlip } from "@/components/about/items/BrowserFlip";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { Section } from "@/components/shared/Section";
@@ -16,9 +16,12 @@ export function AboutHero() {
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-7">
           <Eyebrow>{aboutHero.eyebrow}</Eyebrow>
-          <h1 className="mt-5 font-heading text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 font-heading text-4xl leading-[1.03] font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
             {aboutHero.title}
           </h1>
+          <p className="mt-6 max-w-xl text-base text-muted-foreground lg:text-lg">
+            {heroLead}
+          </p>
         </div>
 
         <div ref={ref} className="lg:col-span-5">

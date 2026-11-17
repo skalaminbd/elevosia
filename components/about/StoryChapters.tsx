@@ -19,12 +19,16 @@ function ChapterRow({ index }: { index: number }) {
   const reversed = index % 2 === 1;
 
   return (
-    <article className="grid gap-8 border-b border-border py-12 lg:grid-cols-12 lg:gap-16 lg:py-16">
-      <div className={cn("lg:col-span-7", reversed && "lg:order-2")}>
-        <p className="font-mono text-sm text-muted-foreground">
+    <article className="grid gap-8 border-b border-border py-12 lg:grid-cols-12 lg:gap-10 lg:py-16">
+      <div className="lg:col-span-1">
+        <p className="font-heading text-2xl font-semibold tabular-nums text-muted-foreground/70 lg:text-3xl">
           {chapter.index}
         </p>
-        <h2 className="mt-3 font-heading text-2xl font-bold tracking-tight sm:text-3xl">
+      </div>
+
+      <div className={cn("lg:col-span-6", reversed && "lg:order-3")}>
+        <span aria-hidden="true" className="mb-5 block h-px w-12 bg-primary" />
+        <h2 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
           {chapter.title}
         </h2>
         <p className="mt-4 max-w-2xl text-base text-muted-foreground">
@@ -34,7 +38,7 @@ function ChapterRow({ index }: { index: number }) {
 
       <div
         ref={ref}
-        className={cn("lg:col-span-5 lg:self-center", reversed && "lg:order-1")}
+        className={cn("lg:col-span-5 lg:self-start", reversed && "lg:order-2")}
       >
         <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
           <Item

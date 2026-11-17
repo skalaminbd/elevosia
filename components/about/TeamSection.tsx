@@ -1,6 +1,6 @@
 "use client";
 
-import { team } from "@/content/about";
+import { team, teamFacts } from "@/content/about";
 import { Section } from "@/components/shared/Section";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { ShineBorder } from "@/components/ui/shine-border";
@@ -14,7 +14,7 @@ export function TeamSection() {
     <Section id="team">
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-5">
-          <div className="relative mx-auto max-w-xs overflow-hidden rounded-lg border border-border bg-card p-3 shadow-sm">
+          <div className="relative mx-auto max-w-60 overflow-hidden rounded-lg border border-border bg-card p-2 shadow-sm lg:mx-0">
             {founder.photo ? (
               <div className="relative overflow-hidden rounded-md">
                 {!reduceMotion ? (
@@ -54,6 +54,17 @@ export function TeamSection() {
           >
             {founder.linkedin.label}
           </a>
+
+          <ul className="mt-8 flex flex-wrap gap-2">
+            {teamFacts.map((fact) => (
+              <li
+                key={fact}
+                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground"
+              >
+                {fact}
+              </li>
+            ))}
+          </ul>
 
           {people.length > 0 ? (
             <ul className="mt-8 flex flex-wrap gap-3">

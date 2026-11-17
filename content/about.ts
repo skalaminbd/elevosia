@@ -118,3 +118,100 @@ export const aboutDemo = {
     title: "Call with your team",
   },
 };
+
+/* Added for the redesign. No new factual claims: every line is supported by
+   the existing copy (ownership, fixed price, no per-seat fees, US overlap). */
+
+export const heroLead =
+  "Now we build the system behind it: one dashboard for the team, the clients and the website.";
+
+export const facts = [
+  {
+    title: "Small on purpose",
+    body: "You talk to the people building your software, not an account manager.",
+  },
+  {
+    title: "Senior team",
+    body: "The people who scope the work are the people who build it.",
+  },
+  {
+    title: "US hours",
+    body: "4+ hours of live overlap with US Eastern, every weekday.",
+  },
+  {
+    title: "You own it",
+    body: "Code, data and designs are yours, written into the contract.",
+  },
+];
+
+export const board = {
+  eyebrow: "Show, don't tell",
+  title: "You watch it happen, week by week.",
+  body: "Every project runs on a shared board. When a task moves, you see it that day, not in a status call.",
+  week: "Week 3 of 8",
+  update: "Weekly update sent Monday",
+  columns: [
+    {
+      id: "week",
+      label: "This week",
+      tasks: [
+        { id: "portal", text: "Client portal — approvals" },
+        { id: "shifts", text: "Scheduling — shift rules" },
+      ],
+    },
+    {
+      id: "progress",
+      label: "In progress",
+      tasks: [
+        { id: "invoices", text: "Invoices — testing" },
+        { id: "reports", text: "Reports — first pass" },
+      ],
+    },
+    {
+      id: "done",
+      label: "Completed",
+      tasks: [
+        { id: "blueprint", text: "Blueprint signed off" },
+        { id: "shell", text: "Dashboard shell" },
+        { id: "roles", text: "Login + roles" },
+      ],
+    },
+  ],
+};
+
+export const principlesTitle = "Four rules we don't break.";
+
+export const principlesLead =
+  "If a project needs something different, we'll say so before the contract, not after.";
+
+export const honesty = {
+  eyebrow: "What we won't do",
+  title: "The short list.",
+  lead: "Check every one of these before you sign anything.",
+  items: [
+    {
+      wont: "Sell you AI you don't need",
+      will: "If it won't save you hours, we don't build it.",
+    },
+    {
+      wont: "Charge per seat",
+      will: "Add your whole team for free.",
+    },
+    {
+      wont: "Lock in your data",
+      will: "Code, data and designs are yours, in writing.",
+    },
+    {
+      wont: "Disappear after launch",
+      will: "A 30-day warranty, then a care plan if you want one.",
+    },
+  ],
+};
+
+export const teamFacts = ["Remote, based in Dhaka", "US working hours", "Senior only"];
+
+export const dhakaFacts = [
+  "Dhaka, Bangladesh",
+  "4+ hours with US Eastern",
+  "Weekday overlap",
+];

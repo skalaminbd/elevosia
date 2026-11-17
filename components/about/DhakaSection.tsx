@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { dhaka } from "@/content/about";
+import { dhaka, dhakaFacts } from "@/content/about";
 import { Section } from "@/components/shared/Section";
 import { useInViewLoop } from "@/hooks/use-in-view-loop";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -35,6 +35,16 @@ export function DhakaSection() {
           <p className="mt-4 max-w-xl text-base text-muted-foreground">
             {dhaka.body}
           </p>
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {dhakaFacts.map((fact) => (
+              <li
+                key={fact}
+                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground"
+              >
+                {fact}
+              </li>
+            ))}
+          </ul>
           <Link
             href={dhaka.link.href}
             className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"

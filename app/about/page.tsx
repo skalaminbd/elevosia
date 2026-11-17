@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { AboutHero } from "@/components/about/AboutHero";
+import { FactRail } from "@/components/about/FactRail";
 import { StoryChapters } from "@/components/about/StoryChapters";
+import { BoardSection } from "@/components/about/BoardSection";
 import { BeliefsSection } from "@/components/about/BeliefsSection";
 import { TeamSection } from "@/components/about/TeamSection";
 import { ExperienceSection } from "@/components/about/ExperienceSection";
+import { HonestySection } from "@/components/about/HonestySection";
 import { DhakaSection } from "@/components/about/DhakaSection";
 import { AboutClosing } from "@/components/about/AboutClosing";
 import { SiteFooter } from "@/components/kit/watermelon/site-footer";
@@ -29,9 +32,12 @@ export default function AboutPage() {
 
       <main className="relative overflow-x-clip">
         <AboutHero />
+        <FactRail />
         <StoryChapters />
+        <BoardSection />
         <BeliefsSection />
         <TeamSection />
+        <HonestySection />
         <ExperienceSection />
         <DhakaSection />
         <AboutClosing />
