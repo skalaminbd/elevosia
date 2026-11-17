@@ -92,7 +92,7 @@ Rules:
 
 | Use | Classes |
 |---|---|
-| H1, page hero | `text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] tracking-[-0.04em] font-bold text-balance` |
+| H1, page hero | `text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.96] tracking-[-0.04em] font-bold text-balance` |
 | H2, section title | `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl` |
 | H2, closing band | `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl lg:text-6xl` |
 | H3, section sub-heading / large item | `text-2xl font-heading font-semibold tracking-tight sm:text-3xl` |
@@ -116,7 +116,7 @@ The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pat
 ### Hero
 Full-bleed brand band. Two layouts are allowed — pick one per page, never invent a third:
 
-- **Centered** (Custom Dashboards): text in `mx-auto max-w-4xl text-center`, visual below, bleeding off the bottom edge (`pb-0`).
+- **Centered** (Custom Dashboards): text in `mx-auto max-w-5xl text-center`, visual below, bleeding off the bottom edge (`pb-0`).
 - **Split** (About): `grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16`, content left-aligned in `lg:col-span-7`, visual in `lg:col-span-5`; stacks content-first on mobile.
 
 | Part | Classes |
@@ -124,7 +124,7 @@ Full-bleed brand band. Two layouts are allowed — pick one per page, never inve
 | Band | `relative overflow-hidden bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground` |
 | Texture | `line-grid` overlay, `opacity-[0.07]`, masked to the top |
 | Container | `mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24`. Use `pb-0` when the visual bleeds off the bottom edge |
-| Text block | Centered: `mx-auto max-w-4xl text-center`. Split: `lg:col-span-7`, left aligned, lead `max-w-xl` |
+| Text block | Centered: `mx-auto max-w-5xl text-center`, lead `max-w-3xl`. Split: `lg:col-span-7`, left aligned, lead `max-w-2xl` |
 | Eyebrow | `<Eyebrow tone="inverse">` |
 | H1 | `mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance` |
 | Lead | `mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75` |

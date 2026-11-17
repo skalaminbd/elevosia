@@ -115,12 +115,12 @@ export function DashboardsHero() {
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-16 sm:px-6 md:pt-20 lg:px-8 lg:pt-24">
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-5xl text-center">
           <Eyebrow tone="inverse">{dashboardsHero.eyebrow}</Eyebrow>
-          <h1 className="mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
+          <h1 className="mt-6 font-heading text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
             {dashboardsHero.title}
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
+          <p className="mx-auto mt-6 max-w-3xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
             {dashboardsHero.subhead}
           </p>
 
