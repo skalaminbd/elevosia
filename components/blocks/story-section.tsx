@@ -74,9 +74,26 @@ const ORBITS = [
   { radius: 20, duration: 48, tools: TOOLS.slice(5) },
 ];
 
+type Tool = (typeof TOOLS)[number];
+
+function ToolChip({ label, icon: Icon, color }: Tool) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-medium whitespace-nowrap shadow-sm sm:gap-2 sm:px-3 sm:py-2 sm:text-[13px]",
+        color,
+      )}
+    >
+      <Icon className="size-3.5 shrink-0 sm:size-4" aria-hidden="true" />
+      {label}
+    </span>
+  );
+}
+
 function ToolOrbit({ reduceMotion }: { reduceMotion: boolean }) {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-xl">
+    <>
+    <div className="relative mx-auto hidden aspect-square w-full max-w-xl md:block">
       <div
         className="absolute inset-0 rounded-full bg-highlight/5 blur-2xl"
         aria-hidden="true"
@@ -127,21 +144,22 @@ function ToolOrbit({ reduceMotion }: { reduceMotion: boolean }) {
                 animate={reduceMotion ? undefined : { rotate: -360 }}
                 transition={{ duration, repeat: Infinity, ease: "linear" }}
               >
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap shadow-sm",
-                    color,
-                  )}
-                >
-                  <Icon className="size-4 shrink-0" aria-hidden="true" />
-                  {label}
-                </span>
+                <ToolChip label={label} icon={Icon} color={color} />
               </motion.div>
             );
           })}
         </motion.div>
       ))}
     </div>
+
+    <ul className="mx-auto flex max-w-md flex-wrap justify-center gap-2 md:hidden">
+      {TOOLS.map((tool) => (
+        <li key={tool.label}>
+          <ToolChip {...tool} />
+        </li>
+      ))}
+    </ul>
+    </>
   );
 }
 
