@@ -91,18 +91,44 @@ Rules:
 | Use | Classes |
 |---|---|
 | Eyebrow | `rounded-full bg-success/15 px-3 py-1 text-xs font-medium text-success` |
-| Hero title | `text-4xl sm:text-5xl lg:text-6xl font-bold` |
-| Page title | `text-3xl font-semibold` |
-| Section title | `text-2xl font-semibold` |
+| Hero title | `text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] tracking-[-0.04em] font-bold` |
+| Section title (H2) | `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl` |
+| Sub-heading | `text-2xl font-semibold sm:text-3xl` |
 | Card title | `text-lg font-semibold` |
-| Body | `text-base` |
+| Body | `text-base`, section intros `text-base sm:text-lg` |
 | Small, labels | `text-sm` |
 | Meta | `text-xs text-muted-foreground` |
+
+## Marketing page pattern (use on every page)
+The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pattern. Every marketing page uses this hero and this type scale — do not invent a new hero or a new heading size per page.
+
+### Hero
+Full-bleed brand band, centred display headline, lead line, then the page's live visual.
+
+| Part | Classes |
+|---|---|
+| Band | `relative overflow-hidden bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground` |
+| Texture | `line-grid` overlay, `opacity-[0.07]`, masked to the top |
+| Container | `mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24`. Use `pb-0` when the visual bleeds off the bottom edge |
+| Text block | `mx-auto max-w-4xl text-center` |
+| Eyebrow | `<Eyebrow tone="inverse">` |
+| H1 | `mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance` |
+| Lead | `mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75` |
+| Buttons | centred row: `variant="highlight"` primary, `variant="outline" className="text-foreground"` secondary |
+| Trust row | optional, `text-xs text-primary-foreground/70` with lime `Check` icons |
+| Visual | `mt-14 lg:mt-20`, lime glow `absolute bg-highlight/20 blur-3xl`, window `rounded-t-xl border border-b-0 border-primary-foreground/15 bg-card shadow-md`, `mx-auto max-w-5xl` |
+
+### Section rules
+- Section H2: `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl`. Never `text-3xl` for a section heading.
+- Section intro: `text-base text-muted-foreground sm:text-lg`
+- Closing band H2: `text-4xl leading-[1.02] tracking-[-0.03em] font-bold sm:text-5xl lg:text-6xl`
+- Surfaces follow the theme: light cards in light mode, dark cards in dark mode. Only full-bleed brand bands (hero, closing) stay dark in both.
+- Sections alternate layout (split, ruled list, full-width band, sticky sequence) and each carries one live item.
 
 ## Layout
 - Spacing on the 4px scale. No arbitrary spacing like `p-[13px]`
 - Page container: `mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8`
-- Marketing sections: `py-15 md:py-20 lg:py-25` — 60px phone / 80px tablet / 100px desktop above and below, the same on every section. The hero is the exception: it keeps its own full-height layout
+- Marketing sections: `py-15 md:py-20 lg:py-25` — 60px phone / 80px tablet / 100px desktop above and below, the same on every section. The hero is the exception: it uses the pattern below
 - Admin and portal pages: `p-4 sm:p-6`, gaps `gap-4` or `gap-6`
 - Card padding: `p-6`
 - Shadows: `shadow-sm` or `shadow-md` only

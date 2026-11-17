@@ -14,10 +14,10 @@ export function ExperienceSection() {
   return (
     <Section id="experience">
       <div className="max-w-3xl">
-        <h2 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+        <h2 className="font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] sm:text-5xl">
           {experience.title}
         </h2>
-        <p className="mt-4 text-base text-muted-foreground">
+        <p className="mt-5 text-base text-muted-foreground sm:text-lg">
           {experience.body}
         </p>
       </div>

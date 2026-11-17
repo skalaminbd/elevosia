@@ -15,7 +15,7 @@ export function AboutClosing() {
     <Section className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-7">
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl">
+          <h2 className="font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl lg:text-6xl">
             {aboutClosing.title}
           </h2>
           <p className="mt-4 max-w-xl text-base text-primary-foreground/80 dark:text-foreground/80">

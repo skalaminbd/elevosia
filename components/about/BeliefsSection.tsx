@@ -32,10 +32,10 @@ export function BeliefsSection() {
       <div ref={ref} className="grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <Eyebrow>What we believe</Eyebrow>
-          <h2 className="mt-4 font-heading text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+          <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
             {principlesTitle}
           </h2>
-          <p className="mt-4 max-w-xs text-base text-muted-foreground">
+          <p className="mt-4 max-w-xs text-base text-muted-foreground sm:text-lg">
             {principlesLead}
           </p>
         </div>

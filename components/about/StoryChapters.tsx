@@ -28,7 +28,7 @@ function ChapterRow({ index }: { index: number }) {
 
       <div className={cn("lg:col-span-6", reversed && "lg:order-3")}>
         <span aria-hidden="true" className="mb-5 block h-px w-12 bg-primary" />
-        <h2 className="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
+        <h2 className="font-heading text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
           {chapter.title}
         </h2>
         <p className="mt-4 max-w-2xl text-base text-muted-foreground">
