@@ -222,6 +222,88 @@
   animation: none;
 }
 
+/* Custom dashboards page items */
+@keyframes cd-gauge {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  55%,
+  92% {
+    stroke-dashoffset: 40;
+  }
+  100% {
+    stroke-dashoffset: 100;
+  }
+}
+
+@keyframes cd-shake {
+  0%,
+  54%,
+  72%,
+  100% {
+    transform: translateX(0);
+  }
+  58% {
+    transform: translateX(-3px);
+  }
+  63% {
+    transform: translateX(3px);
+  }
+  68% {
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes cd-bar {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes cd-line {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  6%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cd-node {
+  0%,
+  8% {
+    opacity: 0.35;
+    transform: scale(0.96);
+  }
+  18%,
+  86% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  96%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes cd-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
 /* About page items */
 @keyframes about-option-left {
   0%,
