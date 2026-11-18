@@ -26,7 +26,7 @@ const SEARCH_ROWS = [
 
 export default function MarketingPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Marketing"
         meta="Team & growth"

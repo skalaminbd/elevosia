@@ -28,7 +28,7 @@ const initials = (name: string) =>
 
 export default function RequirementsPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Requirements"
         meta="Clients"

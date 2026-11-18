@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
   );
 
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Good morning, Alamin"
         meta="Wednesday 19 November"

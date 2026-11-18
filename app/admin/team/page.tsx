@@ -18,7 +18,7 @@ export default function TeamPage() {
   const capacity = team.reduce((sum, member) => sum + member.capacity, 0);
 
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Team & timesheets"
         meta="Team & growth"

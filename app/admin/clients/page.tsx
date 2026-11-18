@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ClientsPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Clients"
         description="Every company account, its projects, care plan and balance in one list."

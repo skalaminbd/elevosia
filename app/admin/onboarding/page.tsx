@@ -18,7 +18,7 @@ const templates = [
 
 export default function OnboardingPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Onboarding"
         meta="Clients"

@@ -36,7 +36,7 @@ const HEALTH_RULES = [
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Settings"
         meta="Admin"

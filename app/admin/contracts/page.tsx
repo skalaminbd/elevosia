@@ -26,7 +26,7 @@ const templates = [
 
 export default function ContractsPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Contracts"
         meta="Finance"

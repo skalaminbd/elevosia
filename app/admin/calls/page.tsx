@@ -27,7 +27,7 @@ export default function CallsPage() {
   const today = calls.filter((call) => call.day === "Today");
 
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Calls"
         meta="Delivery"

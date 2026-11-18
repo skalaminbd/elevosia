@@ -20,7 +20,7 @@ const RETAINERS = [
 
 export default function InvoicesPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Invoices"
         meta="Finance"

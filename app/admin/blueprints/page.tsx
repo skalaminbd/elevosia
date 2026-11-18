@@ -30,7 +30,7 @@ export default function BlueprintsPage() {
   const total = blueprints.reduce((sum, blueprint) => sum + blueprint.price, 0);
 
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Blueprints"
         meta="Clients"

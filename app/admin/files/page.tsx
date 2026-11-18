@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function FilesPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Files"
         meta="Delivery"
