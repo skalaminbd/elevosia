@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 export default function CustomDashboardsPage() {
   return (
     <>
-      <SiteHeader invert />
+      <SiteHeader />
 
       <main className="relative overflow-x-clip">
         <DashboardsHero />

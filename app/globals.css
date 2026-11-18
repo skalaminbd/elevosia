@@ -618,7 +618,8 @@
   }
 }
 
-/* Header sitting on a dark hero, while no menu is open */
+/* Optional inverse header tone (SiteHeader invert). Kept for a future dark hero;
+   the current rule is light heroes on every page, so no page uses it. */
 header[data-tone="inverse"]:not(:has([data-state="open"])) {
   --header-on: var(--primary-foreground);
   background: var(--primary);

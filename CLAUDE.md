@@ -114,29 +114,28 @@ Rules:
 The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pattern. Every marketing page uses this hero and this type scale — do not invent a new hero or a new heading size per page.
 
 ### Hero
-Full-bleed brand band. Two layouts are allowed — pick one per page, never invent a third:
+**Heroes are always light**, exactly like the homepage: no brand band, the page background showing through, a default `<Eyebrow>` (not inverse), `text-muted-foreground` lead and `variant="highlight"` + `variant="outline"` buttons. The sticky header stays transparent over it. Two layouts are allowed — pick one per page, never invent a third:
 
-- **Centered** (Custom Dashboards): text in `mx-auto max-w-5xl text-center`, visual below, bleeding off the bottom edge (`pb-0`).
+- **Centered** (homepage, Custom Dashboards): text in `mx-auto max-w-5xl text-center`, visual below, bleeding off the bottom edge (`pb-0`).
 - **Split** (About): `grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16`, content left-aligned in `lg:col-span-7`, visual in `lg:col-span-5`; stacks content-first on mobile.
 
 | Part | Classes |
 |---|---|
-| Band | `relative overflow-hidden bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground` |
-| Texture | `line-grid` overlay, `opacity-[0.07]`, masked to the top |
+| Section | `relative overflow-hidden` — no band, page background shows through |
+| Texture | optional; usually none on heroes |
 | Container | `mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24`. Use `pb-0` when the visual bleeds off the bottom edge |
 | Text block | Centered: `mx-auto max-w-5xl text-center`, lead `max-w-3xl`. Split: `lg:col-span-7`, left aligned, lead `max-w-2xl` |
-| Eyebrow | `<Eyebrow tone="inverse">` |
+| Eyebrow | `<Eyebrow>` (never inverse on a hero) |
 | H1 | `mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance` |
-| Lead | `mx-auto mt-6 max-w-2xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75` |
-| Buttons | centred row: `variant="highlight"` primary, `variant="outline" className="text-foreground"` secondary |
-| Trust row | optional, `text-xs text-primary-foreground/70` with lime `Check` icons |
+| Lead | `mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg` |
+| Buttons | `variant="highlight"` primary, `variant="outline"` secondary |
+| Trust row | optional, `text-xs text-muted-foreground` with `text-success` `Check` icons |
 | Visual | `mt-14 lg:mt-20`, lime glow `absolute bg-highlight/20 blur-3xl`, window `rounded-t-xl border border-b-0 border-primary-foreground/15 bg-card shadow-md`, `mx-auto max-w-5xl` |
 
 ### Section rules
 - Headings, intros and card titles follow the type-scale table above exactly — every page uses the same sizes.
 - **Bands are dark in both themes.** Hero bands, feature bands and closing bands use `bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground` — the page keeps its dark bookends in light mode too. Anything inside a band uses the `primary-foreground` / `dark:foreground` pair (e.g. `text-primary-foreground/70 dark:text-foreground/70`), lime (`highlight`) for accents, and `border-border` hairlines.
 - **Content surfaces follow the theme.** Cards, screens, mockups and terminals are `bg-card` / `bg-background` — light in light mode, dark in dark mode. Charts and icons sitting on those surfaces use `primary` (forest in light, lime in dark), never lime on white.
-- **Pages with a dark hero pass `<SiteHeader invert />`.** The header then sits on the hero's colour (dark in both themes, lime logo tile and CTA) and switches to the light card surface while a menu is open. Its hero pulls up behind it with `-mt-[var(--header-h)] pt-[var(--header-h)]`.
 - Menus dim and blur the page behind them; the header blur layer uses `bg-background/40 backdrop-blur-md`.
 - Sections alternate layout (split, ruled list, full-width band, sticky sequence) and each carries one live item.
 
