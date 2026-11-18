@@ -58,7 +58,7 @@ export function ModuleLibrary() {
               const isActive = active === index;
 
               return (
-                <li key={module.id} className="border-b border-border">
+                <li key={module.id} id={module.id} className="scroll-mt-24 border-b border-border">
                   <button
                     type="button"
                     aria-pressed={isActive}

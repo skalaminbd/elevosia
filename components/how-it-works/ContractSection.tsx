@@ -17,7 +17,7 @@ export function ContractSection() {
   const alive = inView && !reduceMotion;
 
   return (
-    <Section className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
+    <Section id="contract" className="scroll-mt-24 bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
       <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
         <div className="lg:col-span-7">
           <Eyebrow tone="inverse">In the contract</Eyebrow>

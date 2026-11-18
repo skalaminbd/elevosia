@@ -54,7 +54,7 @@ export function PortalSection() {
 
   return (
     <Section id="portal">
-      <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
+      <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-6">
           <h2 className="max-w-xl font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
             {portal.title}
@@ -66,7 +66,7 @@ export function PortalSection() {
           <ul className="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2">
             {portal.features.map((feature) => (
               <li key={feature.id} className="border-t border-border pt-4">
-                <h3 className="text-base font-semibold text-foreground">
+                <h3 className="text-lg font-semibold text-foreground">
                   {feature.title}
                 </h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">
