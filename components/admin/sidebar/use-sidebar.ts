@@ -3,21 +3,21 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-const STORAGE_KEY = "elevosia.sidebar.collapsed";
-
 /**
  * Sidebar state: desktop collapse (persisted) and the mobile drawer. The drawer
  * closes on route change, Escape and backdrop tap; body scroll is locked while
  * it is open.
  */
-export function useSidebar() {
+export function useSidebar(
+  storageKey = "elevosia.sidebar.collapsed",
+) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
+    const stored = window.localStorage.getItem(storageKey);
     const initial =
       stored !== null ? stored === "true" : window.innerWidth < 1280;
     const frame = window.requestAnimationFrame(() => {
@@ -25,12 +25,12 @@ export function useSidebar() {
       setHydrated(true);
     });
     return () => window.cancelAnimationFrame(frame);
-  }, []);
+  }, [storageKey]);
 
   useEffect(() => {
     if (!hydrated) return;
-    window.localStorage.setItem(STORAGE_KEY, String(collapsed));
-  }, [collapsed, hydrated]);
+    window.localStorage.setItem(storageKey, String(collapsed));
+  }, [collapsed, hydrated, storageKey]);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => setMobileOpen(false));
