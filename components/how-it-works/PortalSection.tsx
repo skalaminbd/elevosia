@@ -16,12 +16,22 @@ export function PortalSection() {
   const reduceMotion = useReducedMotion();
   const { ref, inView } = useInViewLoop<HTMLDivElement>({ threshold: 0.15 });
   const [round, setRound] = useState(0);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
     if (!inView || reduceMotion) return;
     const timer = window.setInterval(
       () => setRound((value) => value + 1),
       portal.feed.length * 1400 + 3000,
+    );
+    return () => window.clearInterval(timer);
+  }, [inView, reduceMotion]);
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return;
+    const timer = window.setInterval(
+      () => setStep((value) => (value + 1) % 4),
+      1600,
     );
     return () => window.clearInterval(timer);
   }, [inView, reduceMotion]);
@@ -97,7 +107,50 @@ export function PortalSection() {
               </aside>
 
               <div className="sm:col-span-4">
-                <p className="text-[11px] text-muted-foreground">Activity</p>
+                <div className="rounded-md border border-border bg-background p-2.5">
+                  <p className="flex items-center justify-between text-[10px] font-medium text-muted-foreground">
+                    This week
+                    <span className="font-mono">
+                      {reduceMotion ? 3 : step}/3
+                    </span>
+                  </p>
+                  <div className="mt-2 h-1 overflow-hidden rounded-full bg-muted">
+                    <span
+                      className="block h-full origin-left rounded-full bg-primary transition-transform duration-500 ease-out motion-reduce:transition-none"
+                      style={{
+                        transform: `scaleX(${(reduceMotion ? 3 : step) / 3})`,
+                      }}
+                    />
+                  </div>
+                  <ul className="mt-2 flex flex-col gap-1">
+                    {["Shift rules", "Invoice export", "Portal approvals"].map(
+                      (task, index) => {
+                        const done = index < (reduceMotion ? 3 : step);
+                        return (
+                          <li
+                            key={task}
+                            className="flex items-center gap-1.5 text-[10px] text-foreground"
+                          >
+                            <span
+                              className={
+                                done
+                                  ? "flex size-3 items-center justify-center rounded-full bg-success text-success-foreground"
+                                  : "size-3 rounded-full border border-muted-foreground/40"
+                              }
+                            >
+                              {done ? (
+                                <Check className="size-2" aria-hidden="true" />
+                              ) : null}
+                            </span>
+                            {task}
+                          </li>
+                        );
+                      },
+                    )}
+                  </ul>
+                </div>
+
+                <p className="mt-3 text-[11px] text-muted-foreground">Activity</p>
                 <div className="mt-2">
                   {reduceMotion ? (
                     <div className="flex flex-col gap-2">

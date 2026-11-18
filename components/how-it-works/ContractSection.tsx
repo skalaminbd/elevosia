@@ -53,7 +53,7 @@ export function ContractSection() {
               </span>
             </div>
 
-            <div className="mt-6 rounded-md border border-border bg-background p-4">
+            <div className="relative mt-6 rounded-md border border-border bg-background p-4">
               <p className="text-xs text-muted-foreground">
                 Authorised signature
               </p>
@@ -79,6 +79,16 @@ export function ContractSection() {
               <p className="mt-2 border-t border-border pt-2 text-[10px] text-muted-foreground">
                 Elevosia · fixed price, you own the code
               </p>
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "absolute right-4 bottom-4 rotate-[-7deg] rounded-md border-2 border-success px-2 py-0.5 text-[10px] font-bold tracking-wide text-success",
+                  alive && "animate-[who-pop_6000ms_ease-out_infinite]",
+                )}
+                style={{ animationDelay: "2.6s" }}
+              >
+                Signed
+              </span>
             </div>
 
             <div className="mt-6">
@@ -86,13 +96,12 @@ export function ContractSection() {
                 <span>Payment schedule</span>
                 <span className="font-mono">100%</span>
               </div>
-              <div className="mt-2 flex h-2 overflow-hidden rounded-full bg-muted">
+              <div className="mt-2 flex h-2 gap-0.5 overflow-hidden rounded-full bg-muted">
                 {contract.payments.map((payment, index) => (
                   <span
                     key={payment}
                     className={cn(
-                      "block h-full origin-left bg-primary",
-                      index > 0 && "border-l border-card",
+                      "block h-full origin-left rounded-sm bg-primary",
                       alive && "animate-[who-grow-x_6000ms_ease-out_infinite]",
                     )}
                     style={{

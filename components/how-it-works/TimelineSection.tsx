@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { timeline } from "@/content/how-it-works";
+import { MilestoneGlyph } from "@/components/how-it-works/MilestoneGlyph";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Section } from "@/components/shared/Section";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +12,7 @@ import { cn } from "@/lib/utils";
  * on lights up.
  */
 export function TimelineSection() {
+  const reduceMotion = useReducedMotion();
   const [reached, setReached] = useState(-1);
   const rows = useRef<Array<HTMLLIElement | null>>([]);
 
@@ -75,14 +78,21 @@ export function TimelineSection() {
                   )}
                 />
 
-                <div className="grid gap-2 lg:grid-cols-12 lg:gap-8">
-                  <p className="font-mono text-xs text-muted-foreground lg:col-span-2">
-                    {milestone.when}
-                  </p>
+                <div className="grid gap-2 lg:grid-cols-12 lg:items-start lg:gap-8">
+                  <div className="flex items-center gap-3 lg:col-span-3">
+                    <MilestoneGlyph
+                      id={milestone.id}
+                      active={isReached}
+                      reduceMotion={reduceMotion}
+                    />
+                    <p className="font-mono text-xs text-muted-foreground">
+                      {milestone.when}
+                    </p>
+                  </div>
                   <h3 className="font-heading text-xl font-semibold tracking-tight text-foreground lg:col-span-4">
                     {milestone.title}
                   </h3>
-                  <p className="max-w-2xl text-base text-muted-foreground lg:col-span-6">
+                  <p className="max-w-2xl text-base text-muted-foreground lg:col-span-5">
                     {milestone.body}
                   </p>
                 </div>
