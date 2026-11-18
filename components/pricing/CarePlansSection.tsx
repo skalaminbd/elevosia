@@ -4,7 +4,6 @@ import { Check } from "lucide-react";
 import { carePlans } from "@/content/pricing-page";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { Section } from "@/components/shared/Section";
-import { NumberTicker } from "@/components/ui/number-ticker";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { useInViewLoop } from "@/hooks/use-in-view-loop";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -86,12 +85,7 @@ export function CarePlansSection() {
 
               <p className="relative mt-5 border-t border-border pt-5">
                 <span className="font-mono text-2xl font-semibold text-foreground">
-                  $
-                  {reduceMotion ? (
-                    plan.price.toLocaleString("en-US")
-                  ) : (
-                    <NumberTicker value={plan.price} />
-                  )}
+                  ${plan.price.toLocaleString("en-US")}
                 </span>
                 <span className="text-xs text-muted-foreground"> a month</span>
               </p>
@@ -110,6 +104,22 @@ export function CarePlansSection() {
                   </li>
                 ))}
               </ul>
+
+              <div className="relative mt-auto pt-6">
+                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                  <span>Included changes</span>
+                  <span className="font-mono">{plan.hours} h / month</span>
+                </div>
+                <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-secondary">
+                  <span
+                    className={cn(
+                      "block h-full rounded-full",
+                      plan.highlight ? "bg-primary" : "bg-primary/50",
+                    )}
+                    style={{ width: `${(plan.hours / 20) * 100}%` }}
+                  />
+                </div>
+              </div>
             </div>
           ))}
         </div>

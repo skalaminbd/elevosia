@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Layers, Plug, SearchCheck, Sparkles } from "lucide-react";
 import { addOns, websiteBand } from "@/content/pricing-page";
 import { Section } from "@/components/shared/Section";
-import { NumberTicker } from "@/components/ui/number-ticker";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+
+const ICONS = {
+  "Extra module": Layers,
+  "AI automation": Sparkles,
+  Integration: Plug,
+  "AI audit": SearchCheck,
+} as Record<string, typeof Layers>;
 
 /** Add-ons and the small "need a website first" band. */
 export function ExtrasSection() {
-  const reduceMotion = useReducedMotion();
-
   return (
     <Section id="add-ons" className="scroll-mt-24">
       <div className="flex flex-wrap items-end justify-between gap-6">
@@ -23,22 +26,22 @@ export function ExtrasSection() {
       </div>
 
       <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-        {addOns.items.map((item) => (
+        {addOns.items.map((item) => {
+          const Icon = ICONS[item.name] ?? Layers;
+          return (
           <li
             key={item.name}
             className="rounded-lg border border-border bg-card p-5 shadow-sm"
           >
-            <p className="text-sm font-medium text-foreground">{item.name}</p>
+            <span className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <Icon className="size-3.5" aria-hidden="true" />
+            </span>
+            <p className="mt-3 text-sm font-medium text-foreground">{item.name}</p>
             <p className="mt-4 border-t border-border pt-4 font-mono text-xl font-semibold text-foreground">
               <span className="text-xs font-normal text-muted-foreground">
                 from{" "}
               </span>
-              $
-              {reduceMotion ? (
-                item.price.toLocaleString("en-US")
-              ) : (
-                <NumberTicker value={item.price} />
-              )}
+              ${item.price.toLocaleString("en-US")}
             </p>
             {"note" in item && item.note ? (
               <p className="mt-1 text-[11px] text-muted-foreground">
@@ -46,7 +49,8 @@ export function ExtrasSection() {
               </p>
             ) : null}
           </li>
-        ))}
+          );
+        })}
       </ul>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-5 shadow-sm">
