@@ -131,6 +131,25 @@ export default async function BlogPostPage({ params }: { params: Params }) {
             </aside>
 
             <article className="max-w-3xl lg:col-span-9">
+              {post.takeaways?.length ? (
+                <div className="mb-8 rounded-lg border border-border bg-card p-5">
+                  <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    What you&apos;ll take away
+                  </p>
+                  <ul className="mt-3 space-y-2">
+                    {post.takeaways.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-success" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
               {sections.map((section, index) => (
                 <section
                   key={section.id}
@@ -150,6 +169,15 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                       </p>
                     ))}
                   </div>
+
+                  {post.pullQuote &&
+                  post.pullQuote.afterSection === section.id ? (
+                    <blockquote className="mt-6 border-l-2 border-primary pl-5">
+                      <p className="font-heading text-xl font-medium tracking-tight text-foreground">
+                        “{post.pullQuote.text}”
+                      </p>
+                    </blockquote>
+                  ) : null}
 
                   {index === 3 ? <InlineCta /> : null}
                 </section>

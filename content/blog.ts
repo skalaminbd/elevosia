@@ -15,6 +15,18 @@ export const blogHero = {
   subhead:
     "Practical guides for owners who are tired of juggling tools. No jargon, no fluff.",
   searchPlaceholder: "Search articles",
+  topics: [
+    "scheduling",
+    "invoicing",
+    "client portals",
+    "per-seat pricing",
+    "weekly boards",
+    "AI follow-ups",
+    "spreadsheets",
+    "build vs buy",
+    "data migration",
+    "care plans",
+  ],
 };
 
 export const categories = [
@@ -42,6 +54,8 @@ export type Post = {
   date: string;
   readingTime: string;
   published: boolean;
+  takeaways?: string[];
+  pullQuote?: { text: string; afterSection: string };
   body?: PostSection[];
   faq?: { question: string; answer: string }[];
 };
@@ -56,6 +70,15 @@ export const posts: Post[] = [
     date: "18 Nov 2026",
     readingTime: "7 min read",
     published: true,
+    pullQuote: {
+      text: "If the person who built the spreadsheet is on holiday and the team waits, you don't have a system. You have a person with a system in their head.",
+      afterSection: "one-person",
+    },
+    takeaways: [
+      "Spreadsheets stop fitting when only one person understands them.",
+      "The clearest sign is being afraid to change the file.",
+      "You do not have to replace everything: start with the task that eats the most hours.",
+    ],
     body: [
       {
         id: "why",
