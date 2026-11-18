@@ -50,13 +50,17 @@ export function RulesSection() {
                     <Icon className="size-5" aria-hidden="true" />
                     <LiveGlyph id={rule.id} reduceMotion={reduceMotion} />
                   </span>
-                  <span className="font-mono text-xs text-muted-foreground">
+                  <span className="font-mono text-3xl font-semibold text-primary/15">
                     {rule.number}
                   </span>
                 </div>
                 <h3 className="mt-5 text-lg font-semibold">{rule.title}</h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">
                   {rule.body}
+                </p>
+                <p className="mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
+                  <span className="font-medium text-foreground">In practice · </span>
+                  {rule.example}
                 </p>
               </div>
             </MagicCard>

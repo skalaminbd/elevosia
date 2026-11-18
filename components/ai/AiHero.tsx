@@ -28,7 +28,7 @@ export function AiHero() {
   });
 
   const loop = [...aiHero.actions, ...aiHero.actions];
-  const rows = Array.from({ length: 4 }, (_, index) => {
+  const rows = Array.from({ length: 3 }, (_, index) => {
     const key = step + index;
     return { ...loop[(key + aiHero.actions.length) % loop.length], key };
   });
@@ -66,8 +66,26 @@ export function AiHero() {
                 </span>
               </div>
 
-              <div className="p-5">
-                <div className="flex items-center justify-between">
+              <div className="p-4 sm:p-5">
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    ["Hours saved", "6.2"],
+                    ["Tasks handled", "14"],
+                    ["Awaiting you", "2"],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="rounded-md border border-border bg-background px-2.5 py-2"
+                    >
+                      <p className="text-[9px] text-muted-foreground">{label}</p>
+                      <p className="mt-0.5 font-mono text-base font-semibold tabular-nums">
+                        {value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex items-center justify-between">
                   <p className="text-sm font-semibold">Handled this morning</p>
                   <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                     <span className="size-1.5 rounded-full bg-success" />
@@ -75,7 +93,7 @@ export function AiHero() {
                   </span>
                 </div>
 
-                <ul className="relative mt-3 flex h-[172px] flex-col gap-2 overflow-hidden">
+                <ul className="relative mt-3 flex h-[126px] flex-col gap-2 overflow-hidden">
                   <AnimatePresence initial={false} mode="popLayout">
                     {rows.map((row) => (
                       <motion.li
@@ -104,7 +122,7 @@ export function AiHero() {
                 </ul>
 
                 <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-[11px] text-muted-foreground">
-                  <span>4 tasks handled · about 0.8 hrs saved</span>
+                  <span>From 6:02 am · nobody at a keyboard</span>
                   <span className="font-mono">Sample data</span>
                 </div>
               </div>

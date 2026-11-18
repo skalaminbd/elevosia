@@ -35,24 +35,28 @@ export const aiRules = {
       number: "01",
       title: "Start with the job",
       body: "We find the task eating hours first, then pick the simplest tool that fixes it.",
+      example: "A 40-person care team spent 11 hours a week covering shifts. We started there.",
     },
     {
       id: "approve",
       number: "02",
       title: "People approve what matters",
       body: "AI drafts and suggests. Your team approves anything that touches money or clients.",
+      example: "Reminder wording is approved once, then reused until you change it.",
     },
     {
       id: "measure",
       number: "03",
       title: "Measured, not promised",
       body: "We track time saved from day one and turn off what doesn't pay off.",
+      example: "If reminders don't cut late invoices, we switch them off and tell you.",
     },
     {
       id: "data",
       number: "04",
       title: "Your data stays yours",
       body: "We use business-grade AI services that don't train public models on your data.",
+      example: "Your records are never used to train a public model.",
     },
   ],
 };

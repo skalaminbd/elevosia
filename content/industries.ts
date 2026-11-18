@@ -146,3 +146,31 @@ export const industriesClosing = {
   primary: { label: "Start a project", href: "/start" },
   secondary: { label: "Try the live demo", href: "/demo" },
 };
+
+export const industryFoundation = {
+  title: "Different industries, the same foundation",
+  intro:
+    "The first module changes. Everything underneath it does not. Four parts come with every industry build.",
+  items: [
+    {
+      id: "portal",
+      title: "Your client portal",
+      body: "A weekly board, approvals and invoices your clients can see without calling you.",
+    },
+    {
+      id: "phone",
+      title: "A phone view for the team",
+      body: "Today's jobs, notes and photos, built for one hand and bad signal.",
+    },
+    {
+      id: "numbers",
+      title: "The numbers that matter",
+      body: "One screen for the owner. No report queue, no waiting for month end.",
+    },
+    {
+      id: "ai",
+      title: "AI where it earns its keep",
+      body: "One job per automation, measured in hours. Switched off if it doesn't pay.",
+    },
+  ],
+};

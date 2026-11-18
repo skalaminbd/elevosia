@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { industryTabs } from "@/content/industries";
 import { AgenciesPreview } from "@/components/home/who-previews/AgenciesPreview";
 import { CarePreview } from "@/components/home/who-previews/CarePreview";
@@ -105,6 +106,28 @@ export function IndustryTabs() {
             >
               {item.label}
             </button>
+          ))}
+        </div>
+
+        <div className="mt-3 flex w-fit max-w-full items-center gap-1" aria-hidden="true">
+          {industryTabs.map((item) => (
+            <span
+              key={item.id}
+              className="h-0.5 w-8 overflow-hidden rounded-full bg-primary-foreground/20 dark:bg-foreground/20"
+            >
+              {active === item.id ? (
+                <motion.span
+                  key={`${active}-${picked}`}
+                  className="block h-full origin-left rounded-full bg-highlight"
+                  initial={{ scaleX: picked ? 1 : 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{
+                    duration: picked ? 0 : 6.5,
+                    ease: "linear",
+                  }}
+                />
+              ) : null}
+            </span>
           ))}
         </div>
 
