@@ -224,6 +224,51 @@
   animation: none;
 }
 
+/* How it works items */
+@keyframes hiw-fill {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  65%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hiw-sign {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hiw-week {
+  0%,
+  10% {
+    transform: translateX(0);
+  }
+  90%,
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes hiw-lock {
+  0%,
+  20% {
+    opacity: 0.35;
+    transform: scale(0.94);
+  }
+  35%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Custom dashboards page items */
 @keyframes cd-gauge {
   0% {
