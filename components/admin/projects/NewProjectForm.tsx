@@ -8,7 +8,10 @@ import { Button } from "@/components/ui/button";
 
 const MODULES = ["Scheduling", "Client CRM", "Care plans", "Invoicing", "Client portal", "Reports"];
 
-export function NewProjectForm() {
+export function NewProjectForm({
+  plain = false,
+  onDone,
+}: { plain?: boolean; onDone?: () => void } = {}) {
   const [fromBlueprint, setFromBlueprint] = useState("BP-309");
   const [name, setName] = useState("Care dashboard and client portal");
   const [pm, setPm] = useState("Alamin");
@@ -27,16 +30,23 @@ export function NewProjectForm() {
           {name} starts on {start}. The weekly board and milestones come from the
           approved Blueprint.
         </p>
-        <Button asChild className="mt-4" size="sm">
-          <Link href="/admin/projects">Back to projects</Link>
-        </Button>
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {onDone ? (
+            <Button size="sm" onClick={onDone}>
+              Done
+            </Button>
+          ) : null}
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/projects">Back to projects</Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
     <form
-      className="rounded-lg border border-border bg-card p-5 lg:p-6"
+      className={plain ? undefined : "rounded-lg border border-border bg-card p-5 lg:p-6"}
       onSubmit={(event) => {
         event.preventDefault();
         if (!name.trim()) return;

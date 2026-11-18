@@ -7,7 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
-export function InvoiceForm() {
+export function InvoiceForm({
+  plain = false,
+  onDone,
+}: { plain?: boolean; onDone?: () => void } = {}) {
   const [client, setClient] = useState("Brightline Care");
   const [kind, setKind] = useState("Milestone");
   const [amount, setAmount] = useState("4800");
@@ -27,7 +30,12 @@ export function InvoiceForm() {
             ? `${client} has been sent the invoice in this sample.`
             : "Saved as a draft. Send it when you are ready."}
         </p>
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {onDone ? (
+            <Button size="sm" onClick={onDone}>
+              Done
+            </Button>
+          ) : null}
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/invoices">All invoices</Link>
           </Button>
@@ -40,7 +48,7 @@ export function InvoiceForm() {
 
   return (
     <form
-      className="rounded-lg border border-border bg-card p-5 lg:p-6"
+      className={plain ? undefined : "rounded-lg border border-border bg-card p-5 lg:p-6"}
       onSubmit={(event) => {
         event.preventDefault();
         if (!valid) return;

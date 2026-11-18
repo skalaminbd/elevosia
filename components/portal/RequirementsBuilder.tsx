@@ -34,7 +34,7 @@ const seed: Section[] = [
 
 let counter = 100;
 
-export function RequirementsBuilder() {
+export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
   const [name, setName] = useState("");
   const [sections, setSections] = useState<Section[]>(seed);
   const [budget, setBudget] = useState("$10,000 to $20,000");
@@ -140,9 +140,18 @@ export function RequirementsBuilder() {
           review.
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+          {onDone ? (
+            <button
+              type="button"
+              onClick={onDone}
+              className="inline-flex h-9 items-center rounded-lg bg-primary px-3.5 text-xs font-medium text-primary-foreground"
+            >
+              Done
+            </button>
+          ) : null}
           <Link
             href="/portal"
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-3 text-xs font-medium hover:bg-secondary"
           >
             Back to home
             <ArrowUpRight className="size-3.5" aria-hidden="true" />
@@ -201,7 +210,7 @@ export function RequirementsBuilder() {
                   <textarea
                     value={point.text}
                     onChange={(event) => updatePoint(section.id, point.id, event.target.value)}
-                    rows={2}
+                    rows={3}
                     aria-label="Feature point"
                     placeholder="What should it do, in plain words?"
                     className="min-w-0 flex-1 resize-none rounded-md border border-transparent bg-transparent px-2 py-1.5 text-sm outline-none hover:border-border focus-visible:border-ring"
@@ -224,9 +233,9 @@ export function RequirementsBuilder() {
                       type="button"
                       onClick={() => removePoint(section.id, point.id)}
                       aria-label="Remove point"
-                      className="flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-destructive"
+                      className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-destructive"
                     >
-                      <Trash2 className="size-3" aria-hidden="true" />
+                      <Trash2 className="size-3.5" aria-hidden="true" />
                     </button>
                   </div>
                 </li>

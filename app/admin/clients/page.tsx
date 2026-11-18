@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CreditCard, UserPlus, Users, Wallet } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ClientsTable } from "@/components/admin/clients/ClientsTable";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { StatCard } from "@/components/admin/ui/StatCard";
+import { NewClientDialog } from "@/components/admin/clients/NewClientDialog";
 
 export const metadata: Metadata = {
   title: "Clients | Elevosia Admin",
@@ -17,12 +16,7 @@ export default function ClientsPage() {
         title="Clients"
         description="Every company account, its projects, care plan and balance in one list."
       >
-        <Button asChild size="sm">
-          <Link href="/admin/clients/new">
-            <UserPlus className="size-4" aria-hidden="true" />
-            Add client
-          </Link>
-        </Button>
+        <NewClientDialog />
       </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">

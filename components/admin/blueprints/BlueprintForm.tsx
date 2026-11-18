@@ -6,10 +6,18 @@ import { Check, Plus, Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-export function BlueprintForm() {
-  const [requirementId, setRequirementId] = useState<string | null>(null);
+export function BlueprintForm({
+  requirementId: initialRequirement,
+  plain = false,
+  onDone,
+}: {
+  requirementId?: string;
+  plain?: boolean;
+  onDone?: () => void;
+} = {}) {
+  const [requirementId, setRequirementId] = useState<string | null>(initialRequirement ?? null);
   const [client, setClient] = useState("Clearwater Fund");
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(initialRequirement ? "Donor CRM and impact reporting" : "");
   const [price, setPrice] = useState("28000");
   const [terms, setTerms] = useState("Service agreement");
   const [validUntil, setValidUntil] = useState("2026-12-19");
@@ -17,6 +25,7 @@ export function BlueprintForm() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
+    if (initialRequirement) return;
     const wanted = new URLSearchParams(window.location.search).get("requirement");
     if (!wanted) return;
     const frame = window.requestAnimationFrame(() => {
@@ -24,7 +33,7 @@ export function BlueprintForm() {
       setTitle((current) => current || "Donor CRM and impact reporting");
     });
     return () => window.cancelAnimationFrame(frame);
-  }, []);
+  }, [initialRequirement]);
 
   if (saved) {
     return (
@@ -37,13 +46,20 @@ export function BlueprintForm() {
           {title || "The Blueprint"} for {client} is a draft. Review the margin, then send
           it to the client.
         </p>
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {onDone ? (
+            <Button size="sm" onClick={onDone}>
+              Done
+            </Button>
+          ) : null}
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/blueprints">All Blueprints</Link>
           </Button>
-          <Button asChild size="sm">
-            <Link href="/admin/blueprints/BP-311">Open a Blueprint</Link>
-          </Button>
+          {!onDone ? (
+            <Button asChild size="sm">
+              <Link href="/admin/blueprints/BP-311">Open a Blueprint</Link>
+            </Button>
+          ) : null}
         </div>
       </div>
     );
@@ -53,7 +69,7 @@ export function BlueprintForm() {
 
   return (
     <form
-      className="rounded-lg border border-border bg-card p-5 lg:p-6"
+      className={plain ? undefined : "rounded-lg border border-border bg-card p-5 lg:p-6"}
       onSubmit={(event) => {
         event.preventDefault();
         if (!valid) return;

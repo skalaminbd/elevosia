@@ -13,6 +13,8 @@ import {
   Video,
 } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
+import { NewRequirementDialog } from "@/components/portal/NewRequirementDialog";
+import { NewRequestDialog } from "@/components/portal/NewRequestDialog";
 import { Progress } from "@/components/admin/ui/Progress";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
@@ -186,16 +188,38 @@ export default function PortalHomePage() {
             >
               {QUICK_ACTIONS.map((action) => {
                 const Icon = action.icon;
-                return (
-                  <Link
-                    key={action.id}
-                    href={action.href}
-                    className="flex flex-col gap-2 rounded-md border border-border p-3 text-xs font-medium transition-colors hover:border-primary/30 hover:bg-secondary/40"
-                  >
+                const className =
+                  "flex w-full flex-col items-start gap-2 rounded-md border border-border p-3 text-left text-xs font-medium transition-colors hover:border-primary/30 hover:bg-secondary/40";
+                const content = (
+                  <>
                     <span className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
                       <Icon className="size-3.5" aria-hidden="true" />
                     </span>
                     {action.label}
+                  </>
+                );
+
+                if (action.id === "new-project") {
+                  return (
+                    <NewRequirementDialog key={action.id}>
+                      <button type="button" className={className}>
+                        {content}
+                      </button>
+                    </NewRequirementDialog>
+                  );
+                }
+                if (action.id === "request") {
+                  return (
+                    <NewRequestDialog key={action.id}>
+                      <button type="button" className={className}>
+                        {content}
+                      </button>
+                    </NewRequestDialog>
+                  );
+                }
+                return (
+                  <Link key={action.id} href={action.href} className={className}>
+                    {content}
                   </Link>
                 );
               })}

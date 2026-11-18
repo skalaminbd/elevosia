@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Plus } from "lucide-react";
 import { FileText, Hourglass, PenLine, Stamp } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
+import { NewBlueprintDialog } from "@/components/admin/blueprints/NewBlueprintDialog";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
-import { Button } from "@/components/ui/button";
 import { blueprints, type BlueprintStatus } from "@/lib/admin-data";
 
 export const metadata: Metadata = {
@@ -39,12 +38,7 @@ export default function BlueprintsPage() {
         meta="Clients"
         description="Every plan sent to a client, with its version, expiry and fixed price."
       >
-        <Button asChild size="sm">
-          <Link href="/admin/blueprints/new">
-            <Plus className="size-4" aria-hidden="true" />
-            New Blueprint
-          </Link>
-        </Button>
+        <NewBlueprintDialog />
       </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">

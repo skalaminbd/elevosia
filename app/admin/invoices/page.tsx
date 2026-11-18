@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Plus } from "lucide-react";
 import { CalendarClock, CircleDollarSign, Receipt, TriangleAlert } from "lucide-react";
 import { InvoicesTable } from "@/components/admin/invoices/InvoicesTable";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
@@ -10,6 +9,7 @@ import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { installments } from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
+import { NewInvoiceDialog } from "@/components/admin/invoices/NewInvoiceDialog";
 
 export const metadata: Metadata = {
   title: "Invoices | Elevosia Admin",
@@ -35,12 +35,7 @@ export default function InvoicesPage() {
         <Button asChild variant="outline" size="sm">
           <Link href="/admin/invoices/retainers">Retainers</Link>
         </Button>
-        <Button asChild size="sm">
-          <Link href="/admin/invoices/new">
-            <Plus className="size-4" aria-hidden="true" />
-            New invoice
-          </Link>
-        </Button>
+        <NewInvoiceDialog />
       </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">

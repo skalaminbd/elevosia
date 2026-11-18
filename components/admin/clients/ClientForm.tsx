@@ -8,7 +8,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import type { AdminClient } from "@/lib/admin-data";
 
-export function ClientForm({ mode, client }: { mode: "new" | "edit"; client?: AdminClient }) {
+export function ClientForm({
+  mode,
+  client,
+  plain = false,
+  onDone,
+}: {
+  mode: "new" | "edit";
+  client?: AdminClient;
+  plain?: boolean;
+  onDone?: () => void;
+}) {
   const [company, setCompany] = useState(client?.name ?? "");
   const [contact, setContact] = useState(client?.contact ?? "");
   const [email, setEmail] = useState(client?.email ?? "");
@@ -37,11 +47,16 @@ export function ClientForm({ mode, client }: { mode: "new" | "edit"; client?: Ad
               : "No invite sent. You can invite them later."
             : "The profile is up to date in this sample."}
         </p>
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {onDone ? (
+            <Button size="sm" onClick={onDone}>
+              Done
+            </Button>
+          ) : null}
           <Button asChild variant="outline" size="sm">
             <Link href="/admin/clients">Back to clients</Link>
           </Button>
-          {mode === "edit" && client ? (
+          {mode === "edit" && client && !onDone ? (
             <Button asChild size="sm">
               <Link href={`/admin/clients/${client.id}`}>Open client</Link>
             </Button>
@@ -55,7 +70,7 @@ export function ClientForm({ mode, client }: { mode: "new" | "edit"; client?: Ad
 
   return (
     <form
-      className="rounded-lg border border-border bg-card p-5 lg:p-6"
+      className={plain ? undefined : "rounded-lg border border-border bg-card p-5 lg:p-6"}
       onSubmit={(event) => {
         event.preventDefault();
         if (!valid) return;

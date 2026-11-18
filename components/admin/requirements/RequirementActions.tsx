@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { CornerUpLeft, FileText, XCircle } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
+import { NewBlueprintDialog } from "@/components/admin/blueprints/NewBlueprintDialog";
 
 export function RequirementActions({
   requirementId,
@@ -26,12 +26,12 @@ export function RequirementActions({
         </p>
       </div>
       <div className="space-y-3 p-5">
-        <Button asChild className="w-full">
-          <Link href={`/admin/blueprints/new?requirement=${requirementId}`}>
+        <NewBlueprintDialog requirementId={requirementId}>
+          <Button className="w-full">
             <FileText className="size-4" aria-hidden="true" />
             Create Blueprint
-          </Link>
-        </Button>
+          </Button>
+        </NewBlueprintDialog>
 
         {stage === "idle" ? (
           <>

@@ -5,7 +5,10 @@ import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { retainer } from "@/lib/portal-data";
 
-export function NewRequestForm() {
+export function NewRequestForm({
+  plain = false,
+  onDone,
+}: { plain?: boolean; onDone?: () => void } = {}) {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
   const [project, setProject] = useState("Care dashboard and client portal");
@@ -23,13 +26,22 @@ export function NewRequestForm() {
           Your PM replies with an estimate in hours. Accepted work uses your care plan
           hours first.
         </p>
+        {onDone ? (
+          <button
+            type="button"
+            onClick={onDone}
+            className="mt-4 h-9 rounded-lg bg-primary px-3.5 text-xs font-medium text-primary-foreground"
+          >
+            Done
+          </button>
+        ) : null}
       </div>
     );
   }
 
   return (
     <form
-      className="rounded-lg border border-border bg-card p-5"
+      className={plain ? undefined : "rounded-lg border border-border bg-card p-5"}
       onSubmit={(event) => {
         event.preventDefault();
         if (!title.trim() || !detail.trim()) return;
