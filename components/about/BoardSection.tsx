@@ -8,8 +8,8 @@ import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 /**
- * The week board: the studio's own dashboard on a dark surface, running. One
- * status dot flips and the week's progress bar fills on a loop.
+ * The week board: the studio's own dashboard, running on a slightly darker
+ * surface than the page. One status dot flips and the week's bar fills.
  */
 export function BoardSection() {
   const reduceMotion = useReducedMotion();
@@ -28,14 +28,14 @@ export function BoardSection() {
         </div>
 
         <div ref={ref} className="lg:col-span-8">
-          <div className="overflow-hidden rounded-lg border border-border bg-secondary text-secondary-foreground shadow-md border-border dark:bg-secondary dark:text-foreground">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4 border-border">
-              <p className="text-sm font-semibold">Your board</p>
+          <div className="overflow-hidden rounded-lg border border-border bg-primary/10 shadow-md dark:bg-card">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
+              <p className="text-sm font-semibold text-foreground">Your board</p>
               <div className="flex items-center gap-3">
-                <span className="rounded-full border border-border px-2.5 py-1 font-mono text-xs text-secondary-foreground/80 border-border dark:text-muted-foreground">
+                <span className="rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-xs text-muted-foreground">
                   {board.week}
                 </span>
-                <span className="inline-flex items-center gap-2 text-xs text-secondary-foreground/80 dark:text-muted-foreground">
+                <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
                   <span
                     aria-hidden="true"
                     className="size-1.5 rounded-full bg-success"
@@ -49,9 +49,9 @@ export function BoardSection() {
               {board.columns.map((column) => (
                 <div
                   key={column.id}
-                  className="rounded-md bg-background/60 p-3 dark:bg-background/40"
+                  className="rounded-md bg-background/70 p-3 dark:bg-background/40"
                 >
-                  <p className="flex items-center justify-between text-xs font-medium text-secondary-foreground/70">
+                  <p className="flex items-center justify-between text-xs font-medium text-muted-foreground">
                     {column.label}
                     <span className="font-mono">{column.tasks.length}</span>
                   </p>
@@ -64,7 +64,7 @@ export function BoardSection() {
                       return (
                         <li
                           key={task.id}
-                          className="rounded-md border border-border bg-background/70 px-3 py-2.5 text-sm border-border dark:bg-card"
+                          className="rounded-md border border-border bg-card px-3 py-2.5 text-sm text-foreground"
                         >
                           <span className="flex items-start gap-2">
                             <span
@@ -80,7 +80,7 @@ export function BoardSection() {
                           </span>
 
                           {isTesting ? (
-                            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium text-secondary-foreground/70 dark:bg-muted dark:text-muted-foreground">
+                            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               <span
                                 aria-hidden="true"
                                 className={cn(
@@ -101,14 +101,12 @@ export function BoardSection() {
               ))}
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-5 py-3 border-border">
-              <p className="text-xs text-secondary-foreground/70">
-                {board.update}
-              </p>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-5 py-3">
+              <p className="text-xs text-muted-foreground">{board.update}</p>
               <span className="h-1 w-32 overflow-hidden rounded-full bg-muted">
                 <span
                   className={cn(
-                    "block h-full origin-left rounded-full bg-highlight",
+                    "block h-full origin-left rounded-full bg-primary",
                     alive && "animate-[who-grow-x_4500ms_ease-out_infinite]",
                   )}
                 />
