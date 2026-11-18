@@ -56,6 +56,7 @@ export default function TeamPage() {
                 </div>
                 <div className="mt-2.5 flex items-center gap-3">
                   <Progress
+                    className="flex-1"
                     value={ratio}
                     tone={ratio > 100 ? "danger" : ratio > 90 ? "warning" : "primary"}
                   />

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { CreditCard, Users, UserPlus, Wallet } from "lucide-react";
+import Link from "next/link";
+import { CreditCard, UserPlus, Users, Wallet } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ClientsTable } from "@/components/admin/clients/ClientsTable";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { StatCard } from "@/components/admin/ui/StatCard";
@@ -14,7 +16,14 @@ export default function ClientsPage() {
       <PageHeader
         title="Clients"
         description="Every company account, its projects, care plan and balance in one list."
-      />
+      >
+        <Button asChild size="sm">
+          <Link href="/admin/clients/new">
+            <UserPlus className="size-4" aria-hidden="true" />
+            Add client
+          </Link>
+        </Button>
+      </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard label="Active clients" value={4} note="1 onboarding this week" icon={Users} />

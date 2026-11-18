@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, Download, Search } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,47 @@ export function ClientsTable() {
     });
   }, [query, filter]);
 
+  function exportCsv() {
+    const header = [
+      "Company",
+      "Status",
+      "PM",
+      "Projects",
+      "Plan",
+      "Balance",
+      "Contact",
+      "Email",
+      "Industry",
+      "Time zone",
+    ];
+    const csv = [
+      header.join(","),
+      ...rows.map((client) =>
+        [
+          client.name,
+          client.status,
+          client.pm,
+          client.projects,
+          client.plan,
+          client.balance,
+          client.contact,
+          client.email,
+          client.industry,
+          client.timezone,
+        ]
+          .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+          .join(","),
+      ),
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "elevosia-clients.csv";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="rounded-lg border border-border bg-card">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
@@ -60,6 +102,14 @@ export function ClientsTable() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={exportCsv}
+            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <Download className="size-3.5" aria-hidden="true" />
+            CSV
+          </button>
           {FILTERS.map((item) => (
             <button
               key={item}
@@ -90,12 +140,18 @@ export function ClientsTable() {
               <div className="flex items-start gap-3">
                 <Avatar initials={client.initials} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{client.name}</p>
+                  <Link
+                    href={`/admin/clients/${client.id}`}
+                    className="truncate text-sm font-medium hover:underline"
+                  >
+                    {client.name}
+                  </Link>
                   <p className="truncate text-xs text-muted-foreground">
                     {client.industry} · {client.source}
                   </p>
                 </div>
                 <StatusBadge tone={TONE[client.status]}>{client.status}</StatusBadge>
+                <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
               </div>
               <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 pl-11 text-xs">
                 <span className="text-muted-foreground">
@@ -122,12 +178,13 @@ export function ClientsTable() {
               <th className="px-4 py-2.5 font-medium">Projects</th>
               <th className="px-4 py-2.5 font-medium">Plan</th>
               <th className="px-4 py-2.5 text-right font-medium">Balance</th>
+              <th className="w-10 px-4 py-2.5" />
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 ? (
               <tr className="border-t border-border">
-                <td colSpan={6} className="px-5 py-10 text-center text-sm text-muted-foreground">
+                <td colSpan={7} className="px-5 py-10 text-center text-sm text-muted-foreground">
                   No clients match that search.
                 </td>
               </tr>
@@ -141,7 +198,12 @@ export function ClientsTable() {
                     <div className="flex items-center gap-3">
                       <Avatar initials={client.initials} />
                       <div className="min-w-0">
-                        <p className="truncate font-medium">{client.name}</p>
+                        <Link
+                          href={`/admin/clients/${client.id}`}
+                          className="truncate font-medium hover:underline"
+                        >
+                          {client.name}
+                        </Link>
                         <p className="truncate text-xs text-muted-foreground">
                           {client.industry} · {client.source}
                         </p>
@@ -166,6 +228,15 @@ export function ClientsTable() {
                     ) : (
                       <span className="text-muted-foreground">—</span>
                     )}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Link
+                      href={`/admin/clients/${client.id}`}
+                      aria-label={`Open ${client.name}`}
+                      className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    >
+                      <ChevronRight className="size-4" aria-hidden="true" />
+                    </Link>
                   </td>
                 </tr>
               ))

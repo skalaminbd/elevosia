@@ -61,7 +61,7 @@ export default function MarketingPage() {
                 </StatusBadge>
               </div>
               <div className="mt-2.5 flex items-center gap-3">
-                <Progress value={campaign.progress} />
+                <Progress className="flex-1" value={campaign.progress} />
                 <span className="w-8 shrink-0 text-right font-mono text-[10px] text-muted-foreground">
                   {campaign.progress}%
                 </span>

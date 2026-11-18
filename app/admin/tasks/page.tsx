@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CheckCircle2, Clock, ListChecks, Timer } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { TasksView } from "@/components/admin/tasks/TasksView";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Tasks | Elevosia Admin",
@@ -15,7 +17,11 @@ export default function TasksPage() {
         title="Tasks"
         meta="Delivery"
         description="Your week first, then the whole board. Client-visible work updates the portal the moment it moves."
-      />
+      >
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/tasks/mine">My tasks</Link>
+        </Button>
+      </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard label="Open this week" value={6} note="Across 4 projects" icon={ListChecks} />

@@ -14,6 +14,7 @@ export type AdminClient = {
   email: string;
   status: ClientStatus;
   source: string;
+  since: string;
   projects: number;
   plan: string;
   balance: number;
@@ -31,6 +32,7 @@ export const adminClients: AdminClient[] = [
     email: "sarah@brightlinecare.com",
     status: "Active",
     source: "Referral",
+    since: "Sep 2026",
     projects: 1,
     plan: "Operate · $16,000",
     balance: 4800,
@@ -46,6 +48,7 @@ export const adminClients: AdminClient[] = [
     email: "dale@northwindhvac.com",
     status: "Active",
     source: "Website",
+    since: "Oct 2026",
     projects: 1,
     plan: "Launch · $8,500",
     balance: 2550,
@@ -61,6 +64,7 @@ export const adminClients: AdminClient[] = [
     email: "priya@lumenstudio.co",
     status: "Active",
     source: "Website",
+    since: "Aug 2026",
     projects: 1,
     plan: "Operate · $16,000",
     balance: 4800,
@@ -76,6 +80,7 @@ export const adminClients: AdminClient[] = [
     email: "tom@clearwaterfund.org",
     status: "Lead",
     source: "Website",
+    since: "Nov 2026",
     projects: 0,
     plan: "Scale enquiry",
     balance: 0,
@@ -91,6 +96,7 @@ export const adminClients: AdminClient[] = [
     email: "nina@harbortherapy.com",
     status: "Active",
     source: "Google",
+    since: "Jun 2026",
     projects: 1,
     plan: "Care · Growth",
     balance: 0,
@@ -106,6 +112,7 @@ export const adminClients: AdminClient[] = [
     email: "marco@ridgelineclean.com",
     status: "Paused",
     source: "Referral",
+    since: "May 2026",
     projects: 1,
     plan: "Single module · $4,500",
     balance: 1350,
@@ -121,6 +128,7 @@ export const adminClients: AdminClient[] = [
     email: "elaine@cedarbrook.edu",
     status: "Onboarding",
     source: "Event",
+    since: "Nov 2026",
     projects: 0,
     plan: "Scale",
     balance: 0,
@@ -136,12 +144,29 @@ export const adminClients: AdminClient[] = [
     email: "ray@atlasproperty.co",
     status: "Former",
     source: "Website",
+    since: "Mar 2026",
     projects: 0,
     plan: "Launch · handed over",
     balance: 0,
     pm: "Alamin",
     timezone: "America/Chicago",
   },
+];
+
+export type AdminActivity = {
+  id: string;
+  title: string;
+  detail: string;
+  time: string;
+  kind: "file" | "client" | "invoice" | "comment" | "approval";
+};
+
+export const activity: AdminActivity[] = [
+  { id: "A-1", title: "Sarah approved week 3", detail: "Brightline Care · client portal", time: "12 min ago", kind: "approval" },
+  { id: "A-2", title: "Maya uploaded the visit import", detail: "Brightline Care · data migration", time: "48 min ago", kind: "file" },
+  { id: "A-3", title: "Invoice INV-1045 paid", detail: "Harbor Therapy · $640", time: "2 hrs ago", kind: "invoice" },
+  { id: "A-4", title: "Comment from Priya Raman", detail: "Lumen Studio · weekly board", time: "Yesterday", kind: "comment" },
+  { id: "A-5", title: "New lead: Clearwater Fund", detail: "Nonprofit · Scale enquiry", time: "Yesterday", kind: "client" },
 ];
 
 export type RequirementStatus =
@@ -755,5 +780,212 @@ export const onboardingPipeline: {
   {
     stage: "Ready",
     cards: [],
+  },
+];
+
+
+/** Sample submission detail for each requirement, used by the requirement page. */
+export const requirementDetails: Record<
+  string,
+  {
+    sections: {
+      id: string;
+      title: string;
+      points: { text: string; must: boolean; comment?: string }[];
+    }[];
+    attachments: string[];
+    deadline: string;
+    nda: string;
+  }
+> = {
+  "REQ-2051": {
+    sections: [
+      {
+        id: "donors",
+        title: "Donors and members",
+        points: [
+          { text: "One record per donor with gifts, notes and contact history.", must: true },
+          { text: "Membership renewals tracked with reminders.", must: true },
+          { text: "Tags for programs and campaigns.", must: false },
+        ],
+      },
+      {
+        id: "applications",
+        title: "Applications",
+        points: [
+          { text: "Online application form with attachments.", must: true, comment: "Can reviewers see applications without an account?" },
+          { text: "Two-stage review with scores.", must: true },
+        ],
+      },
+      {
+        id: "reporting",
+        title: "Impact reporting",
+        points: [
+          { text: "Board-ready impact summary each quarter.", must: true },
+          { text: "Funds raised against goal by program.", must: true },
+        ],
+      },
+    ],
+    attachments: ["donor-list-export.xlsx", "current-application-form.pdf"],
+    deadline: "Before the spring campaign",
+    nda: "Signed 14 Nov 2026",
+  },
+  "REQ-2050": {
+    sections: [
+      {
+        id: "enrolment",
+        title: "Enrolment",
+        points: [
+          { text: "Families apply online and upload documents.", must: true },
+          { text: "Waitlist by grade and start date.", must: true },
+        ],
+      },
+      {
+        id: "families",
+        title: "Family portal",
+        points: [
+          { text: "One login per family, with every child in one place.", must: true },
+          { text: "Teachers post updates only to their class.", must: true },
+          { text: "Calendar of events per class.", must: false },
+        ],
+      },
+    ],
+    attachments: ["enrolment-workflow.docx"],
+    deadline: "Before the January intake",
+    nda: "Requested, not signed",
+  },
+  "REQ-2049": {
+    sections: [
+      {
+        id: "time",
+        title: "Time and retainers",
+        points: [
+          { text: "Time logged per client, project and person.", must: true },
+          { text: "Retainer hours used shown before the month end.", must: true },
+        ],
+      },
+      {
+        id: "reports",
+        title: "Client reporting",
+        points: [
+          { text: "Monthly client report generated from logged work.", must: true },
+          { text: "White-label option for the agency brand.", must: false },
+        ],
+      },
+    ],
+    attachments: ["retainer-tracker.xlsx", "client-report-example.pdf"],
+    deadline: "Q1 2027",
+    nda: "Signed 24 Sep 2026",
+  },
+  "REQ-2048": {
+    sections: [
+      {
+        id: "scheduling",
+        title: "Scheduling",
+        points: [
+          { text: "Clients book visits online and get a reminder the day before.", must: true },
+          { text: "Open shifts appear in one weekly board.", must: true },
+          { text: "Caregivers see their day on a phone.", must: false },
+        ],
+      },
+      {
+        id: "billing",
+        title: "Billing and portal",
+        points: [
+          { text: "Invoices go out from completed visits.", must: true },
+          { text: "Families can see visit updates in a portal.", must: true },
+        ],
+      },
+    ],
+    attachments: ["care-process-notes.pdf"],
+    deadline: "Before the winter season",
+    nda: "Signed 24 Sep 2026",
+  },
+  "REQ-2047": {
+    sections: [
+      {
+        id: "checklists",
+        title: "Crew checklists",
+        points: [
+          { text: "A checklist per job type with photos.", must: true },
+          { text: "Crews see today's jobs on a phone.", must: true },
+        ],
+      },
+    ],
+    attachments: [],
+    deadline: "No fixed deadline",
+    nda: "Not requested",
+  },
+};
+
+
+export type WorkRequest = {
+  id: string;
+  client: string;
+  title: string;
+  detail: string;
+  hours: number;
+  submitted: string;
+  status: "Submitted" | "Accepted" | "Converted" | "Declined";
+  pm: string;
+};
+
+export const workRequests: WorkRequest[] = [
+  {
+    id: "WR-31",
+    client: "Lumen Studio",
+    title: "Add a retainer report export",
+    detail: "A monthly PDF with hours used per client, ready to send to their clients.",
+    hours: 3,
+    submitted: "17 Nov 2026",
+    status: "Submitted",
+    pm: "Maya",
+  },
+  {
+    id: "WR-30",
+    client: "Harbor Therapy",
+    title: "Second booking calendar",
+    detail: "A separate calendar for the east-side clinic with the same rules.",
+    hours: 2,
+    submitted: "13 Nov 2026",
+    status: "Accepted",
+    pm: "Maya",
+  },
+  {
+    id: "WR-29",
+    client: "Brightline Care",
+    title: "Weekly report email",
+    detail: "Send the board summary every Monday at 7 am in the client's time zone.",
+    hours: 1.5,
+    submitted: "6 Nov 2026",
+    status: "Converted",
+    pm: "Alamin",
+  },
+];
+
+export const cannedReplies = [
+  {
+    id: "CR-1",
+    title: "We are on it",
+    category: "Acknowledgment",
+    body: "Thanks for the details. We have picked this up and will update you within one business day.",
+  },
+  {
+    id: "CR-2",
+    title: "Need a screenshot",
+    category: "Information",
+    body: "Could you send a screenshot of the screen and the time it happened? That will help us find it faster.",
+  },
+  {
+    id: "CR-3",
+    title: "Fixed",
+    category: "Resolution",
+    body: "This is fixed and live now. Please refresh the page and let us know if you see it again.",
+  },
+  {
+    id: "CR-4",
+    title: "Under warranty",
+    category: "Billing",
+    body: "This one is covered by your warranty, so there is no charge. We will keep you posted here.",
   },
 ];

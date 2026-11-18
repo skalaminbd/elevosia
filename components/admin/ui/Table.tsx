@@ -52,8 +52,16 @@ export function TR({ children }: { children: ReactNode }) {
   );
 }
 
-export function TH({ children }: { children: ReactNode }) {
-  return <th className="px-4 py-2.5 font-medium">{children}</th>;
+export function TH({
+  children,
+  className,
+}: {
+  children?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <th className={cn("px-4 py-2.5 font-medium", className)}>{children}</th>
+  );
 }
 
 export function TD({

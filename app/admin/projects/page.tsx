@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { AlertTriangle, FolderKanban, ShieldCheck, Wrench } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { ProjectsView } from "@/components/admin/projects/ProjectsView";
 import { StatCard } from "@/components/admin/ui/StatCard";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Projects | Elevosia Admin",
@@ -15,7 +18,14 @@ export default function ProjectsPage() {
         title="Projects"
         meta="Delivery"
         description="Every build, its health and its budget. List, board or timeline."
-      />
+      >
+        <Button asChild size="sm">
+          <Link href="/admin/projects/new">
+            <Plus className="size-4" aria-hidden="true" />
+            New project
+          </Link>
+        </Button>
+      </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard label="Active projects" value={4} note="2 building, 1 review" icon={FolderKanban} />

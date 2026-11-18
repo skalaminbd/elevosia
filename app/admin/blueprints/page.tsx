@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { FileText, Hourglass, PenLine, Stamp } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
@@ -6,6 +8,7 @@ import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
+import { Button } from "@/components/ui/button";
 import { blueprints, type BlueprintStatus } from "@/lib/admin-data";
 
 export const metadata: Metadata = {
@@ -35,7 +38,14 @@ export default function BlueprintsPage() {
         title="Blueprints"
         meta="Clients"
         description="Every plan sent to a client, with its version, expiry and fixed price."
-      />
+      >
+        <Button asChild size="sm">
+          <Link href="/admin/blueprints/new">
+            <Plus className="size-4" aria-hidden="true" />
+            New Blueprint
+          </Link>
+        </Button>
+      </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard label="Waiting for approval" value={2} note="$44,000 on the table" icon={Hourglass} tone="warning" />
@@ -59,6 +69,7 @@ export default function BlueprintsPage() {
             <TH>Valid until</TH>
             <TH>Milestones</TH>
             <TH>Price</TH>
+            <TH className="w-10" />
           </tr>
         </THead>
         <TBody>
@@ -71,7 +82,9 @@ export default function BlueprintsPage() {
                 </div>
               </TD>
               <TD>
-                <p className="font-medium">{blueprint.title}</p>
+                <Link href={`/admin/blueprints/${blueprint.id}`} className="font-medium hover:underline">
+                  {blueprint.title}
+                </Link>
                 <p className="font-mono text-[10px] text-muted-foreground">
                   {blueprint.id}
                 </p>
@@ -92,6 +105,11 @@ export default function BlueprintsPage() {
               </TD>
               <TD className="font-mono text-xs font-semibold tabular-nums">
                 ${blueprint.price.toLocaleString("en-US")}
+              </TD>
+              <TD>
+                <Link href={`/admin/blueprints/${blueprint.id}`} aria-label={`Open ${blueprint.client} Blueprint`} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground">
+                  <span aria-hidden="true">›</span>
+                </Link>
               </TD>
             </TR>
           ))}

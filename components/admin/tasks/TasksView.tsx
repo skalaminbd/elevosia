@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Check, Circle, ListChecks, SquareKanban } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { adminTasks, type TaskStatus } from "@/lib/admin-data";
@@ -29,6 +30,10 @@ export function TasksView() {
     () => adminTasks.filter((task) => task.assignee === "Alamin"),
     [],
   );
+  const openCount =
+    tab === "mine"
+      ? mine.filter((task) => !done[task.id]).length
+      : adminTasks.filter((task) => !done[task.id]).length;
 
   return (
     <div className="rounded-lg border border-border bg-card">
@@ -56,7 +61,7 @@ export function TasksView() {
           })}
         </div>
         <p className="text-xs text-muted-foreground">
-          {adminTasks.filter((task) => !done[task.id]).length} open · sample data
+          {openCount} open · sample data
         </p>
       </div>
 
@@ -98,14 +103,15 @@ export function TasksView() {
                     <Check className="size-3" strokeWidth={3} aria-hidden="true" />
                   </button>
                   <div className="min-w-0 flex-1">
-                    <p
+                    <Link
+                      href={`/admin/tasks/${task.id}`}
                       className={cn(
-                        "text-sm font-medium",
+                        "text-sm font-medium hover:underline",
                         checked && "text-muted-foreground line-through",
                       )}
                     >
                       {task.title}
-                    </p>
+                    </Link>
                     <p className="mt-0.5 text-xs text-muted-foreground">
                       {task.client} · {task.project}
                     </p>
@@ -163,7 +169,12 @@ export function TasksView() {
                               </StatusBadge>
                             )}
                           </div>
-                          <p className="mt-2 text-xs font-medium">{task.title}</p>
+                          <Link
+                            href={`/admin/tasks/${task.id}`}
+                            className="mt-2 block text-xs font-medium hover:underline"
+                          >
+                            {task.title}
+                          </Link>
                           <p className="mt-0.5 text-[10px] text-muted-foreground">
                             {task.client}
                           </p>

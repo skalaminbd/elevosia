@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FileSignature, PenLine, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
@@ -6,6 +7,8 @@ import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
 import { contracts } from "@/lib/admin-data";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contracts | Elevosia Admin",
@@ -31,7 +34,14 @@ export default function ContractsPage() {
         title="Contracts"
         meta="Finance"
         description="Templates, what is out for signature and the NDAs clients asked for first."
-      />
+      >
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/contracts/templates">Templates</Link>
+        </Button>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/contracts/nda">NDAs</Link>
+        </Button>
+      </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard label="Signed" value={3} note="This month" icon={FileSignature} tone="success" />
@@ -60,12 +70,17 @@ export default function ContractsPage() {
             <TH>Type</TH>
             <TH>Status</TH>
             <TH>Date</TH>
+            <TH className="w-10" />
           </tr>
         </THead>
         <TBody>
           {contracts.map((contract) => (
             <TR key={contract.id}>
-              <TD className="font-mono text-xs">{contract.id}</TD>
+              <TD className="font-mono text-xs">
+                <Link href={`/admin/contracts/${contract.id}`} className="hover:underline">
+                  {contract.id}
+                </Link>
+              </TD>
               <TD className="font-medium">{contract.client}</TD>
               <TD className="text-xs text-muted-foreground">{contract.type}</TD>
               <TD>
@@ -74,6 +89,11 @@ export default function ContractsPage() {
                 </StatusBadge>
               </TD>
               <TD className="text-xs text-muted-foreground">{contract.date}</TD>
+              <TD>
+                <Link href={`/admin/contracts/${contract.id}`} aria-label={`Open ${contract.id}`} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary">
+                  <ChevronRight className="size-4" aria-hidden="true" />
+                </Link>
+              </TD>
             </TR>
           ))}
         </TBody>

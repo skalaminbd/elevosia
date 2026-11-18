@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { LayoutList, Columns3, GanttChartSquare } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { Progress } from "@/components/admin/ui/Progress";
@@ -82,7 +83,12 @@ function ListView() {
             <div className="flex items-start gap-3">
               <Avatar initials={initials(project.client)} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{project.name}</p>
+                <Link
+                  href={`/admin/projects/${project.id}`}
+                  className="truncate text-sm font-medium hover:underline"
+                >
+                  {project.name}
+                </Link>
                 <p className="truncate text-xs text-muted-foreground">
                   {project.client}
                 </p>
@@ -138,7 +144,12 @@ function ListView() {
               <div className="flex items-center gap-2.5">
                 <Avatar initials={initials(project.client)} />
                 <div>
-                  <p className="font-medium">{project.name}</p>
+                  <Link
+                    href={`/admin/projects/${project.id}`}
+                    className="font-medium hover:underline"
+                  >
+                    {project.name}
+                  </Link>
                   <p className="text-xs text-muted-foreground">{project.client}</p>
                 </div>
               </div>
@@ -217,7 +228,12 @@ function BoardView() {
                       className="rounded-md border border-border bg-card p-3 transition-colors hover:border-primary/30"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <p className="text-sm font-medium">{project.client}</p>
+                        <Link
+                          href={`/admin/projects/${project.id}`}
+                          className="text-sm font-medium hover:underline"
+                        >
+                          {project.client}
+                        </Link>
                         <StatusBadge tone={HEALTH[project.health]}>
                           {project.health}
                         </StatusBadge>
@@ -265,7 +281,12 @@ function TimelineView() {
               className="grid grid-cols-[220px_1fr] items-center gap-4 rounded-md py-1.5"
             >
               <div className="min-w-0">
-                <p className="truncate text-xs font-medium">{project.name}</p>
+                <Link
+                  href={`/admin/projects/${project.id}`}
+                  className="truncate text-xs font-medium hover:underline"
+                >
+                  {project.name}
+                </Link>
                 <p className="truncate text-[10px] text-muted-foreground">
                   {project.client}
                 </p>

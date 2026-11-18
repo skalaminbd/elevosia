@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
 import { adminInvoices, type InvoiceStatus } from "@/lib/admin-data";
@@ -61,6 +63,7 @@ export function InvoicesTable() {
             <TH>Amount</TH>
             <TH>Due</TH>
             <TH>Status</TH>
+            <TH className="w-10" />
           </tr>
         </THead>
         <TBody>
@@ -73,7 +76,11 @@ export function InvoicesTable() {
           ) : (
             rows.map((invoice) => (
               <TR key={invoice.id}>
-                <TD className="font-mono text-xs">{invoice.id}</TD>
+                <TD className="font-mono text-xs">
+                  <Link href={`/admin/invoices/${invoice.id}`} className="hover:underline">
+                    {invoice.id}
+                  </Link>
+                </TD>
                 <TD className="font-medium">{invoice.client}</TD>
                 <TD className="text-xs text-muted-foreground">{invoice.kind}</TD>
                 <TD className="font-mono text-xs font-semibold tabular-nums">
@@ -84,6 +91,11 @@ export function InvoicesTable() {
                   <StatusBadge tone={TONE[invoice.status]}>
                     {invoice.status}
                   </StatusBadge>
+                </TD>
+                <TD>
+                  <Link href={`/admin/invoices/${invoice.id}`} aria-label={`Open ${invoice.id}`} className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary">
+                    <ChevronRight className="size-4" aria-hidden="true" />
+                  </Link>
                 </TD>
               </TR>
             ))

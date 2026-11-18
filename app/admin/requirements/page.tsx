@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { AlertTriangle, ArrowUp, FileCheck2, Inbox } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
@@ -57,6 +59,7 @@ export default function RequirementsPage() {
             <TH>Status</TH>
             <TH>Points</TH>
             <TH>Budget</TH>
+            <TH className="w-10" />
           </tr>
         </THead>
         <TBody>
@@ -69,7 +72,12 @@ export default function RequirementsPage() {
                 </div>
               </TD>
               <TD>
-                <p className="font-medium">{requirement.title}</p>
+                <Link
+                  href={`/admin/requirements/${requirement.id}`}
+                  className="font-medium hover:underline"
+                >
+                  {requirement.title}
+                </Link>
                 <p className="font-mono text-[10px] text-muted-foreground">
                   {requirement.id} · {requirement.points} points
                 </p>
@@ -94,6 +102,15 @@ export default function RequirementsPage() {
               </TD>
               <TD className="font-mono text-xs tabular-nums">{requirement.points}</TD>
               <TD className="text-xs text-muted-foreground">{requirement.budget}</TD>
+              <TD>
+                <Link
+                  href={`/admin/requirements/${requirement.id}`}
+                  aria-label={`Open ${requirement.client} requirements`}
+                  className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  <ChevronRight className="size-4" aria-hidden="true" />
+                </Link>
+              </TD>
             </TR>
           ))}
         </TBody>

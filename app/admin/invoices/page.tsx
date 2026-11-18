@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { CalendarClock, CircleDollarSign, Receipt, TriangleAlert } from "lucide-react";
 import { InvoicesTable } from "@/components/admin/invoices/InvoicesTable";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
@@ -7,6 +9,7 @@ import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { installments } from "@/lib/admin-data";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Invoices | Elevosia Admin",
@@ -25,7 +28,20 @@ export default function InvoicesPage() {
         title="Invoices"
         meta="Finance"
         description="What came in, what is due and what needs a nudge. Care plans invoice themselves on the 1st."
-      />
+      >
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/invoices/installments">Installments</Link>
+        </Button>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/admin/invoices/retainers">Retainers</Link>
+        </Button>
+        <Button asChild size="sm">
+          <Link href="/admin/invoices/new">
+            <Plus className="size-4" aria-hidden="true" />
+            New invoice
+          </Link>
+        </Button>
+      </PageHeader>
 
       <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <StatCard label="Paid this month" value="$7,040" note="2 invoices" icon={Receipt} tone="success" />

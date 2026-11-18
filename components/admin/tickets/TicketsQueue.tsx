@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
@@ -112,7 +113,9 @@ function TicketRow({
   return (
     <TR>
       <TD>
-        <p className="font-medium">{ticket.subject}</p>
+        <Link href={`/admin/tickets/${ticket.id}`} className="font-medium hover:underline">
+          {ticket.subject}
+        </Link>
         <p className="font-mono text-[10px] text-muted-foreground">{ticket.id}</p>
       </TD>
       <TD className="text-xs text-muted-foreground">{ticket.client}</TD>
