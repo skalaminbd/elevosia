@@ -67,6 +67,29 @@
   --sidebar-accent-foreground: var(--brand-forest);
   --sidebar-border: #e3e1d6;
   --sidebar-ring: var(--brand-forest);
+
+  /* Admin sidebar roles. The sidebar is dark in both themes: in light mode it
+     uses the primary surface pair, in dark mode the sidebar pair. The accent is
+     lime in both, because forest on forest has no contrast. Derived roles are
+     color-mix values so the theme switch updates them automatically. */
+  --sb-bg: var(--primary);
+  --sb-fg: var(--primary-foreground);
+  --sb-accent: var(--highlight);
+  --sb-accent-fg: var(--highlight-foreground);
+  --sb-warning: color-mix(in srgb, var(--warning) 55%, var(--white));
+  --sb-border: color-mix(in srgb, var(--sb-fg) 12%, transparent);
+  --sb-text: color-mix(in srgb, var(--sb-fg) 80%, transparent);
+  --sb-text-hover: color-mix(in srgb, var(--sb-fg) 95%, transparent);
+  --sb-text-muted: color-mix(in srgb, var(--sb-fg) 68%, transparent);
+  --sb-text-label: color-mix(in srgb, var(--sb-fg) 62%, transparent);
+  --sb-hover-bg: color-mix(in srgb, var(--sb-fg) 6%, transparent);
+  --sb-surface: color-mix(in srgb, var(--sb-fg) 4%, transparent);
+  --sb-surface-border: color-mix(in srgb, var(--sb-fg) 9%, transparent);
+  --sb-badge-bg: color-mix(in srgb, var(--sb-fg) 9%, transparent);
+  --sb-badge-text: color-mix(in srgb, var(--sb-fg) 88%, transparent);
+  --sb-accent-soft: color-mix(in srgb, var(--sb-accent) 14%, transparent);
+  --sb-warning-soft: color-mix(in srgb, var(--sb-warning) 16%, transparent);
+  --sb-focus: var(--sb-accent);
 }
 
 .dark {
@@ -118,6 +141,12 @@
   --sidebar-accent-foreground: #f3f5ee;
   --sidebar-border: rgb(255 255 255 / 10%);
   --sidebar-ring: var(--brand-lime);
+
+  --sb-bg: var(--sidebar);
+  --sb-fg: var(--sidebar-foreground);
+  --sb-accent: var(--sidebar-primary);
+  --sb-accent-fg: var(--sidebar-primary-foreground);
+  --sb-warning: var(--warning);
 }
 
 @theme inline {
@@ -178,6 +207,24 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-sb-bg: var(--sb-bg);
+  --color-sb-fg: var(--sb-fg);
+  --color-sb-border: var(--sb-border);
+  --color-sb-text: var(--sb-text);
+  --color-sb-text-hover: var(--sb-text-hover);
+  --color-sb-text-muted: var(--sb-text-muted);
+  --color-sb-text-label: var(--sb-text-label);
+  --color-sb-hover-bg: var(--sb-hover-bg);
+  --color-sb-surface: var(--sb-surface);
+  --color-sb-surface-border: var(--sb-surface-border);
+  --color-sb-badge-bg: var(--sb-badge-bg);
+  --color-sb-badge-text: var(--sb-badge-text);
+  --color-sb-accent: var(--sb-accent);
+  --color-sb-accent-fg: var(--sb-accent-fg);
+  --color-sb-accent-soft: var(--sb-accent-soft);
+  --color-sb-warning: var(--sb-warning);
+  --color-sb-warning-soft: var(--sb-warning-soft);
+  --color-sb-focus: var(--sb-focus);
 
   /* Body + buttons: Inter. Headings: Geist. Code: Geist Mono */
   --font-sans: var(--font-inter);

@@ -39,6 +39,25 @@ Rules:
 - No other UI library. Not allowed: MUI, Chakra, Mantine, Ant Design, DaisyUI, Bootstrap, styled-components, emotion
 - Do not install a package without asking. Each imported component lists its own dependencies. Tell me what it needs first
 
+## Dashboard areas (admin + portal)
+The product spec for these areas is `clientmanagement.md`. Read it before building any admin or portal screen.
+
+The admin and client areas use a different source order from the marketing site. Pick in this order:
+
+| Order | Source | Use it for |
+|---|---|---|
+| 1 | Watermelon UI animated components (ui.watermelon.sh/animated-components) | Every animated item: sidebars, activity feeds, task lists, status pickers, calendars, steppers, command search, onboarding, profile cards |
+| 2 | Watermelon UI components (ui.watermelon.sh/components) | Anything animated components do not cover: data tables, calendar variants, badges, avatars, dropdowns, sheets, tabs |
+| 3 | shadcn/ui (ui.shadcn.com/docs/components) | Primitives and anything missing from both: button, input, select, dialog, table, form fields |
+
+Rules:
+- Install Watermelon items with `npx shadcn@latest add https://registry.watermelon.sh/r/<name>.json` or copy the registry source into `components/kit/watermelon/`, then run the import checklist below. Always keep the source comment
+- Watermelon items that pull `@hugeicons/*`, `react-icons`, `react-use-measure` or another new package are adapted to lucide + `motion/react` by hand. Never add a new icon or animation package
+- Watermelon "base-ui" variants are adapted onto our existing `@/components/ui` primitives; do not add a second primitive system
+- Admin and portal layouts: fixed sidebar on desktop, bottom tab bar on mobile, `p-4 sm:p-6` page padding, `gap-4` or `gap-6`
+- Fetch or install a component only when the screen you are building needs it. Do not bulk-download registry entries in advance
+- Animated items must be purposeful (progress, status, lists, scheduling) and show their final state under reduced motion. No entrance animations on text or blocks
+
 ## Folder structure
 ```
 app/(public)/              marketing site
@@ -161,7 +180,7 @@ The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pat
 
 ## Animation
 - Marketing site: animation is fine. Durations 0.2 to 0.6s, ease `easeOut`
-- Admin and portal: no decorative animation. Only small transitions (hover, open and close, list changes)
+- Admin and portal: one purposeful animated item per panel (Watermelon animated component), plus small transitions for hover, open/close and list changes. No entrance animations on text or blocks. Loops pause when off screen and freeze on their final state under reduced motion
 
 ## Buttons
 - Always `<Button>` from `@/components/ui/button`
