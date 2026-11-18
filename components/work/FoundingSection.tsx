@@ -16,7 +16,10 @@ export function FoundingSection() {
   const alive = inView && !reduceMotion;
 
   return (
-    <Section className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
+    <Section
+      id="founding-clients"
+      className="scroll-mt-24 bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground"
+    >
       <div ref={ref} className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-7">
           <h2 className="font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">

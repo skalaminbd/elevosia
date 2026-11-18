@@ -51,7 +51,7 @@ const ITEMS: Item[] = [
     image:
       "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1200&q=80",
     imageAlt: "Abstract visual of connected data points",
-    cta: { label: "See what AI can do", href: "/ai" },
+    cta: { label: "See what AI can do", href: "/ai-automation" },
   },
   {
     value: "website",

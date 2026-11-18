@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Sample Blueprint — Elevosia</title>
+<style>
+  @page { size: A4; margin: 14mm 15mm; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #17392b;
+    background: #f7f5ee;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+  @media screen { body { max-width: 700px; margin: 0 auto; padding: 24px; } }
+  .page { padding: 2mm 0 8mm; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .top { display: flex; align-items: center; justify-content: space-between; border-bottom: 1.2pt solid #17392b; padding-bottom: 5mm; }
+  .brand { display: flex; align-items: center; gap: 3mm; font-weight: 700; font-size: 13pt; letter-spacing: -0.02em; }
+  .mark { width: 8mm; height: 8mm; border-radius: 2mm; background: #17392b; color: #c6f24e; display: flex; align-items: center; justify-content: center; font-size: 11pt; }
+  .eyebrow { display: inline-block; background: rgba(23,57,43,.08); color: #17392b; border-radius: 999px; padding: 1.2mm 3mm; font-size: 8.5pt; font-weight: 600; }
+  h1 { font-size: 25pt; line-height: 1.02; letter-spacing: -0.035em; margin: 5mm 0 2mm; }
+  h2 { font-size: 12pt; letter-spacing: -0.01em; margin: 7mm 0 2.5mm; }
+  h3 { font-size: 10.5pt; margin: 0 0 1mm; }
+  p { margin: 0 0 2.5mm; color: #44584f; }
+  .muted { color: #6b7d73; font-size: 9pt; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin: 6mm 0; }
+  .meta div { border: 0.8pt solid rgba(23,57,43,.18); border-radius: 2mm; padding: 2.5mm 3mm; background: #fffdf8; }
+  .meta span { display: block; font-size: 7.5pt; color: #6b7d73; text-transform: uppercase; letter-spacing: .04em; }
+  .meta strong { font-size: 10pt; }
+  .note { background: rgba(198,242,78,.35); border-radius: 2mm; padding: 3mm 4mm; font-size: 9pt; margin: 5mm 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .card { border: 0.8pt solid rgba(23,57,43,.18); border-radius: 2.5mm; padding: 4mm; background: #fffdf8; }
+  ul { margin: 0; padding-left: 4mm; }
+  li { margin-bottom: 1.2mm; color: #44584f; }
+  .milestone { display: flex; gap: 4mm; border-top: 0.8pt solid rgba(23,57,43,.18); padding: 3.5mm 0; }
+  .milestone:first-of-type { border-top: 1.2pt solid #17392b; }
+  .num { font-family: "Courier New", monospace; font-size: 9pt; color: #6b7d73; width: 10mm; padding-top: 1mm; }
+  table { width: 100%; border-collapse: collapse; margin-top: 2mm; }
+  th { text-align: left; font-size: 8pt; text-transform: uppercase; letter-spacing: .05em; color: #6b7d73; padding: 2mm 2mm; border-bottom: 0.8pt solid rgba(23,57,43,.25); }
+  td { padding: 2.2mm 2mm; border-bottom: 0.6pt solid rgba(23,57,43,.12); font-size: 9.5pt; }
+  td.mono { font-family: "Courier New", monospace; }
+  .price { margin-top: 4mm; border-radius: 2.5mm; background: #17392b; color: #f7f5ee; padding: 5mm; display: flex; justify-content: space-between; align-items: center; }
+  .price strong { font-size: 18pt; letter-spacing: -0.02em; }
+  .price span { color: rgba(247,245,238,.7); font-size: 9pt; }
+  .pay { display: grid; grid-template-columns: 4fr 3fr 3fr; gap: 2mm; margin-top: 3mm; }
+  .pay div { border: 0.8pt solid rgba(23,57,43,.18); border-radius: 2mm; padding: 2.5mm; font-size: 8.5pt; background: #fffdf8; }
+  .foot { margin-top: 6mm; border-top: 0.8pt solid rgba(23,57,43,.18); padding-top: 3mm; display: flex; justify-content: space-between; font-size: 8pt; color: #6b7d73; }
+  .badge { display: inline-block; background: rgba(23,57,43,.08); border-radius: 999px; padding: 1mm 2.5mm; font-size: 8pt; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="top">
+      <div class="brand"><span class="mark">e</span> elevosia</div>
+      <span class="badge">Sample document</span>
+    </div>
+
+    <div style="margin-top:8mm">
+      <span class="eyebrow">Free Blueprint</span>
+      <h1>Brightline Care: one dashboard for scheduling, clients and billing</h1>
+      <p class="muted">Prepared 18 November 2026 · Valid for 30 days · Sample only</p>
+    </div>
+
+    <div class="meta">
+      <div><span>Team</span><strong>12 people</strong></div>
+      <div><span>Timeline</span><strong>6 weeks</strong></div>
+      <div><span>Modules</span><strong>4</strong></div>
+      <div><span>Fixed price</span><strong>$16,000</strong></div>
+    </div>
+
+    <p class="note"><strong>Sample only.</strong> This document shows the format every Elevosia Blueprint follows. Brightline Care is a made-up company. A real Blueprint is built from your requirements and your workflow.</p>
+
+    <h2>The goal</h2>
+    <p>Replace four disconnected tools with one dashboard for the office, a simple phone view for caregivers, and a client portal families can see. The first win is covering open shifts in minutes instead of a morning of phone calls.</p>
+
+    <h2>What's in scope</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Scheduling and dispatch</h3>
+        <ul>
+          <li>Weekly board with open shifts</li>
+          <li>Auto-fill by skill, area and hours</li>
+          <li>Caregiver phone view</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Clients and care plans</h3>
+        <ul>
+          <li>Client records and visit history</li>
+          <li>Care plan notes and documents</li>
+          <li>Family access to updates</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Invoicing and reminders</h3>
+        <ul>
+          <li>Invoices from completed visits</li>
+          <li>Polite reminders that stop on payment</li>
+          <li>Export to your accounting tool</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Weekly reporting</h3>
+        <ul>
+          <li>Visits, hours and revenue per week</li>
+          <li>Open shifts and expiring credentials</li>
+          <li>Monday email summary</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span>elevosia.com · hello@elevosia.com</span>
+      <span>Page 1 of 2</span>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="top">
+      <div class="brand"><span class="mark">e</span> elevosia</div>
+      <span class="badge">Sample Blueprint</span>
+    </div>
+
+    <h2 style="margin-top:8mm">Milestones and tasks</h2>
+
+    <div class="milestone">
+      <div class="num">01</div>
+      <div>
+        <h3>Foundation · week 1</h3>
+        <ul>
+          <li>Workshop: roles, visit types, care plan fields</li>
+          <li>Import clients, caregivers and visit history</li>
+          <li>Sign-off on the weekly board layout</li>
+        </ul>
+      </div>
+    </div>
+    <div class="milestone">
+      <div class="num">02</div>
+      <div>
+        <h3>Build · weeks 2 to 4</h3>
+        <ul>
+          <li>Scheduling, auto-fill and caregiver phone view</li>
+          <li>Client records, care plans and family access</li>
+          <li>Invoices, reminders and exports</li>
+        </ul>
+      </div>
+    </div>
+    <div class="milestone">
+      <div class="num">03</div>
+      <div>
+        <h3>Review and finish · weeks 5 to 6</h3>
+        <ul>
+          <li>Team training on a real week of work</li>
+          <li>Migration checks and role permissions</li>
+          <li>Launch, then 30-day warranty</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Timeline</h2>
+    <table>
+      <thead>
+        <tr><th>Week</th><th>Focus</th><th>What you see</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>Foundation</td><td>Your data in, board layout approved</td></tr>
+        <tr><td class="mono">2</td><td>Scheduling</td><td>Open shifts and auto-fill working</td></tr>
+        <tr><td class="mono">3</td><td>Clients</td><td>Client records and family access</td></tr>
+        <tr><td class="mono">4</td><td>Billing</td><td>Invoices and reminders</td></tr>
+        <tr><td class="mono">5</td><td>Review</td><td>Mid-project demo, changes agreed</td></tr>
+        <tr><td class="mono">6</td><td>Launch</td><td>Training, go-live, warranty starts</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Fixed price</h2>
+    <div class="price">
+      <div>
+        <span>Fixed price, no per-user fees</span>
+        <br />
+        <strong>$16,000</strong>
+      </div>
+      <div style="text-align:right">
+        <span>Includes client portal, data migration,<br />training and a 30-day warranty</span>
+      </div>
+    </div>
+
+    <div class="pay">
+      <div><strong>40%</strong><br /><span class="muted">To start · $6,400</span></div>
+      <div><strong>30%</strong><br /><span class="muted">Mid-project demo · $4,800</span></div>
+      <div><strong>30%</strong><br /><span class="muted">At launch · $4,800</span></div>
+    </div>
+
+    <h2>After launch</h2>
+    <p>Essential care, $299 a month: monitoring, daily backups, security updates, bug fixes, two hours of small changes and next-business-day support. Cancel any time; you keep the code and the data.</p>
+
+    <h2>Next step</h2>
+    <p>Approve this Blueprint to start, or send changes. Nothing is charged until you approve, and the price only changes if the scope does.</p>
+
+    <div class="foot">
+      <span>elevosia.com · hello@elevosia.com</span>
+      <span>Page 2 of 2</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -90,7 +90,7 @@ export const comparison = {
   ] satisfies ComparisonRow[],
   link: {
     label: "See the full cost comparison and calculator",
-    href: "/calculator",
+    href: "/why-custom#calculator",
   },
 } as const;
 
@@ -98,7 +98,7 @@ export const ai = {
   eyebrow: "AI that earns its place",
   title: "Less busywork. Not more buzzwords.",
   body: "We only add AI where it saves real time, and we measure it in hours saved.",
-  cta: { label: "Explore AI & automation", href: "/ai" },
+  cta: { label: "Explore AI & automation", href: "/ai-automation" },
   briefing: {
     title: "Morning briefing",
     caption: "what needs your attention today",
@@ -364,7 +364,7 @@ export const closing = {
   secondary: { label: "Book a call", href: "/book-a-call" },
   checklist: {
     label: "Not ready? Get the free Dashboard Blueprint checklist",
-    href: "/blueprint",
+    href: "/pricing#blueprint",
   },
   day: "Monday",
   clock: "7:40",
