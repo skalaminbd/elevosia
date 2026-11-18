@@ -224,6 +224,24 @@
   animation: none;
 }
 
+/* AI page items */
+@keyframes ai-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+/* Why custom items */
+@keyframes why-rock {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
 /* How it works items */
 @keyframes hiw-fill {
   0% {
