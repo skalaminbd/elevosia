@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { SmoothAnchors } from "@/components/shared/SmoothAnchors";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
+          <SmoothAnchors />
           <Toaster position="bottom-right" closeButton />
         </ThemeProvider>
       </body>

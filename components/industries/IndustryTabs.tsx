@@ -35,14 +35,23 @@ export function IndustryTabs() {
   const [picked, setPicked] = useState(false);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
+    const syncFromHash = () => {
       const hash = window.location.hash.replace("#", "");
       if (isTabId(hash)) {
         setActive(hash);
         setPicked(true);
       }
-    });
-    return () => window.cancelAnimationFrame(frame);
+    };
+
+    const frame = window.requestAnimationFrame(syncFromHash);
+    window.addEventListener("hashchange", syncFromHash);
+    window.addEventListener("popstate", syncFromHash);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", syncFromHash);
+      window.removeEventListener("popstate", syncFromHash);
+    };
   }, []);
 
   useEffect(() => {
@@ -67,6 +76,12 @@ export function IndustryTabs() {
 
   return (
     <Section id="industries" className="scroll-mt-24 bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
+      <div aria-hidden="true">
+        {industryTabs.map((item) => (
+          <span key={item.id} id={item.id} className="block scroll-mt-24" />
+        ))}
+      </div>
+
       <div ref={ref}>
         <Eyebrow tone="inverse">Pick your industry</Eyebrow>
 
