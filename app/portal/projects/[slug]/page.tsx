@@ -34,7 +34,7 @@ export default async function PortalProjectPage({ params }: { params: Params }) 
   );
 
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <Link
         href="/portal/projects"
         className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"

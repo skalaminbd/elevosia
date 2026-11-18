@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function PortalProjectsPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="My projects"
         meta="Projects"

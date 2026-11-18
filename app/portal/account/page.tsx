@@ -21,7 +21,7 @@ const NOTIFY = [
 
 export default function PortalAccountPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Account and team"
         meta="Settings"

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function NewRequestPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Request new work"
         meta="Care plan"

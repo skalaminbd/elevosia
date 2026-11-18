@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function PortalReportsPage() {
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Reports"
         meta="Support"

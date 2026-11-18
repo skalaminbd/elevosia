@@ -88,7 +88,7 @@ export default function PortalHomePage() {
   const done = week.tasks.filter((task) => task.state === "done").length;
 
   return (
-    <div className="mx-auto w-full max-w-[1440px]">
+    <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title={`Welcome back, ${portalClient.firstName}`}
         meta="Wednesday 19 November"
