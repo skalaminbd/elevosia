@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Plus } from "lucide-react";
+import { Plus, FileText } from "lucide-react";
 import { Dialog } from "@/components/shared/Dialog";
 import { Button } from "@/components/ui/button";
 import { BlueprintForm } from "./BlueprintForm";
@@ -23,6 +23,7 @@ export function NewBlueprintDialog({
           </Button>
         )
       }
+      icon={<FileText className="size-4" aria-hidden="true" />}
       title="New Blueprint"
       description="Milestones, tasks and a fixed price. Nothing is sent until you choose."
       size="xl"

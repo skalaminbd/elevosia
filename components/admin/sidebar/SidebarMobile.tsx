@@ -106,7 +106,7 @@ export function SidebarMobile({
           >
             <motion.div
               aria-hidden="true"
-              className="absolute inset-0 bg-sb-bg/55 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/30 backdrop-blur-md dark:bg-black/45"
               initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0 }}

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Plus } from "lucide-react";
+import { Plus, UserPlus } from "lucide-react";
 import { Dialog } from "@/components/shared/Dialog";
 import { Button } from "@/components/ui/button";
 import { ClientForm } from "./ClientForm";
@@ -17,6 +17,7 @@ export function NewClientDialog({ children }: { children?: ReactNode }) {
           </Button>
         )
       }
+      icon={<UserPlus className="size-4" aria-hidden="true" />}
       title="Add a client"
       description="Company, contact and portal access. Projects and billing come after."
       size="lg"

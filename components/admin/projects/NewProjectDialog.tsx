@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Plus } from "lucide-react";
+import { Plus, FolderKanban } from "lucide-react";
 import { Dialog } from "@/components/shared/Dialog";
 import { Button } from "@/components/ui/button";
 import { NewProjectForm } from "./NewProjectForm";
@@ -17,6 +17,7 @@ export function NewProjectDialog({ children }: { children?: ReactNode }) {
           </Button>
         )
       }
+      icon={<FolderKanban className="size-4" aria-hidden="true" />}
       title="New project"
       description="Start from an approved Blueprint, or from an internal template."
       size="lg"
