@@ -6,13 +6,15 @@ import { Eyebrow } from "@/components/shared/Eyebrow";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
-/** Hero: a balance scale rocking between Build and Buy. */
+/** Hero: a balance scale between build and buy, with both sides labelled. */
 export function WhyHero() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative">
-      <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24">
+    <section className="relative overflow-hidden">
+      <div className="absolute top-1/4 -left-24 hidden size-64 rounded-full bg-highlight/10 blur-3xl lg:block" />
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
           <div className="lg:col-span-7">
             <Eyebrow>{whyHero.eyebrow}</Eyebrow>
@@ -33,32 +35,51 @@ export function WhyHero() {
           </div>
 
           <div className="lg:col-span-5">
-            <div className="mx-auto flex max-w-sm flex-col items-center rounded-lg border border-border bg-card p-6 shadow-sm">
+            <div className="mx-auto w-full max-w-sm rounded-lg border border-border bg-card p-6 shadow-sm">
               <svg
                 viewBox="0 0 200 120"
-                className="h-44 w-full"
+                className="h-40 w-full"
                 role="img"
                 aria-label="A balance scale tipping between build and buy"
               >
-                <line x1="100" y1="18" x2="100" y2="100" stroke="var(--color-border)" strokeWidth="2" />
-                <line x1="70" y1="104" x2="130" y2="104" stroke="var(--color-border)" strokeWidth="2" strokeLinecap="round" />
+                <line x1="100" y1="20" x2="100" y2="100" stroke="var(--color-border)" strokeWidth="2" />
+                <line x1="66" y1="104" x2="134" y2="104" stroke="var(--color-border)" strokeWidth="2" strokeLinecap="round" />
                 <g
                   className={cn(
-                    "origin-center",
                     !reduceMotion && "animate-[why-rock_6000ms_ease-in-out_infinite]",
                   )}
-                  style={{ transformOrigin: "100px 24px" }}
+                  style={{ transformOrigin: "100px 26px" }}
                 >
-                  <line x1="40" y1="24" x2="160" y2="24" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-                  <path d="M40 24l-10 22h20z" fill="none" stroke="var(--color-primary)" strokeWidth="2" />
-                  <path d="M160 24l-10 22h20z" fill="none" stroke="var(--color-primary)" strokeWidth="2" />
-                  <circle cx="100" cy="24" r="4" fill="var(--color-primary)" />
+                  <line x1="40" y1="26" x2="160" y2="26" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M40 26l-11 24h22z" fill="none" stroke="var(--color-primary)" strokeWidth="2" />
+                  <path d="M160 26l-11 24h22z" fill="none" stroke="var(--color-primary)" strokeWidth="2" />
+                  <circle cx="100" cy="26" r="4" fill="var(--color-primary)" />
                 </g>
               </svg>
 
-              <div className="mt-2 flex w-full items-center justify-between font-mono text-xs text-muted-foreground">
-                <span>Buy</span>
-                <span>Build</span>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="rounded-md border border-border bg-background p-3">
+                  <p className="text-[10px] font-medium text-muted-foreground">
+                    Buy
+                  </p>
+                  <p className="mt-1 font-mono text-sm font-semibold tabular-nums">
+                    $2,400<span className="text-[10px] font-normal">/mo</span>
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    at 20 people, +7% a year
+                  </p>
+                </div>
+                <div className="rounded-md border border-primary/25 bg-primary/5 p-3">
+                  <p className="text-[10px] font-medium text-muted-foreground">
+                    Build
+                  </p>
+                  <p className="mt-1 font-mono text-sm font-semibold tabular-nums">
+                    $16,000
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    fixed, then $299/mo care
+                  </p>
+                </div>
               </div>
             </div>
           </div>
