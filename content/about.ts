@@ -215,3 +215,35 @@ export const dhakaFacts = [
   "4+ hours with US Eastern",
   "Weekday overlap",
 ];
+
+export const aboutTimeline = {
+  title: "How we got here",
+  intro:
+    "A short history, because the way we work now comes straight out of it.",
+  stages: [
+    {
+      id: "websites",
+      label: "Where we started",
+      title: "Websites and search",
+      body: "Sites, technical SEO and content for US nonprofits, care providers and service companies.",
+    },
+    {
+      id: "automation",
+      label: "Then",
+      title: "Automation",
+      body: "The same teams asked us to connect the tools behind the website: forms, email, invoices.",
+    },
+    {
+      id: "pattern",
+      label: "The pattern",
+      title: "The same wall",
+      body: "Every project ended at one spreadsheet that only one person understood. The website was never the problem.",
+    },
+    {
+      id: "now",
+      label: "Now",
+      title: "Elevosia",
+      body: "One system for the team, the clients and the website, at a fixed price a growing business can plan around.",
+    },
+  ],
+};

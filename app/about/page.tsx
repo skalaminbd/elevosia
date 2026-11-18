@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { AboutHero } from "@/components/about/AboutHero";
 import { FactRail } from "@/components/about/FactRail";
 import { StoryChapters } from "@/components/about/StoryChapters";
+import { TimelineSection } from "@/components/about/TimelineSection";
 import { BoardSection } from "@/components/about/BoardSection";
 import { BeliefsSection } from "@/components/about/BeliefsSection";
 import { TeamSection } from "@/components/about/TeamSection";
@@ -34,6 +35,7 @@ export default function AboutPage() {
         <AboutHero />
         <FactRail />
         <StoryChapters />
+        <TimelineSection />
         <BoardSection />
         <BeliefsSection />
         <TeamSection />
