@@ -32,7 +32,7 @@ export function WhatYouGet() {
         {whatYouGet.cards.map((card, index) => (
           <div
             key={card.id}
-            className="flex flex-col rounded-lg border border-border bg-card p-6"
+            className="flex flex-col rounded-lg border border-border bg-card p-6 transition-colors hover:border-primary/30"
           >
             <div className="flex items-center justify-between gap-3">
               <h3 className="text-lg font-semibold">{card.title}</h3>

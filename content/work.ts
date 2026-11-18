@@ -70,3 +70,40 @@ export const workClosing = {
   primary: { label: "Start a project", href: "/start" },
   secondary: { label: "See how it works", href: "/how-it-works" },
 };
+
+export const workProcess = {
+  title: "The shape of every project",
+  intro:
+    "The same four steps, whether you start with one module or all of them. You see each one on your weekly board.",
+  steps: [
+    {
+      id: "requirements",
+      label: "Requirements",
+      body: "A short form and a call. We write down what slows you down, in your words.",
+      meta: "1 conversation",
+    },
+    {
+      id: "blueprint",
+      label: "Blueprint",
+      body: "Milestones, tasks, timeline and a fixed price. Free, and yours to keep.",
+      meta: "5 business days",
+    },
+    {
+      id: "build",
+      label: "Build",
+      body: "A weekly board, a working demo and a call every week. No status meetings.",
+      meta: "6 to 10 weeks",
+    },
+    {
+      id: "launch",
+      label: "Launch and care",
+      body: "Training on a real week of work, a 30-day warranty, then care if you want it.",
+      meta: "Day one onward",
+    },
+  ],
+};
+
+export const caseStudyCta = {
+  label: "Read the sample weekly board",
+  href: "/how-it-works#weekly-board",
+};

@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/kit/watermelon/site-footer";
 import { SiteHeader } from "@/components/kit/watermelon/site-header";
 import { PageClosing } from "@/components/shared/PageClosing";
 import { FoundingSection } from "@/components/work/FoundingSection";
+import { ProcessSection } from "@/components/work/ProcessSection";
 import { WhatYouGet } from "@/components/work/WhatYouGet";
 import { WorkHero } from "@/components/work/WorkHero";
 import { workClosing, workMeta } from "@/content/work";
@@ -27,6 +28,7 @@ export default function WorkPage() {
       <main className="relative overflow-x-clip">
         <WorkHero />
         <WhatYouGet />
+        <ProcessSection />
         <FoundingSection />
         <PageClosing
           title={workClosing.title}

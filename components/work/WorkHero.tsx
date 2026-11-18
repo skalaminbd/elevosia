@@ -46,7 +46,11 @@ export function WorkHero() {
           </div>
 
           <div ref={ref} className="lg:col-span-5">
-            <ol className="mx-auto w-full max-w-sm">
+            <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
+              <p className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                Every project
+              </p>
+              <ol className="relative mt-4 w-full">
               {workHero.steps.map((item, index) => {
                 const Icon = ICONS[index];
                 const active = !reduceMotion && index === step;
@@ -89,7 +93,8 @@ export function WorkHero() {
                   </li>
                 );
               })}
-            </ol>
+              </ol>
+            </div>
           </div>
         </div>
       </div>
