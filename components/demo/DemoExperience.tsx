@@ -214,9 +214,9 @@ export function DemoExperience() {
                   })}
                 </ul>
 
-                <div className="mt-4 rounded-md border border-border p-2.5">
-                  <p className="text-[10px] font-medium">Yours, not ours</p>
-                  <p className="mt-1 text-[9px] leading-relaxed text-muted-foreground">
+                <div className="mt-4 rounded-md border border-border bg-background p-3">
+                  <p className="text-[11px] font-medium">Yours, not ours</p>
+                  <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
                     Every screen is built from modules we customize.
                   </p>
                 </div>

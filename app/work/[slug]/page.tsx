@@ -15,6 +15,10 @@ import {
 type Params = Promise<{ slug: string }>;
 
 export function generateStaticParams() {
+  // Cache Components needs at least one param to validate the route. The
+  // placeholder resolves to notFound(), so no case study page is published
+  // until a real study is added to content/case-studies.ts.
+  if (caseStudies.length === 0) return [{ slug: "not-published" }];
   return caseStudies.map((study) => ({ slug: study.slug }));
 }
 

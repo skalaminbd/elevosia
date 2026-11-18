@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -40,11 +40,37 @@ const COVER_ICONS = {
   "Industry playbooks": Building2,
 } as const;
 
+const CATEGORY_BY_SLUG: Record<string, Category> = {
+  "build-vs-buy": "Build vs buy",
+  operations: "Operations",
+  "client-experience": "Client experience",
+  "ai-automation": "AI & automation",
+  "industry-playbooks": "Industry playbooks",
+};
+
 /** Blog index: search, category filters, featured guide, animated grid. */
 export function BlogIndex() {
   const reduceMotion = useReducedMotion();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<Category>("All");
+
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("category");
+    if (!slug || !CATEGORY_BY_SLUG[slug]) return;
+    const frame = window.requestAnimationFrame(() =>
+      setCategory(CATEGORY_BY_SLUG[slug]),
+    );
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  function chooseCategory(next: Category) {
+    setCategory(next);
+    const slug = Object.entries(CATEGORY_BY_SLUG).find(
+      ([, value]) => value === next,
+    )?.[0];
+    const url = slug ? `/blog?category=${slug}` : "/blog";
+    window.history.replaceState(null, "", url);
+  }
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -99,7 +125,7 @@ export function BlogIndex() {
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setCategory(item)}
+                  onClick={() => chooseCategory(item)}
                   aria-pressed={category === item}
                   className={cn(
                     "rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
@@ -213,7 +239,7 @@ export function BlogIndex() {
               type="button"
               onClick={() => {
                 setQuery("");
-                setCategory("All");
+                chooseCategory("All");
               }}
               className="text-xs font-medium text-primary hover:underline"
             >
@@ -232,7 +258,7 @@ export function BlogIndex() {
               type="button"
               onClick={() => {
                 setQuery("");
-                setCategory("All");
+                chooseCategory("All");
               }}
               className="mt-4 text-sm font-medium text-primary hover:underline"
             >
