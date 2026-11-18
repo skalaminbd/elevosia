@@ -4,6 +4,16 @@
 
 Read this whole file before any UI work. If something is not covered here, ask before adding it.
 
+## Design rules — read before building any page
+These six are the client's standing rules and override anything else here. Check every page against them before writing code.
+
+1. **One header, everywhere.** Every page renders the same `<SiteHeader />` — no per-page tone, variant or layout. It is transparent over the page and picks up the blur + border on scroll.
+2. **The hero follows the theme.** Light mode gets a light hero (page background, light surfaces); dark mode gets a dark hero. Never force a dark hero in light mode, or the reverse.
+3. **One type scale.** Headings are identical on every page — use the Typography table. Never tune a heading size for a single page.
+4. **Every page has 2–3 dark sections**, even in light mode — feature bands and the closing band. They give the page its rhythm and contrast.
+5. **Mobile is pixel-perfect.** Check 360, 390, 768 and 1440. No horizontal scroll, no clipped text, tap targets 44px+.
+6. **One button system.** In light mode a button is either dark (`default`, forest) or light (`outline`, cream) — no lime, accent or coloured buttons anywhere. The same two styles on every page. On a dark band the pair inverts: a solid light button (`className="bg-background text-foreground"`) plus a light ghost button.
+
 ## Stack
 - Next.js (App Router), TypeScript strict
 - Tailwind CSS v4
@@ -114,7 +124,7 @@ Rules:
 The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pattern. Every marketing page uses this hero and this type scale — do not invent a new hero or a new heading size per page.
 
 ### Hero
-**Heroes are always light**, exactly like the homepage: no brand band, the page background showing through, a default `<Eyebrow>` (not inverse), `text-muted-foreground` lead and `variant="highlight"` + `variant="outline"` buttons. The sticky header stays transparent over it. Two layouts are allowed — pick one per page, never invent a third:
+**Heroes are always light**, exactly like the homepage: no brand band, the page background showing through, a default `<Eyebrow>` (not inverse), `text-muted-foreground` lead and `default` + `outline` buttons. The sticky header stays transparent over it. Two layouts are allowed — pick one per page, never invent a third:
 
 - **Centered** (homepage, Custom Dashboards): text in `mx-auto max-w-5xl text-center`, visual below, bleeding off the bottom edge (`pb-0`).
 - **Split** (About): `grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16`, content left-aligned in `lg:col-span-7`, visual in `lg:col-span-5`; stacks content-first on mobile.
@@ -128,7 +138,7 @@ The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pat
 | Eyebrow | `<Eyebrow>` (never inverse on a hero) |
 | H1 | `mt-6 font-heading text-[clamp(2.5rem,5.6vw,5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance` |
 | Lead | `mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg` |
-| Buttons | `variant="highlight"` primary, `variant="outline"` secondary |
+| Buttons | `default` primary, `outline` secondary — no coloured buttons |
 | Trust row | optional, `text-xs text-muted-foreground` with `text-success` `Check` icons |
 | Visual | `mt-14 lg:mt-20`, lime glow `absolute bg-highlight/20 blur-3xl`, window `rounded-t-xl border border-b-0 border-primary-foreground/15 bg-card shadow-md`, `mx-auto max-w-5xl` |
 
@@ -155,7 +165,7 @@ The Custom Dashboards page (`app/custom-dashboards/page.tsx`) sets the house pat
 ## Buttons
 - Always `<Button>` from `@/components/ui/button`
 - Variants: default, highlight, secondary, outline, ghost, destructive, link
-- Max one `default` button per section. For a single lime CTA on marketing pages use `variant="highlight"`
+- Max one `default` button per section. CTAs are only `default` (dark) or `outline` (light) — never `highlight`, and never a lime/coloured button
 - Icon-only buttons need `aria-label`
 
 ## Code conventions

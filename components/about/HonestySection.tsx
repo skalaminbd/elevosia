@@ -17,26 +17,26 @@ export function HonestySection() {
   const alive = inView && !reduceMotion;
 
   return (
-    <Section id="honesty" className="border-t border-border">
+    <Section id="honesty" className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
       <div ref={ref} className="grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
-          <Eyebrow>{honesty.eyebrow}</Eyebrow>
+          <Eyebrow tone="inverse">{honesty.eyebrow}</Eyebrow>
           <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-[2.75rem]">
             {honesty.title}
           </h2>
-          <p className="mt-4 max-w-xs text-base text-muted-foreground sm:text-lg">
+          <p className="mt-4 max-w-xs text-base text-primary-foreground/70 sm:text-lg dark:text-foreground/70">
             {honesty.lead}
           </p>
         </div>
 
         <div className="lg:col-span-8">
-          <ul className="border-t border-border">
+          <ul className="border-t border-border/40">
             {honesty.items.map((item, index) => (
               <li
                 key={item.wont}
-                className="grid gap-2 border-b border-border py-5 sm:grid-cols-2 sm:items-baseline sm:gap-10"
+                className="grid gap-2 border-b border-border/40 py-5 sm:grid-cols-2 sm:items-baseline sm:gap-10"
               >
-                <p className="text-base text-muted-foreground">
+                <p className="text-base text-primary-foreground/60 dark:text-foreground/60">
                   <span className="relative inline-block">
                     {item.wont}
                     <span
@@ -49,7 +49,7 @@ export function HonestySection() {
                     />
                   </span>
                 </p>
-                <p className="text-base text-foreground">{item.will}</p>
+                <p className="text-base text-primary-foreground dark:text-foreground">{item.will}</p>
               </li>
             ))}
           </ul>

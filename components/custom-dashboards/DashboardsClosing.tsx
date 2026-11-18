@@ -40,13 +40,13 @@ export function DashboardsClosing() {
             {dashboardsClosing.body}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <ButtonLink href={dashboardsClosing.primary.href} variant="highlight">
+            <ButtonLink href={dashboardsClosing.primary.href} className="bg-background text-foreground hover:bg-background/90">
               {dashboardsClosing.primary.label}
             </ButtonLink>
             <ButtonLink
               href={dashboardsClosing.secondary.href}
-              variant="outline"
-              className="text-foreground"
+              variant="ghost"
+              className="text-primary-foreground hover:bg-primary-foreground/10 dark:text-foreground dark:hover:bg-foreground/10"
             >
               {dashboardsClosing.secondary.label}
             </ButtonLink>

@@ -71,15 +71,15 @@ export function ClosingSection() {
                       colorTo="var(--highlight)"
                     />
                   ) : null}
-                  <ButtonLink href={closing.primary.href} variant="highlight">
+                  <ButtonLink href={closing.primary.href} className="bg-background text-foreground hover:bg-background/90">
                     {closing.primary.label}
                   </ButtonLink>
                 </div>
 
                 <ButtonLink
                   href={closing.secondary.href}
-                  variant="outline"
-                  className="text-foreground"
+                  variant="ghost"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 dark:text-foreground dark:hover:bg-foreground/10"
                 >
                   {closing.secondary.label}
                 </ButtonLink>

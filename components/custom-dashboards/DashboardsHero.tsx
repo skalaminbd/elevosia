@@ -120,7 +120,7 @@ export function DashboardsHero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <ButtonLink href={dashboardsHero.primary.href} variant="highlight">
+            <ButtonLink href={dashboardsHero.primary.href}>
               {dashboardsHero.primary.label}
             </ButtonLink>
             <ButtonLink
