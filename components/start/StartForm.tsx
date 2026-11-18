@@ -82,6 +82,42 @@ export function StartForm() {
               <ProgressRing offset={offset} filled={filled} />
             </div>
 
+            <ol className="mt-6 grid grid-cols-3 gap-2" aria-label="Form progress">
+              {[
+                { id: "need", label: "What you need", done: Boolean(values.need) },
+                {
+                  id: "about",
+                  label: "About you",
+                  done: Boolean(values.fullName && values.email && values.company),
+                },
+                { id: "team", label: "Team size", done: Boolean(values.teamSize) },
+              ].map((step, index) => (
+                <li key={step.id}>
+                  <span
+                    className={cn(
+                      "block h-1.5 rounded-full transition-colors",
+                      step.done ? "bg-primary" : "bg-secondary",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "mt-1.5 flex items-center gap-1 text-[11px]",
+                      step.done
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    {step.done ? (
+                      <Check className="size-2.5 text-primary" aria-hidden="true" />
+                    ) : (
+                      <span className="font-mono">{index + 1}</span>
+                    )}
+                    {step.label}
+                  </span>
+                </li>
+              ))}
+            </ol>
+
             <fieldset className="mt-7">
               <legend className="sr-only">What do you need?</legend>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -170,25 +206,34 @@ export function StartForm() {
                   {...form.register("company")}
                 />
               </Field>
-              <div className="space-y-1.5">
-                <Label htmlFor="teamSize" className="text-sm font-medium">
-                  Team size
-                </Label>
-                <select
-                  id="teamSize"
-                  className="h-11 w-full rounded-lg border border-input bg-card px-3 text-base transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive md:text-sm"
-                  aria-invalid={Boolean(errors.teamSize)}
-                  {...form.register("teamSize")}
-                >
-                  <option value="">Select team size</option>
-                  {startForm.teamSizes.map((size) => (
-                    <option key={size} value={size}>
-                      {size}
-                    </option>
-                  ))}
-                </select>
+              <fieldset className="space-y-1.5">
+                <legend className="text-sm font-medium">Team size</legend>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {startForm.teamSizes.map((size) => {
+                    const checked = values.teamSize === size;
+                    return (
+                      <label
+                        key={size}
+                        className={cn(
+                          "flex min-h-11 cursor-pointer items-center justify-center rounded-lg border text-xs font-medium transition-colors",
+                          checked
+                            ? "border-primary bg-primary/5 text-primary"
+                            : "border-border text-muted-foreground hover:bg-secondary/60",
+                        )}
+                      >
+                        <input
+                          type="radio"
+                          value={size}
+                          className="sr-only"
+                          {...form.register("teamSize")}
+                        />
+                        {size}
+                      </label>
+                    );
+                  })}
+                </div>
                 <FieldError message={errors.teamSize?.message} />
-              </div>
+              </fieldset>
             </div>
 
             <div className="mt-6 space-y-1.5">
@@ -243,7 +288,21 @@ export function StartForm() {
               </a>
             </div>
             <div className="mt-6 rounded-lg border border-border bg-card p-6">
-              <h3 className="text-sm font-semibold">
+              <div className="flex items-center gap-3 border-b border-border pb-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/founder/alamin.svg"
+                  alt=""
+                  className="size-9 rounded-full"
+                />
+                <div>
+                  <p className="text-sm font-medium">Alamin</p>
+                  <p className="text-xs text-muted-foreground">
+                    Founder · reads every request
+                  </p>
+                </div>
+              </div>
+              <h3 className="mt-4 text-sm font-semibold">
                 {startForm.side.contactTitle}
               </h3>
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">

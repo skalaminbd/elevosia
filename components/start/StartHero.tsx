@@ -59,6 +59,12 @@ export function StartHero() {
               />
             </g>
           </svg>
+
+          <div className="mt-2 flex items-center justify-between px-2 text-[10px] text-muted-foreground sm:text-xs">
+            <span>You tell us</span>
+            <span>Blueprint in 5 days</span>
+            <span>Weekly build</span>
+          </div>
         </div>
       </div>
     </section>
