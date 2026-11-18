@@ -18,16 +18,16 @@ const AFTER = [
 
 export function PictureThisSection() {
   return (
-    <section className="bg-secondary py-15 text-secondary-foreground md:py-20 lg:py-25">
+    <section className="bg-primary py-15 text-primary-foreground md:py-20 lg:py-25 dark:bg-secondary dark:text-foreground">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
-          <Eyebrow>Now picture this</Eyebrow>
+          <Eyebrow tone="inverse">Now picture this</Eyebrow>
 
           <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-[2.75rem]">
             One login. Every answer.
           </h2>
 
-          <p className="mt-5 text-base text-secondary-foreground/80">
+          <p className="mt-5 text-base text-primary-foreground/80 dark:text-foreground/80">
             Your schedule, staff, clients, invoices and numbers live in one
             dashboard built around your business. A customer books on your
             website and the job appears for your team. A shift opens and AI
@@ -37,16 +37,16 @@ export function PictureThisSection() {
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-lg border border-border bg-background/60 p-6 dark:border-border dark:bg-card">
+          <div className="rounded-lg border border-border bg-primary-foreground/5 dark:bg-background/60 p-6 dark:border-border dark:bg-card">
             <h3 className="text-lg font-semibold">Before</h3>
             <ul className="mt-4 space-y-3">
               {BEFORE.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm">
                   <Check
-                    className="mt-0.5 size-4 shrink-0 text-secondary-foreground/60"
+                    className="mt-0.5 size-4 shrink-0 text-primary-foreground/60 dark:text-foreground/60"
                     aria-hidden="true"
                   />
-                  <span className="text-secondary-foreground/80">
+                  <span className="text-primary-foreground/80 dark:text-foreground/80">
                     {item}
                   </span>
                 </li>
@@ -67,17 +67,17 @@ export function PictureThisSection() {
               ]}
             />
 
-            <h3 className="text-lg font-semibold text-success">
+            <h3 className="text-lg font-semibold text-highlight">
               After Elevosia
             </h3>
             <ul className="mt-4 space-y-3">
               {AFTER.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm">
                   <Check
-                    className="mt-0.5 size-4 shrink-0 text-success"
+                    className="mt-0.5 size-4 shrink-0 text-highlight"
                     aria-hidden="true"
                   />
-                  <span className="text-secondary-foreground/90 dark:text-foreground/90">
+                  <span className="text-primary-foreground dark:text-foreground/90 dark:text-foreground/90">
                     {item}
                   </span>
                 </li>

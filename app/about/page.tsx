@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <SiteHeader />
+      <SiteHeader invert />
 
       <main className="relative overflow-x-clip">
         <AboutHero />

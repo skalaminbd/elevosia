@@ -299,14 +299,14 @@ export function ViewsSection() {
   return (
     <Section
       id="views"
-      className="bg-secondary text-secondary-foreground"
+      className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground"
     >
       <div className="max-w-2xl">
-        <Eyebrow>One system, four views</Eyebrow>
+        <Eyebrow tone="inverse">One system, four views</Eyebrow>
         <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
           {views.title}
         </h2>
-        <p className="mt-5 text-base text-secondary-foreground/80 sm:text-lg dark:text-foreground/75">
+        <p className="mt-5 text-base text-primary-foreground/80 dark:text-foreground/80 sm:text-lg dark:text-foreground/75">
           {views.intro}
         </p>
       </div>
@@ -326,8 +326,8 @@ export function ViewsSection() {
                 className={cn(
                   "font-mono text-sm transition-colors",
                   active === index
-                    ? "text-primary"
-                    : "text-secondary-foreground/45 dark:text-foreground/45",
+                    ? "text-highlight"
+                    : "text-primary-foreground/45 dark:text-foreground/45 dark:text-foreground/45",
                 )}
               >
                 {String(index + 1).padStart(2, "0")}
@@ -339,10 +339,10 @@ export function ViewsSection() {
                 {item.bullets.map((bullet) => (
                   <li
                     key={bullet}
-                    className="flex items-start gap-2.5 text-sm text-secondary-foreground/80 sm:text-base dark:text-foreground/75"
+                    className="flex items-start gap-2.5 text-sm text-primary-foreground/80 dark:text-foreground/80 sm:text-base dark:text-foreground/75"
                   >
                     <Check
-                      className="mt-1 size-4 shrink-0 text-primary"
+                      className="mt-1 size-4 shrink-0 text-highlight"
                       aria-hidden="true"
                     />
                     {bullet}
@@ -371,7 +371,7 @@ export function ViewsSection() {
                 <ScreenWindow roleId={tab.id} />
               </div>
             </div>
-            <p className="mt-4 text-center font-mono text-xs text-secondary-foreground/50 dark:text-foreground/50">
+            <p className="mt-4 text-center font-mono text-xs text-primary-foreground/50 dark:text-foreground/50 dark:text-foreground/50">
               {String(active + 1).padStart(2, "0")} / 04 · {tab.label}
             </p>
           </div>

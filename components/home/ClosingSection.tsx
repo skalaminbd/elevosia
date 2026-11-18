@@ -30,7 +30,7 @@ export function ClosingSection() {
   return (
     <section
       id="next-monday"
-      className="relative overflow-hidden bg-secondary py-15 text-secondary-foreground md:py-20 lg:py-25"
+      className="relative overflow-hidden bg-primary py-15 text-primary-foreground md:py-20 lg:py-25 dark:bg-secondary dark:text-foreground"
     >
       {inView && !reduceMotion ? (
         <RetroGrid
@@ -54,7 +54,7 @@ export function ClosingSection() {
             </Reveal>
 
             <Reveal delay={0.07}>
-              <p className="mt-5 text-base text-secondary-foreground/80">
+              <p className="mt-5 text-base text-primary-foreground/80 dark:text-foreground/80">
                 {closing.body}
               </p>
             </Reveal>
@@ -89,7 +89,7 @@ export function ClosingSection() {
             <Reveal delay={0.2}>
               <Link
                 href={closing.checklist.href}
-                className="mt-5 inline-flex text-sm font-medium text-secondary-foreground/80 underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:text-foreground/80"
+                className="mt-5 inline-flex text-sm font-medium text-primary-foreground/80 dark:text-foreground/80 underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:text-foreground/80"
               >
                 {closing.checklist.label}
               </Link>
@@ -101,11 +101,11 @@ export function ClosingSection() {
             <Reveal delay={0.12}>
               <div
                 aria-hidden="true"
-                className="relative overflow-hidden rounded-lg border border-border bg-background/60 p-5 shadow-md dark:border-border dark:bg-card"
+                className="relative overflow-hidden rounded-lg border border-border bg-primary-foreground/5 dark:bg-background/60 p-5 shadow-md dark:border-border dark:bg-card"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs font-medium text-secondary-foreground/70">
+                    <p className="text-xs font-medium text-primary-foreground/70 dark:text-foreground/70">
                       {closing.day}
                     </p>
                     <p className="mt-1 font-mono text-4xl font-semibold">
@@ -146,9 +146,9 @@ export function ClosingSection() {
                         delay: reduceMotion ? 0 : 0.15 + index * 0.3,
                         ease: EASE,
                       }}
-                      className="rounded-lg border border-border bg-background/60 p-4 dark:border-border dark:bg-background/40"
+                      className="rounded-lg border border-border bg-primary-foreground/5 dark:bg-background/60 p-4 dark:border-border dark:bg-background/40"
                     >
-                      <p className="text-xs font-medium text-secondary-foreground/70">
+                      <p className="text-xs font-medium text-primary-foreground/70 dark:text-foreground/70">
                         {widget.label}
                       </p>
                       <p className="mt-1 font-mono text-2xl font-semibold">

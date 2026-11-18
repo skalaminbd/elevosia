@@ -15,7 +15,7 @@ export function AboutHero() {
   const { ref, inView } = useInViewLoop<HTMLDivElement>({ threshold: 0.1 });
 
   return (
-    <section className="relative overflow-hidden bg-secondary text-secondary-foreground">
+    <section className="relative -mt-[var(--header-h)] overflow-hidden bg-primary pt-[var(--header-h)] text-primary-foreground dark:bg-secondary dark:text-foreground">
       <div
         aria-hidden="true"
         className="line-grid pointer-events-none absolute inset-0 opacity-[0.07] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
@@ -24,11 +24,11 @@ export function AboutHero() {
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-6 md:pt-20 md:pb-20 lg:px-8 lg:pt-24 lg:pb-24">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
           <div className="lg:col-span-7">
-            <Eyebrow>{aboutHero.eyebrow}</Eyebrow>
+            <Eyebrow tone="inverse">{aboutHero.eyebrow}</Eyebrow>
             <h1 className="mt-6 font-heading text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
               {aboutHero.title}
             </h1>
-            <p className="mt-6 max-w-2xl text-base text-secondary-foreground/75 sm:text-lg dark:text-foreground/75">
+            <p className="mt-6 max-w-2xl text-base text-primary-foreground/75 dark:text-foreground/75 sm:text-lg dark:text-foreground/75">
               {heroLead}
             </p>
           </div>

@@ -12,13 +12,13 @@ export function AboutClosing() {
   const { ref, inView } = useInViewLoop<HTMLDivElement>({ threshold: 0.2 });
 
   return (
-    <Section className="bg-secondary text-secondary-foreground">
+    <Section className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
         <div className="lg:col-span-7">
           <h2 className="font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem] lg:text-[3.25rem]">
             {aboutClosing.title}
           </h2>
-          <p className="mt-4 max-w-xl text-base text-secondary-foreground/80">
+          <p className="mt-4 max-w-xl text-base text-primary-foreground/80 dark:text-foreground/80">
             {aboutClosing.body}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">

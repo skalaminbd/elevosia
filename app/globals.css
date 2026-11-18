@@ -57,6 +57,8 @@
   --chart-4: var(--brand-lime);
   --chart-5: #8a9a8f;
   --radius: 10px;
+  /* Height of the sticky site header, so heroes can sit behind it */
+  --header-h: 3.5rem;
   --sidebar: #ffffff;
   --sidebar-foreground: #13291f;
   --sidebar-primary: var(--brand-forest);
@@ -608,6 +610,47 @@
     linear-gradient(white 0 0);
   mask-composite: exclude;
   -webkit-mask-composite: xor;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 4.625rem;
+  }
+}
+
+/* Header sitting on a dark hero, while no menu is open */
+header[data-tone="inverse"]:not(:has([data-state="open"])) {
+  --header-on: var(--primary-foreground);
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dark header[data-tone="inverse"]:not(:has([data-state="open"])) {
+  --header-on: var(--foreground);
+  background: var(--secondary);
+  color: var(--foreground);
+}
+
+header[data-tone="inverse"]:not(:has([data-state="open"])) a,
+header[data-tone="inverse"]:not(:has([data-state="open"]))
+  button:not([data-slot="button"]) {
+  color: var(--header-on);
+}
+
+header[data-tone="inverse"]:not(:has([data-state="open"]))
+  [data-slot="button"][data-variant="ghost"] {
+  color: var(--header-on);
+}
+
+header[data-tone="inverse"]:not(:has([data-state="open"]))
+  [data-slot="button"][data-variant="default"] {
+  background: var(--highlight);
+  color: var(--highlight-foreground);
+}
+
+header[data-tone="inverse"]:not(:has([data-state="open"])) a > span:first-child {
+  background: var(--highlight);
+  color: var(--highlight-foreground);
 }
 
 @layer base {

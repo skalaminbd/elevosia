@@ -134,10 +134,10 @@ Full-bleed brand band. Two layouts are allowed — pick one per page, never inve
 
 ### Section rules
 - Headings, intros and card titles follow the type-scale table above exactly — every page uses the same sizes.
-- **Everything follows the theme.** Light mode uses light surfaces only (page, bands, cards, mockups, terminals); dark mode uses dark surfaces only. Never ship a forced-dark block on a light page or a white block on a dark page.
-  - Full-bleed bands (hero, feature bands, closing): `bg-secondary text-secondary-foreground` — soft green in light, deep green in dark.
-  - Cards, screens, mockups: `bg-card` / `bg-background` with `border-border`.
-  - Accents that must read on both: use `primary` (forest in light, lime in dark), not `highlight`, for chart strokes, icons and rules sitting on cards. Lime stays for chip backgrounds with `text-highlight-foreground`.
+- **Bands are dark in both themes.** Hero bands, feature bands and closing bands use `bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground` — the page keeps its dark bookends in light mode too. Anything inside a band uses the `primary-foreground` / `dark:foreground` pair (e.g. `text-primary-foreground/70 dark:text-foreground/70`), lime (`highlight`) for accents, and `border-border` hairlines.
+- **Content surfaces follow the theme.** Cards, screens, mockups and terminals are `bg-card` / `bg-background` — light in light mode, dark in dark mode. Charts and icons sitting on those surfaces use `primary` (forest in light, lime in dark), never lime on white.
+- **Pages with a dark hero pass `<SiteHeader invert />`.** The header then sits on the hero's colour (dark in both themes, lime logo tile and CTA) and switches to the light card surface while a menu is open. Its hero pulls up behind it with `-mt-[var(--header-h)] pt-[var(--header-h)]`.
+- Menus dim and blur the page behind them; the header blur layer uses `bg-background/40 backdrop-blur-md`.
 - Sections alternate layout (split, ruled list, full-width band, sticky sequence) and each carries one live item.
 
 ## Layout

@@ -278,9 +278,9 @@ export function HowItWorksSection() {
 
   return (
     <section ref={sectionRef} className="py-15 md:py-20 lg:py-25">
-      <div className="relative overflow-hidden bg-secondary py-14 text-secondary-foreground sm:py-16 lg:py-24">
+      <div className="relative overflow-hidden bg-primary py-14 text-primary-foreground sm:py-16 lg:py-24 dark:bg-secondary dark:text-foreground">
         <div
-          className="dot-grid pointer-events-none absolute inset-0 text-secondary-foreground opacity-10 dark:text-foreground"
+          className="dot-grid pointer-events-none absolute inset-0 text-primary-foreground dark:text-foreground opacity-10 dark:text-foreground"
           aria-hidden="true"
         />
 
@@ -350,7 +350,7 @@ export function HowItWorksSection() {
                       >
                         <div
                           className={cn(
-                            "flex size-9 items-center justify-center rounded-full border border-border bg-background text-primary lg:size-10",
+                            "flex size-9 items-center justify-center rounded-full border border-border bg-background text-highlight lg:size-10",
                             reduceMotion
                               ? ""
                               : "animate-[spin_18s_linear_infinite_reverse]",
@@ -384,7 +384,7 @@ export function HowItWorksSection() {
                             ? "border-highlight bg-highlight text-highlight-foreground"
                             : isActive
                               ? "animate-pulse border-highlight bg-highlight/25 text-foreground shadow-[0_0_0_4px_var(--highlight)]"
-                              : "border-border bg-background/80 text-secondary-foreground/70",
+                              : "border-border bg-primary-foreground/15 dark:bg-background/80 text-primary-foreground/70 dark:text-foreground/70",
                         )}
                       >
                         {isDone ? <Check className="size-4 lg:size-5" /> : index + 1}
@@ -392,7 +392,7 @@ export function HowItWorksSection() {
 
                       <span
                         className={cn(
-                          "absolute left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap text-secondary-foreground/70 lg:text-xs dark:text-foreground/70",
+                          "absolute left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap text-primary-foreground/70 dark:text-foreground/70 lg:text-xs dark:text-foreground/70",
                           index === 0 ? "-top-6" : "-bottom-6",
                         )}
                       >
@@ -402,7 +402,7 @@ export function HowItWorksSection() {
                   );
                 })}
 
-                <div className="absolute top-1/2 left-1/2 flex aspect-square w-2/5 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-1 rounded-full border border-border bg-background/70 text-center">
+                <div className="absolute top-1/2 left-1/2 flex aspect-square w-2/5 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-1 rounded-full border border-border bg-primary-foreground/10 dark:bg-background/70 text-center">
                   <AnimatePresence mode="wait" initial={false}>
                     <motion.div
                       key={displayStage}
@@ -420,7 +420,7 @@ export function HowItWorksSection() {
                     >
                       <HubIcon className="size-8 text-highlight lg:size-10" />
                       <p className="text-sm font-semibold lg:text-base">{current.name}</p>
-                      <span className="rounded-full bg-background/70 px-2 py-0.5 text-[10px] text-secondary-foreground/80 lg:text-xs">
+                      <span className="rounded-full bg-primary-foreground/10 dark:bg-background/70 px-2 py-0.5 text-[10px] text-primary-foreground/80 dark:text-foreground/80 lg:text-xs">
                         {current.time}
                       </span>
                     </motion.div>
@@ -431,13 +431,13 @@ export function HowItWorksSection() {
 
             <div className="md:col-span-5 lg:col-span-1">
               <div>
-                <Eyebrow>How it works</Eyebrow>
+                <Eyebrow tone="inverse">How it works</Eyebrow>
 
                 <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-[2.75rem]">
                   From messy to managed in three steps
                 </h2>
 
-                <p className="mt-4 max-w-xl text-lg text-secondary-foreground/70 dark:text-foreground/70">
+                <p className="mt-4 max-w-xl text-lg text-primary-foreground/70 dark:text-foreground/70 dark:text-foreground/70">
                   No open-ended projects. You know the scope, price and timeline
                   before a single line of code is written, and you don&apos;t
                   pay anything to find out.
@@ -467,7 +467,7 @@ export function HowItWorksSection() {
                             "mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors duration-300",
                             isDone || isActive
                               ? "border-highlight bg-highlight text-highlight-foreground"
-                              : "border-border text-secondary-foreground/70 dark:border-border dark:text-foreground/70",
+                              : "border-border text-primary-foreground/70 dark:text-foreground/70 dark:border-border dark:text-foreground/70",
                           )}
                         >
                           {isDone ? <Check className="size-3.5" /> : index + 1}
@@ -476,7 +476,7 @@ export function HowItWorksSection() {
                           <span className="block text-base font-semibold">
                             {index + 1}. {step.title}
                           </span>
-                          <span className="mt-1 block text-sm text-secondary-foreground/70 lg:text-base dark:text-foreground/70">
+                          <span className="mt-1 block text-sm text-primary-foreground/70 dark:text-foreground/70 lg:text-base dark:text-foreground/70">
                             {step.body}
                           </span>
                         </span>
@@ -497,7 +497,7 @@ export function HowItWorksSection() {
               <div className="mt-6 flex flex-wrap items-center gap-4">
                 <ButtonLink href="/start">Start a project</ButtonLink>
 
-                <span className="flex items-center gap-1.5 text-sm text-secondary-foreground/70 dark:text-foreground/70">
+                <span className="flex items-center gap-1.5 text-sm text-primary-foreground/70 dark:text-foreground/70 dark:text-foreground/70">
                   <Check className="size-3.5 text-highlight" />
                   Free Blueprint · Fixed price
                 </span>

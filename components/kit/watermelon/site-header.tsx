@@ -277,8 +277,9 @@ function megaPanel(menu: MegaMenu) {
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ invert = false }: { invert?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
+  const [openMenu, setOpenMenu] = useState("");
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
@@ -306,7 +307,17 @@ export function SiteHeader() {
   }, []);
 
   return (
+    <>
+      {openMenu ? (
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 z-40 bg-background/20 backdrop-blur-sm"
+        />
+      ) : null}
+
+
     <header
+      data-tone={invert ? "inverse" : undefined}
       className={cn(
         "sticky top-0 z-50 w-full transition-[transform,colors] duration-300 ease-out motion-reduce:transition-none",
         hidden ? "-translate-y-full" : "translate-y-0",
@@ -316,8 +327,8 @@ export function SiteHeader() {
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-0 -z-10 border-b border-border bg-background/80 backdrop-blur transition-opacity duration-500 ease-out",
-          scrolled ? "opacity-100" : "opacity-0",
+          "pointer-events-none absolute inset-0 -z-10 border-b border-border bg-background/40 backdrop-blur-md transition-opacity duration-500 ease-out",
+          scrolled && !invert ? "opacity-100" : "opacity-0",
         )}
       />
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 md:h-18.5 lg:px-8">
@@ -332,6 +343,8 @@ export function SiteHeader() {
 
         <div className="hidden flex-1 items-center justify-center lg:flex">
           <NavigationMenu
+            value={openMenu}
+            onValueChange={setOpenMenu}
             className={cn(
               "static flex-none",
               // Full-width panel anchored to the header
@@ -519,5 +532,6 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
+    </>
   );
 }
