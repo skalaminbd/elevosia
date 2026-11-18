@@ -5,6 +5,7 @@ import { ArrowLeft, Search, Send } from "lucide-react";
 import { portalClient, portalThreads } from "@/lib/portal-data";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type ExtraMessage = { id: string; from: string; self: boolean; body: string; time: string };
 
@@ -164,14 +165,14 @@ export function PortalMessages() {
               aria-label={`Message ${active.with.split(" · ")[0]}`}
               className="h-10 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
-            <button
+            <Button
               type="submit"
+              size="icon"
               disabled={!draft.trim()}
               aria-label="Send message"
-              className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground disabled:opacity-40"
             >
               <Send className="size-4" aria-hidden="true" />
-            </button>
+            </Button>
           </form>
         </div>
       </div>

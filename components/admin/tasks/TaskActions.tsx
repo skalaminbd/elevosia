@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { Clock, Eye } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export function TaskActions({
   status,
@@ -25,7 +27,7 @@ export function TaskActions({
     <div className="space-y-4">
       <div className="rounded-lg border border-border bg-card p-5">
         <p className="text-xs font-semibold">Status</p>
-        <select
+        <NativeSelect
           value={value}
           onChange={(event) => setValue(event.target.value)}
           aria-label="Task status"
@@ -35,7 +37,7 @@ export function TaskActions({
           <option value="progress">In progress</option>
           <option value="review">In review</option>
           <option value="done">Done</option>
-        </select>
+        </NativeSelect>
         <div className="mt-2 flex items-center justify-between">
           <span className="text-[11px] text-muted-foreground">Client board</span>
           <StatusBadge tone={clientVisible ? "accent" : "neutral"}>
@@ -71,14 +73,15 @@ export function TaskActions({
             style={{ width: `${Math.min(100, (hours / Math.max(1, estimate)) * 100)}%` }}
           />
         </div>
-        <button
-          type="button"
+        <Button
+          variant="outline"
+          size="sm"
+          className="mt-3"
           onClick={() => setHours((current) => Math.min(estimate, current + 0.5))}
-          className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-medium hover:bg-secondary"
         >
           <Clock className="size-3.5" aria-hidden="true" />
           Log 0.5 h
-        </button>
+        </Button>
         <p className="mt-2 flex items-center gap-1 text-[11px] text-muted-foreground">
           <Eye className="size-3" aria-hidden="true" />
           Client never sees internal checks or comments.

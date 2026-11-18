@@ -13,7 +13,6 @@ import {
   Video,
 } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { NewRequirementDialog } from "@/components/portal/NewRequirementDialog";
 import { NewRequestDialog } from "@/components/portal/NewRequestDialog";
 import { Progress } from "@/components/admin/ui/Progress";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
@@ -25,6 +24,7 @@ import {
   portalProjects,
   retainer,
 } from "@/lib/portal-data";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 
 export const metadata: Metadata = {
   title: "Home | Elevosia client portal",
@@ -201,11 +201,13 @@ export default function PortalHomePage() {
 
                 if (action.id === "new-project") {
                   return (
-                    <NewRequirementDialog key={action.id}>
-                      <button type="button" className={className}>
-                        {content}
-                      </button>
-                    </NewRequirementDialog>
+                    <Link
+                      key={action.id}
+                      href="/portal/requirements/new"
+                      className={className}
+                    >
+                      {content}
+                    </Link>
                   );
                 }
                 if (action.id === "request") {
@@ -235,13 +237,7 @@ export default function PortalHomePage() {
                 {portalCalls.upcoming.when} · {portalCalls.upcoming.with}
               </p>
               <div className="mt-4 flex items-center gap-2">
-                <Link
-                  href="/portal/calls"
-                  className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-                >
-                  Call details
-                  <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                </Link>
+                <ButtonLink href="/portal/calls">Call details</ButtonLink>
                 <span className="text-[10px] text-muted-foreground">
                   {portalCalls.upcoming.join}
                 </span>

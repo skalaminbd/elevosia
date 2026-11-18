@@ -7,6 +7,7 @@ import { portalInvoices, portalBlueprint, retainer } from "@/lib/portal-data";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export function PortalInvoicesView() {
   const [paid, setPaid] = useState<Record<string, boolean>>({});
@@ -56,13 +57,9 @@ export function PortalInvoicesView() {
                 ) : (
                   <div className="flex items-center gap-2">
                     <StatusBadge tone="warning">Due</StatusBadge>
-                    <button
-                      type="button"
-                      onClick={() => setPaying(invoice.id)}
-                      className="h-8 rounded-lg bg-primary px-2.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-                    >
+                    <Button onClick={() => setPaying(invoice.id)}>
                       Pay now
-                    </button>
+                    </Button>
                   </div>
                 )}
               </li>
@@ -110,12 +107,9 @@ export function PortalInvoicesView() {
                 Bank transfer
               </label>
             </div>
-            <button
-              type="submit"
-              className="mt-3 h-9 rounded-lg bg-primary px-3.5 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-            >
+            <Button type="submit" className="mt-3">
               Confirm payment
-            </button>
+            </Button>
           </form>
         ) : null}
 

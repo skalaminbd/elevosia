@@ -29,10 +29,10 @@ export default function InvoicesPage() {
         meta="Finance"
         description="What came in, what is due and what needs a nudge. Care plans invoice themselves on the 1st."
       >
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/invoices/installments">Installments</Link>
         </Button>
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/invoices/retainers">Retainers</Link>
         </Button>
         <NewInvoiceDialog />

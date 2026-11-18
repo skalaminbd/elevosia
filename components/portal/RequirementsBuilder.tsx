@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { ArrowUpRight, Check, Plus, Trash2 } from "lucide-react";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
@@ -8,6 +9,7 @@ import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Point = { id: string; text: string; must: boolean };
 type Section = { id: string; title: string; points: Point[] };
@@ -141,13 +143,9 @@ export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
         </p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           {onDone ? (
-            <button
-              type="button"
-              onClick={onDone}
-              className="inline-flex h-9 items-center rounded-lg bg-primary px-3.5 text-xs font-medium text-primary-foreground"
-            >
+            <Button type="button" onClick={onDone}>
               Done
-            </button>
+            </Button>
           ) : null}
           <Link
             href="/portal"
@@ -268,7 +266,7 @@ export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
             <Label htmlFor="budget" className="text-xs font-medium">
               Rough budget
             </Label>
-            <select
+            <NativeSelect
               id="budget"
               value={budget}
               onChange={(event) => setBudget(event.target.value)}
@@ -279,7 +277,7 @@ export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
               <option>$10,000 to $20,000</option>
               <option>$20,000+</option>
               <option>Not sure yet</option>
-            </select>
+            </NativeSelect>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="deadline" className="text-xs font-medium">
@@ -312,25 +310,20 @@ export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
 
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setSaved(true)}
-              className="h-10 rounded-lg border border-border px-4 text-sm font-medium hover:bg-secondary"
-            >
+            <Button type="button" variant="outline" onClick={() => setSaved(true)}>
               Save draft
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => {
                 if (!name.trim() || filledPoints.length === 0) return;
                 setSubmitted(true);
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="h-10 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground disabled:opacity-40"
               disabled={!name.trim() || filledPoints.length === 0}
             >
               Submit requirements
-            </button>
+            </Button>
           </div>
           <p className="text-xs text-muted-foreground">
             {saved ? "Draft saved in this browser · " : ""}

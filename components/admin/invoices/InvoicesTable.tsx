@@ -1,14 +1,19 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FilterDisclosure } from "@/components/shared/FilterDisclosure";
+import { AlertTriangle, CheckCircle2, Clock } from "lucide-react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
 import { adminInvoices, type InvoiceStatus } from "@/lib/admin-data";
-import { cn } from "@/lib/utils";
 
-const FILTERS: (InvoiceStatus | "All")[] = ["All", "Due", "Overdue", "Paid"];
+const STATUS_OPTIONS = [
+  { id: "Due", label: "Due", icon: Clock },
+  { id: "Overdue", label: "Overdue", icon: AlertTriangle },
+  { id: "Paid", label: "Paid", icon: CheckCircle2 },
+];
 
 const TONE: Record<InvoiceStatus, BadgeTone> = {
   Paid: "success",
@@ -18,37 +23,26 @@ const TONE: Record<InvoiceStatus, BadgeTone> = {
 
 /** Invoice list with status filters. */
 export function InvoicesTable() {
-  const [filter, setFilter] = useState<InvoiceStatus | "All">("All");
+  const [statuses, setStatuses] = useState<string[]>([]);
 
   const rows = useMemo(
     () =>
       adminInvoices.filter(
-        (invoice) => filter === "All" || invoice.status === filter,
+        (invoice) =>
+          statuses.length === 0 || statuses.includes(invoice.status),
       ),
-    [filter],
+    [statuses],
   );
 
   return (
     <div className="rounded-lg border border-border bg-card">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <div className="flex items-center gap-1 rounded-lg bg-secondary p-1">
-          {FILTERS.map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setFilter(item)}
-              aria-pressed={filter === item}
-              className={cn(
-                "h-8 rounded-md px-3 text-xs font-medium transition-colors",
-                filter === item
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
+                <FilterDisclosure
+          label="Filter"
+          values={statuses}
+          options={STATUS_OPTIONS}
+          onChange={setStatuses}
+        />
         <p className="text-xs text-muted-foreground">
           {rows.length} invoices · sample data
         </p>

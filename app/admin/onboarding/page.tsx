@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { onboardingPipeline } from "@/lib/admin-data";
+import { OnboardingBoard } from "@/components/admin/onboarding/OnboardingBoard";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -24,9 +24,9 @@ export default function OnboardingPage() {
       <PageHeader
         title="Onboarding"
         meta="Clients"
-        description="Every new client between the invite and the deposit. A card moves only when the step is really done."
+        description="Every new client between the invite and the deposit. Drag a card when the step is really done."
       >
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/onboarding/templates">Templates</Link>
         </Button>
       </PageHeader>
@@ -44,46 +44,7 @@ export default function OnboardingPage() {
         className="mt-4"
         bodyClassName="p-3"
       >
-        <div className="overflow-x-auto pb-2">
-          <div className="flex min-w-max gap-3">
-            {onboardingPipeline.map((column) => (
-              <div
-                key={column.stage}
-                className="w-64 shrink-0 rounded-lg border border-border bg-background"
-              >
-                <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
-                  <p className="text-xs font-semibold">{column.stage}</p>
-                  <span className="font-mono text-[10px] text-muted-foreground">
-                    {column.cards.length}
-                  </span>
-                </div>
-                <div className="space-y-2 p-2">
-                  {column.cards.length === 0 ? (
-                    <p className="rounded-md border border-dashed border-border px-3 py-6 text-center text-[11px] text-muted-foreground">
-                      Nothing here
-                    </p>
-                  ) : (
-                    column.cards.map((card) => (
-                      <div
-                        key={card.id}
-                        className="rounded-md border border-border bg-card p-3 transition-colors hover:border-primary/30"
-                      >
-                        <p className="text-sm font-medium">{card.client}</p>
-                        <p className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                          <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
-                          {card.missing}
-                        </p>
-                        <p className="mt-2 font-mono text-[10px] text-muted-foreground">
-                          {card.days}
-                        </p>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <OnboardingBoard />
       </SectionCard>
 
       <SectionCard

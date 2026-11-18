@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronsLeft, Search } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { WorkspaceMenu } from "@/components/shared/WorkspaceMenu";
 import { BriefingCard } from "./BriefingCard";
 import { NavItem } from "./NavItem";
-import { UserCard } from "./UserCard";
 import {
   GROUP_LABELS,
   NAV_ITEMS,
   ROLE_ACCESS,
-  SETTINGS_ITEM,
+  ROLE_LABELS,
+  WORKSPACE_LINKS,
+  DEMO_USERS,
   getNavBadge,
   type SidebarCounts,
   type SidebarRole,
@@ -134,14 +137,16 @@ export function SidebarExpanded({
         <BriefingCard counts={counts} role={role} />
       </nav>
 
-      <div className="shrink-0 border-t border-sb-border px-3 pt-2.5 pb-3.5">
-        {allowed.has("settings") ? (
-          <ul className="mb-1 flex flex-col gap-0.5">
-            <NavItem item={SETTINGS_ITEM} badge={null} onNavigate={onNavigate} />
-          </ul>
-        ) : null}
-
-        <UserCard role={role} />
+      <div className="flex shrink-0 items-center justify-between border-t border-sb-border px-3 pt-2.5 pb-3.5">
+        <div className="px-1.5">
+          <WorkspaceMenu
+            name={DEMO_USERS[role].name}
+            role={ROLE_LABELS[role]}
+            initials={DEMO_USERS[role].initials}
+            links={WORKSPACE_LINKS}
+          />
+        </div>
+        <ThemeToggle className="size-8 shrink-0 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
       </div>
     </div>
   );

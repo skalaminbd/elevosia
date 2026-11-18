@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { Check, Minus, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
@@ -61,7 +62,7 @@ export default function SettingsPage() {
                 <Label htmlFor="workspace-tz" className="text-xs font-medium">
                   Staff time zone
                 </Label>
-                <select
+                <NativeSelect
                   id="workspace-tz"
                   defaultValue="America/New_York"
                   className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -70,20 +71,20 @@ export default function SettingsPage() {
                   <option value="America/Chicago">US Central (CT)</option>
                   <option value="America/Denver">US Mountain (MT)</option>
                   <option value="America/Los_Angeles">US Pacific (PT)</option>
-                </select>
+                </NativeSelect>
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="workspace-week" className="text-xs font-medium">
                   Week starts on
                 </Label>
-                <select
+                <NativeSelect
                   id="workspace-week"
                   defaultValue="monday"
                   className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                 >
                   <option value="monday">Monday</option>
                   <option value="sunday">Sunday</option>
-                </select>
+                </NativeSelect>
               </div>
             </div>
             <p className="text-xs text-muted-foreground">

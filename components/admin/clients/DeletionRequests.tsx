@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Download, Trash2 } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
+import { Button } from "@/components/ui/button";
+import { useConfirm } from "@/hooks/use-confirm";
 
 const REQUESTS = [
   {
@@ -23,6 +25,7 @@ const REQUESTS = [
 
 export function DeletionRequests() {
   const [states, setStates] = useState<Record<string, "exported" | "purged">>({});
+  const confirm = useConfirm();
 
   return (
     <div className="rounded-lg border border-border bg-card">
@@ -49,29 +52,42 @@ export function DeletionRequests() {
                   <StatusBadge tone="danger">Purged</StatusBadge>
                 ) : (
                   <>
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() =>
                         setStates((current) => ({ ...current, [request.id]: "exported" }))
                       }
                       disabled={state === "exported"}
-                      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-medium transition-colors hover:bg-secondary disabled:opacity-50"
                     >
                       <Download className="size-3.5" aria-hidden="true" />
                       {state === "exported" ? "Exported" : "Export data"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setStates((current) => ({ ...current, [request.id]: "purged" }))
-                      }
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={async () => {
+                        const ok = await confirm({
+                          icon: Trash2,
+                          title: `Purge ${request.client}'s data?`,
+                          subtitle:
+                            "The record stays in the archive for 30 days, then it is gone.",
+                          confirmLabel: "Purge record",
+                          tone: "danger",
+                        });
+                        if (ok) {
+                          setStates((current) => ({
+                            ...current,
+                            [request.id]: "purged",
+                          }));
+                        }
+                      }}
                       disabled={state !== "exported"}
                       title={state !== "exported" ? "Export the data first" : undefined}
-                      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-destructive/30 px-2.5 text-xs font-medium text-destructive transition-colors hover:bg-destructive/5 disabled:opacity-40"
                     >
                       <Trash2 className="size-3.5" aria-hidden="true" />
                       Purge
-                    </button>
+                    </Button>
                   </>
                 )}
               </div>

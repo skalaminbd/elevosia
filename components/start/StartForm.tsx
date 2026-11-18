@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { motion } from "motion/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
@@ -243,7 +244,7 @@ export function StartForm() {
                   (optional)
                 </span>
               </Label>
-              <select
+              <NativeSelect
                 id="budget"
                 className="h-11 w-full rounded-lg border border-input bg-card px-3 text-base transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                 {...form.register("budget")}
@@ -254,7 +255,7 @@ export function StartForm() {
                     {budget}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
 
             <div className="mt-7">

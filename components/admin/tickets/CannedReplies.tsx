@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { Check, Copy, Plus } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -34,13 +35,13 @@ export function CannedReplies() {
                 <p className="text-sm font-semibold">{reply.title}</p>
                 <p className="text-xs text-muted-foreground">{reply.category}</p>
               </div>
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => {
                   navigator.clipboard?.writeText(reply.body);
                   setCopied(reply.id);
                 }}
-                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-medium hover:bg-secondary"
               >
                 {copied === reply.id ? (
                   <Check className="size-3.5 text-success" aria-hidden="true" />
@@ -48,7 +49,7 @@ export function CannedReplies() {
                   <Copy className="size-3.5" aria-hidden="true" />
                 )}
                 {copied === reply.id ? "Copied" : "Copy"}
-              </button>
+              </Button>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">{reply.body}</p>
           </div>
@@ -65,9 +66,9 @@ export function CannedReplies() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="reply-category" className="text-xs font-medium">Category</Label>
-            <select id="reply-category" value={category} onChange={(e) => setCategory(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+            <NativeSelect id="reply-category" value={category} onChange={(e) => setCategory(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
               {["Acknowledgment", "Information", "Resolution", "Billing"].map((item) => <option key={item}>{item}</option>)}
-            </select>
+            </NativeSelect>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="reply-body" className="text-xs font-medium">Message</Label>

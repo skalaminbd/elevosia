@@ -5,6 +5,7 @@ import { ArrowLeft, Send } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { threads, type Thread } from "@/lib/admin-data";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const initials = (name: string) =>
   name
@@ -169,14 +170,14 @@ export function MessagesView() {
               aria-label={`Reply to ${active.client}`}
               className="h-10 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
-            <button
+            <Button
               type="submit"
+              size="icon"
               disabled={!draft.trim()}
               aria-label="Send message"
-              className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
             >
               <Send className="size-4" aria-hidden="true" />
-            </button>
+            </Button>
           </form>
         </div>
       </div>

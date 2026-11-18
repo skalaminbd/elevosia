@@ -18,10 +18,10 @@ export default function TicketsPage() {
         meta="Support"
         description="Support queue with SLA timers, care plan and warranty flags. Claim unassigned work or escalate it as a task."
       >
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/tickets/canned-replies">Canned replies</Link>
         </Button>
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/tickets/requests">Work requests</Link>
         </Button>
       </PageHeader>

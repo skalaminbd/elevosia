@@ -1,21 +1,30 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FilterDisclosure } from "@/components/shared/FilterDisclosure";
 import Link from "next/link";
-import { ChevronRight, Download, Search } from "lucide-react";
+import {
+  Archive,
+  CheckCircle2,
+  ChevronRight,
+  Download,
+  PauseCircle,
+  Search,
+  Sparkles,
+  UserPlus,
+} from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { adminClients, type ClientStatus } from "@/lib/admin-data";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-const FILTERS: (ClientStatus | "All")[] = [
-  "All",
-  "Active",
-  "Onboarding",
-  "Lead",
-  "Paused",
-  "Former",
+const STATUS_OPTIONS = [
+  { id: "Active", label: "Active", icon: CheckCircle2 },
+  { id: "Onboarding", label: "Onboarding", icon: UserPlus },
+  { id: "Lead", label: "Lead", icon: Sparkles },
+  { id: "Paused", label: "Paused", icon: PauseCircle },
+  { id: "Former", label: "Former", icon: Archive },
 ];
 
 const TONE: Record<ClientStatus, BadgeTone> = {
@@ -29,12 +38,13 @@ const TONE: Record<ClientStatus, BadgeTone> = {
 /** Clients table with live search and status filters. */
 export function ClientsTable() {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<ClientStatus | "All">("All");
+  const [statuses, setStatuses] = useState<string[]>([]);
 
   const rows = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return adminClients.filter((client) => {
-      const matchesStatus = filter === "All" || client.status === filter;
+      const matchesStatus =
+        statuses.length === 0 || statuses.includes(client.status);
       const matchesQuery =
         needle.length === 0 ||
         client.name.toLowerCase().includes(needle) ||
@@ -42,7 +52,7 @@ export function ClientsTable() {
         client.industry.toLowerCase().includes(needle);
       return matchesStatus && matchesQuery;
     });
-  }, [query, filter]);
+  }, [query, statuses]);
 
   function exportCsv() {
     const header = [
@@ -101,31 +111,17 @@ export function ClientsTable() {
             className="h-9 pl-8 text-sm"
           />
         </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <button
-            type="button"
-            onClick={exportCsv}
-            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
+                <div className="flex flex-wrap items-center gap-2">
+          <FilterDisclosure
+            label="Filter"
+            values={statuses}
+            options={STATUS_OPTIONS}
+            onChange={setStatuses}
+          />
+          <Button variant="outline" onClick={exportCsv}>
             <Download className="size-3.5" aria-hidden="true" />
             CSV
-          </button>
-          {FILTERS.map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setFilter(item)}
-              aria-pressed={filter === item}
-              className={cn(
-                "h-8 rounded-full px-3 text-xs font-medium transition-colors",
-                filter === item
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {item}
-            </button>
-          ))}
+          </Button>
         </div>
       </div>
 

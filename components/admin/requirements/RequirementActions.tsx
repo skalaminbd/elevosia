@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { CornerUpLeft, FileText, XCircle } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -35,22 +36,22 @@ export function RequirementActions({
 
         {stage === "idle" ? (
           <>
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              className="w-full"
               onClick={() => setOpen(open === "changes" ? null : "changes")}
-              className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-border text-xs font-medium hover:bg-secondary"
             >
-              <CornerUpLeft className="size-3.5" aria-hidden="true" />
+              <CornerUpLeft className="size-4" aria-hidden="true" />
               Send back for changes
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="destructive"
+              className="w-full"
               onClick={() => setOpen(open === "decline" ? null : "decline")}
-              className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-border text-xs font-medium text-destructive hover:bg-destructive/5"
             >
-              <XCircle className="size-3.5" aria-hidden="true" />
+              <XCircle className="size-4" aria-hidden="true" />
               Decline
-            </button>
+            </Button>
           </>
         ) : null}
 
@@ -76,20 +77,12 @@ export function RequirementActions({
               className="mt-1.5 w-full resize-none rounded-md border border-input bg-card px-2.5 py-2 text-xs outline-none focus-visible:border-ring"
             />
             <div className="mt-2 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setOpen(null)}
-                className="h-7 rounded-md px-2 text-xs text-muted-foreground hover:bg-secondary"
-              >
+              <Button type="button" variant="ghost" onClick={() => setOpen(null)}>
                 Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={!note.trim()}
-                className="h-7 rounded-md bg-primary px-2.5 text-xs font-medium text-primary-foreground disabled:opacity-40"
-              >
+              </Button>
+              <Button type="submit" disabled={!note.trim()}>
                 Confirm
-              </button>
+              </Button>
             </div>
           </form>
         ) : null}
@@ -105,7 +98,7 @@ export function RequirementActions({
           <label htmlFor="assign-pm" className="text-xs font-medium text-muted-foreground">
             Assigned PM
           </label>
-          <select
+          <NativeSelect
             id="assign-pm"
             defaultValue="Alamin"
             onChange={() => setStage("assigned")}
@@ -113,7 +106,7 @@ export function RequirementActions({
           >
             <option>Alamin</option>
             <option>Maya</option>
-          </select>
+          </NativeSelect>
           {stage === "assigned" ? (
             <p className="mt-1.5 text-[11px] text-success">Assigned in this sample.</p>
           ) : null}

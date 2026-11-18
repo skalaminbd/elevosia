@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { ChevronsRight, Search } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { WorkspaceMenu } from "@/components/shared/WorkspaceMenu";
 import { NavItem } from "./NavItem";
-import { UserAvatarMenu } from "./UserCard";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   GROUP_LABELS,
   NAV_ITEMS,
   ROLE_ACCESS,
-  SETTINGS_ITEM,
+  ROLE_LABELS,
+  WORKSPACE_LINKS,
+  DEMO_USERS,
   getNavBadge,
   type SidebarCounts,
   type SidebarRole,
@@ -103,12 +105,13 @@ export function SidebarCollapsed({
       <div className="shrink-0 border-t border-sb-border px-4 pt-2.5 pb-3.5">
         <div className="flex flex-col items-center gap-1.5">
           <ThemeToggle className="size-11 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
-          {allowed.has("settings") ? (
-            <ul>
-              <NavItem item={SETTINGS_ITEM} badge={null} collapsed />
-            </ul>
-          ) : null}
-          <UserAvatarMenu role={role} />
+          <WorkspaceMenu
+            name={DEMO_USERS[role].name}
+            role={ROLE_LABELS[role]}
+            initials={DEMO_USERS[role].initials}
+            links={WORKSPACE_LINKS}
+            className="size-11"
+          />
           <Tooltip>
             <TooltipTrigger asChild>
               <button

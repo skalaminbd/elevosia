@@ -1,15 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FilterDisclosure } from "@/components/shared/FilterDisclosure";
+import { Inbox, User } from "lucide-react";
 import Link from "next/link";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
 import { tickets, type Ticket, type TicketPriority } from "@/lib/admin-data";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-const TABS = ["All", "Unassigned", "Mine"] as const;
-type Tab = (typeof TABS)[number];
+const QUEUE_OPTIONS = [
+  { id: "unassigned", label: "Unassigned", icon: Inbox },
+  { id: "mine", label: "Mine", icon: User },
+];
 
 const PRIORITY: Record<TicketPriority, BadgeTone> = {
   P1: "danger",
@@ -26,38 +31,31 @@ const initials = (name: string) =>
 
 /** Ticket queue: filter, claim unassigned work. */
 export function TicketsQueue() {
-  const [tab, setTab] = useState<Tab>("All");
+  const [queues, setQueues] = useState<string[]>([]);
   const [claimed, setClaimed] = useState<Record<string, boolean>>({});
 
   const rows = useMemo(() => {
     return tickets.filter((ticket) => {
-      if (tab === "Unassigned") return ticket.assignee === null && !claimed[ticket.id];
-      if (tab === "Mine") return ticket.assignee === "Alamin" || claimed[ticket.id];
-      return true;
+      const isMine = ticket.assignee === "Alamin" || claimed[ticket.id];
+      const isUnassigned =
+        ticket.assignee === null && !claimed[ticket.id];
+      if (queues.length === 0) return true;
+      return (
+        (queues.includes("mine") && isMine) ||
+        (queues.includes("unassigned") && isUnassigned)
+      );
     });
-  }, [tab, claimed]);
+  }, [queues, claimed]);
 
   return (
     <div className="rounded-lg border border-border bg-card">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <div className="flex items-center gap-1 rounded-lg bg-secondary p-1">
-          {TABS.map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setTab(item)}
-              aria-pressed={tab === item}
-              className={cn(
-                "h-8 rounded-md px-3 text-xs font-medium transition-colors",
-                tab === item
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
+        <FilterDisclosure
+          label="Filter"
+          values={queues}
+          options={QUEUE_OPTIONS}
+          onChange={setQueues}
+        />
         <p className="text-xs text-muted-foreground">{rows.length} tickets · sample data</p>
       </div>
 
@@ -160,13 +158,9 @@ function TicketRow({
             <span className="text-xs text-muted-foreground">{assignee}</span>
           </div>
         ) : (
-          <button
-            type="button"
-            onClick={onClaim}
-            className="h-7 rounded-md border border-border px-2.5 text-xs font-medium transition-colors hover:border-primary/40 hover:bg-primary/5"
-          >
+          <Button variant="outline" size="sm" onClick={onClaim}>
             Claim
-          </button>
+          </Button>
         )}
       </TD>
     </TR>

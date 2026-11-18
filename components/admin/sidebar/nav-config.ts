@@ -97,7 +97,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
   { id: "invoices", label: "Invoices", href: "/admin/invoices", icon: Receipt, group: "finance" },
   { id: "contracts", label: "Contracts", href: "/admin/contracts", icon: PenLine, group: "finance" },
   { id: "marketing", label: "Marketing", href: "/admin/marketing", icon: Megaphone, group: "growth" },
-  { id: "team", label: "Team & timesheets", href: "/admin/team", icon: Clock, group: "growth" },
+  { id: "team", label: "Team", href: "/admin/team", icon: Clock, group: "growth" },
 ];
 
 export const SETTINGS_ITEM: NavItemConfig = {
@@ -166,7 +166,7 @@ export const ROLE_LABELS: Record<SidebarRole, string> = {
 };
 
 export const DEMO_USERS: Record<SidebarRole, { name: string; initials: string }> = {
-  admin: { name: "Alamin", initials: "A" },
+  admin: { name: "Alamin Rahman", initials: "AR" },
   pm: { name: "Maya Chen", initials: "MC" },
   developer: { name: "Sam Okafor", initials: "SO" },
   marketing: { name: "Lena Ortiz", initials: "LO" },
@@ -296,3 +296,11 @@ export const SEARCH_PROJECTS = [
   { id: "lumen-ops", label: "Projects, time and retainers", meta: "Lumen Studio · Building" },
   { id: "harbor-bookings", label: "Online booking", meta: "Harbor Therapy · Live" },
 ];
+
+export const WORKSPACE_LINKS = {
+  profile: "/admin/profile",
+  teams: "/admin/team",
+  security: "/admin/settings?tab=security",
+  wallets: "/admin/invoices",
+  settings: "/admin/settings",
+};

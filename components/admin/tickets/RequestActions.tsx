@@ -21,14 +21,10 @@ export function RequestActions({ status }: { status: string }) {
               <FileText className="size-4" aria-hidden="true" />
               Convert to requirements
             </Button>
-            <button
-              type="button"
-              onClick={() => setStage("Declined")}
-              className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-border text-xs font-medium text-destructive hover:bg-destructive/5"
-            >
-              <X className="size-3.5" aria-hidden="true" />
+            <Button variant="destructive" className="w-full" onClick={() => setStage("Declined")}>
+              <X className="size-4" aria-hidden="true" />
               Decline
-            </button>
+            </Button>
           </>
         ) : (
           <p className="text-sm text-muted-foreground">

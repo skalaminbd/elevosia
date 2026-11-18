@@ -35,10 +35,10 @@ export default function ContractsPage() {
         meta="Finance"
         description="Templates, what is out for signature and the NDAs clients asked for first."
       >
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/contracts/templates">Templates</Link>
         </Button>
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/contracts/nda">NDAs</Link>
         </Button>
       </PageHeader>

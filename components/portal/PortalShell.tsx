@@ -14,23 +14,15 @@ import {
   Folder,
   FolderKanban,
   LayoutDashboard,
-  LogOut,
   Menu,
   MessageSquare,
   Receipt,
-  UserRound,
   Video,
   X,
   type LucideIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { WorkspaceMenu, type WorkspaceLinks } from "@/components/shared/WorkspaceMenu";
 import {
   Tooltip,
   TooltipContent,
@@ -106,11 +98,12 @@ const NAV_GROUPS: { label: string | null; items: PortalNavItem[] }[] = [
   },
 ];
 
-const ACCOUNT_ITEM: PortalNavItem = {
-  id: "account",
-  label: "Account",
-  href: "/portal/account",
-  icon: UserRound,
+const WORKSPACE_LINKS: WorkspaceLinks = {
+  profile: "/portal/profile",
+  teams: "/portal/account?tab=team",
+  security: "/portal/account?tab=security",
+  wallets: "/portal/invoices",
+  settings: "/portal/account",
 };
 
 const STORAGE_KEY = "elevosia.portal.sidebar.collapsed";
@@ -228,37 +221,6 @@ function PortalNavRow({
   );
 }
 
-function AccountMenu({ children }: { children: ReactNode }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent align="end" side="top" sideOffset={8} className="w-56">
-        <div className="px-2 py-1.5">
-          <p className="text-sm font-semibold">{portalClient.user}</p>
-          <p className="text-xs text-muted-foreground">{portalClient.company}</p>
-        </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/portal/account">Profile and team</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/portal/account?tab=notifications">Notifications</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/portal/account?tab=security">Security</Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild variant="destructive">
-          <Link href="/login">
-            <LogOut aria-hidden="true" />
-            Log out
-          </Link>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
 function ClientChip({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <Link
@@ -316,46 +278,6 @@ function Brand({ collapsed = false }: { collapsed?: boolean }) {
   );
 }
 
-function UserRow({ collapsed = false }: { collapsed?: boolean }) {
-  if (collapsed) {
-    return (
-      <AccountMenu>
-        <button
-          type="button"
-          aria-label="Account menu"
-          className="flex size-10 items-center justify-center rounded-full bg-sb-accent-soft text-[13px] font-bold text-sb-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sb-focus"
-        >
-          {portalClient.initials}
-        </button>
-      </AccountMenu>
-    );
-  }
-
-  return (
-    <div className="flex items-center gap-2.5 px-1.5 pt-2">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sb-accent-soft text-[13px] font-bold text-sb-accent">
-        {portalClient.initials}
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-sb-text-hover">
-          {portalClient.user}
-        </p>
-        <p className="truncate text-xs text-sb-text-muted">{portalClient.role}</p>
-      </div>
-      <ThemeToggle className="size-8 shrink-0 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
-      <AccountMenu>
-        <button
-          type="button"
-          aria-label="Account menu"
-          className="flex size-8 shrink-0 items-center justify-center rounded-lg text-sb-text transition-colors hover:bg-sb-hover-bg hover:text-sb-text-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sb-focus"
-        >
-          <ChevronsUpDown className="size-4" aria-hidden="true" />
-        </button>
-      </AccountMenu>
-    </div>
-  );
-}
-
 function SidebarContent({
   collapsed = false,
   onNavigate,
@@ -396,10 +318,13 @@ function SidebarContent({
         <div className="border-t border-sb-border px-4 pt-2.5 pb-3.5">
           <div className="flex flex-col items-center gap-1.5">
             <ThemeToggle className="size-11 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
-            <ul>
-              <PortalNavRow item={ACCOUNT_ITEM} collapsed onNavigate={onNavigate} />
-            </ul>
-            <UserRow collapsed />
+            <WorkspaceMenu
+              name={portalClient.user}
+              role={portalClient.role}
+              initials={portalClient.initials}
+              links={WORKSPACE_LINKS}
+              className="size-11"
+            />
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
@@ -459,11 +384,16 @@ function SidebarContent({
         ))}
       </nav>
 
-      <div className="shrink-0 border-t border-sb-border px-3 pt-2.5 pb-3.5">
-        <ul className="mb-1">
-          <PortalNavRow item={ACCOUNT_ITEM} onNavigate={onNavigate} />
-        </ul>
-        <UserRow />
+      <div className="flex shrink-0 items-center justify-between border-t border-sb-border px-3 pt-2.5 pb-3.5">
+        <div className="px-1.5">
+          <WorkspaceMenu
+            name={portalClient.user}
+            role={portalClient.role}
+            initials={portalClient.initials}
+            links={WORKSPACE_LINKS}
+          />
+        </div>
+        <ThemeToggle className="size-8 shrink-0 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
       </div>
     </div>
   );
@@ -539,15 +469,14 @@ function MobileBar({
         </Link>
         <div className="ml-auto flex items-center gap-1">
           <ThemeToggle className="size-10 rounded-lg text-foreground hover:bg-secondary" />
-          <AccountMenu>
-            <button
-              type="button"
-              aria-label="Account menu"
-              className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-[13px] font-bold text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
-              {portalClient.initials}
-            </button>
-          </AccountMenu>
+          <WorkspaceMenu
+            name={portalClient.user}
+            role={portalClient.role}
+            initials={portalClient.initials}
+            links={WORKSPACE_LINKS}
+            tone="page"
+            className="size-10"
+          />
         </div>
       </header>
 

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowUpRight, CalendarClock, Check, Video } from "lucide-react";
+import { CalendarClock, Check, Video } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { portalCalls } from "@/lib/portal-data";
+import { ButtonLink } from "@/components/shared/ButtonLink";
 
 export const metadata: Metadata = {
   title: "Calls | Elevosia client portal",
@@ -40,13 +40,7 @@ export default function PortalCallsPage() {
               {portalCalls.upcoming.join}
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Link
-                href="/book-a-call"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                Book another call
-                <ArrowUpRight className="size-3.5" aria-hidden="true" />
-              </Link>
+              <ButtonLink href="/book-a-call">Book another call</ButtonLink>
             </div>
             <p className="mt-3 text-[10px] text-muted-foreground">
               Reschedule or cancel up to 4 hours before the call.

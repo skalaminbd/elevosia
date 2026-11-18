@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { LayoutList, Columns3, GanttChartSquare } from "lucide-react";
+import { GanttChartSquare, GripVertical, LayoutList, Columns3 } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { Progress } from "@/components/admin/ui/Progress";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
-import { adminProjects, type ProjectHealth } from "@/lib/admin-data";
+import { adminProjects, type AdminProject, type ProjectHealth } from "@/lib/admin-data";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { cn } from "@/lib/utils";
 
 const VIEWS = [
@@ -36,6 +37,15 @@ const initials = (name: string) =>
 /** Projects with list, board and timeline views. */
 export function ProjectsView() {
   const [view, setView] = useState<View>("list");
+  const [projects, setProjects] = useState<AdminProject[]>(adminProjects);
+
+  function moveProject(id: string, status: string) {
+    setProjects((current) =>
+      current.map((project) =>
+        project.id === id ? { ...project, status } : project,
+      ),
+    );
+  }
 
   return (
     <div className="rounded-lg border border-border bg-card">
@@ -63,22 +73,24 @@ export function ProjectsView() {
           })}
         </div>
         <p className="text-xs text-muted-foreground">
-          {adminProjects.length} projects · sample data
+          {projects.length} projects · sample data
         </p>
       </div>
 
-      {view === "list" ? <ListView /> : null}
-      {view === "board" ? <BoardView /> : null}
-      {view === "timeline" ? <TimelineView /> : null}
+      {view === "list" ? <ListView projects={projects} /> : null}
+      {view === "board" ? (
+        <BoardView projects={projects} onMove={moveProject} />
+      ) : null}
+      {view === "timeline" ? <TimelineView projects={projects} /> : null}
     </div>
   );
 }
 
-function ListView() {
+function ListView({ projects }: { projects: AdminProject[] }) {
   return (
     <>
       <ul className="divide-y divide-border md:hidden">
-        {adminProjects.map((project) => (
+        {projects.map((project) => (
           <li key={project.id} className="px-4 py-3.5">
             <div className="flex items-start gap-3">
               <Avatar initials={initials(project.client)} />
@@ -138,7 +150,7 @@ function ListView() {
         </tr>
       </THead>
       <TBody>
-        {adminProjects.map((project) => (
+        {projects.map((project) => (
           <TR key={project.id}>
             <TD>
               <div className="flex items-center gap-2.5">
@@ -197,18 +209,49 @@ function ListView() {
   );
 }
 
-function BoardView() {
+function BoardView({
+  projects,
+  onMove,
+}: {
+  projects: AdminProject[];
+  onMove: (id: string, status: string) => void;
+}) {
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overColumn, setOverColumn] = useState<string | null>(null);
+
   return (
     <div className="overflow-x-auto p-3">
       <div className="flex min-w-max gap-3">
         {COLUMNS.map((column) => {
-          const items = adminProjects.filter((project) =>
+          const items = projects.filter((project) =>
             project.status.startsWith(column),
           );
           return (
             <div
               key={column}
-              className="w-64 shrink-0 rounded-lg border border-border bg-background"
+              onDragOver={(event) => {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = "move";
+                setOverColumn(column);
+              }}
+              onDragLeave={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                  setOverColumn(null);
+                }
+              }}
+              onDrop={(event) => {
+                event.preventDefault();
+                const id = event.dataTransfer.getData("text/plain") || dragId;
+                if (id) onMove(id, column);
+                setDragId(null);
+                setOverColumn(null);
+              }}
+              className={cn(
+                "w-64 shrink-0 rounded-lg border bg-background transition-colors",
+                overColumn === column
+                  ? "border-primary/50 bg-primary/[0.03]"
+                  : "border-border",
+              )}
             >
               <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
                 <p className="text-xs font-semibold">{column}</p>
@@ -225,15 +268,31 @@ function BoardView() {
                   items.map((project) => (
                     <div
                       key={project.id}
-                      className="rounded-md border border-border bg-card p-3 transition-colors hover:border-primary/30"
+                      draggable
+                      onDragStart={(event) => {
+                        event.dataTransfer.setData("text/plain", project.id);
+                        event.dataTransfer.effectAllowed = "move";
+                        setDragId(project.id);
+                      }}
+                      onDragEnd={() => {
+                        setDragId(null);
+                        setOverColumn(null);
+                      }}
+                      className={cn(
+                        "cursor-grab rounded-md border border-border bg-card p-3 transition-colors hover:border-primary/30 active:cursor-grabbing",
+                        dragId === project.id && "opacity-60",
+                      )}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <Link
-                          href={`/admin/projects/${project.id}`}
-                          className="text-sm font-medium hover:underline"
-                        >
-                          {project.client}
-                        </Link>
+                        <span className="flex min-w-0 items-center gap-1.5">
+                          <GripVertical className="size-3 shrink-0 text-muted-foreground" aria-hidden="true" />
+                          <Link
+                            href={`/admin/projects/${project.id}`}
+                            className="truncate text-sm font-medium hover:underline"
+                          >
+                            {project.client}
+                          </Link>
+                        </span>
                         <StatusBadge tone={HEALTH[project.health]}>
                           {project.health}
                         </StatusBadge>
@@ -248,6 +307,24 @@ function BoardView() {
                         <span className="font-mono">{project.progress}%</span>
                         <span>{project.due}</span>
                       </div>
+                      <div className="mt-2 md:hidden">
+                        <NativeSelect
+                          aria-label={`Move ${project.name}`}
+                          value={
+                            COLUMNS.find((option) =>
+                              project.status.startsWith(option),
+                            ) ?? COLUMNS[0]
+                          }
+                          onChange={(event) => onMove(project.id, event.target.value)}
+                          className="h-8 text-[10px]"
+                        >
+                          {COLUMNS.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </NativeSelect>
+                      </div>
                     </div>
                   ))
                 )}
@@ -260,7 +337,7 @@ function BoardView() {
   );
 }
 
-function TimelineView() {
+function TimelineView({ projects }: { projects: AdminProject[] }) {
   return (
     <div className="overflow-x-auto p-4">
       <div className="min-w-[760px]">
@@ -275,7 +352,7 @@ function TimelineView() {
           </div>
         </div>
         <div className="space-y-2">
-          {adminProjects.map((project) => (
+          {projects.map((project) => (
             <div
               key={project.id}
               className="grid grid-cols-[220px_1fr] items-center gap-4 rounded-md py-1.5"

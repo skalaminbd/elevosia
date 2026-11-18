@@ -5,6 +5,7 @@ import { Check, Clock, MessageSquareWarning } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { approvalHistory, portalApprovals } from "@/lib/portal-data";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type State = "pending" | "approved" | "changes";
 
@@ -55,25 +56,22 @@ export function ApprovalsList() {
 
                 {state === "pending" ? (
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    <button
-                      type="button"
+                    <Button
                       onClick={() =>
                         setStates((current) => ({ ...current, [approval.id]: "approved" }))
                       }
-                      className="h-9 rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground hover:bg-primary/90"
                     >
-                      <Check className="mr-1 inline size-3.5" aria-hidden="true" />
+                      <Check className="size-4" aria-hidden="true" />
                       Approve
-                    </button>
-                    <button
-                      type="button"
+                    </Button>
+                    <Button
+                      variant="outline"
                       onClick={() =>
                         setOpenComment(openComment === approval.id ? null : approval.id)
                       }
-                      className="h-9 rounded-lg border border-border px-3 text-xs font-medium hover:bg-secondary"
                     >
                       Request changes
-                    </button>
+                    </Button>
                   </div>
                 ) : state === "approved" ? (
                   <StatusBadge tone="success">
@@ -118,20 +116,19 @@ export function ApprovalsList() {
                     className="mt-1.5 w-full resize-none rounded-lg border border-input bg-card px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                   />
                   <div className="mt-2 flex items-center justify-end gap-2">
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
                       onClick={() => setOpenComment(null)}
-                      className="h-8 rounded-md px-2.5 text-xs text-muted-foreground hover:bg-secondary"
                     >
                       Cancel
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="submit"
                       disabled={!comments[approval.id]?.trim()}
-                      className="h-8 rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground disabled:opacity-40"
                     >
                       Send to PM
-                    </button>
+                    </Button>
                   </div>
                 </form>
               ) : null}

@@ -1,10 +1,38 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { Plus, FileText } from "lucide-react";
-import { Dialog } from "@/components/shared/Dialog";
+import { useState, type ReactNode } from "react";
+import { FileText, Plus, Trash2 } from "lucide-react";
+import { z } from "zod";
+import { AppDialog } from "@/components/ui/app-dialog";
 import { Button } from "@/components/ui/button";
-import { BlueprintForm } from "./BlueprintForm";
+import { FormField, FormSelect } from "@/components/ui/form-field";
+import { Input } from "@/components/ui/input";
+
+const CLIENTS = [
+  "Clearwater Fund",
+  "Cedarbrook Schools",
+  "Lumen Studio",
+  "Brightline Care",
+  "Northwind HVAC",
+];
+const TERMS = ["Service agreement", "Retainer agreement", "Custom"];
+const PAYMENTS = [
+  "40% deposit, 30% demo, 30% launch",
+  "Monthly installments",
+  "Paid in full",
+];
+
+const schema = z.object({
+  client: z.string().min(1),
+  title: z.string().trim().min(2, "Enter the project name"),
+  price: z.string().refine((value) => Number(value) > 0, "Enter a price"),
+  terms: z.string().min(1),
+  validUntil: z.string().min(1),
+  payment: z.string().min(1),
+});
+
+type Values = z.infer<typeof schema>;
+type Errors = Partial<Record<keyof Values, string>>;
 
 export function NewBlueprintDialog({
   requirementId,
@@ -13,24 +41,254 @@ export function NewBlueprintDialog({
   requirementId?: string;
   children?: ReactNode;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog
+    <AppDialog
+      open={open}
+      onOpenChange={setOpen}
       trigger={
         children ?? (
-          <Button size="sm">
+          <Button>
             <Plus className="size-4" aria-hidden="true" />
             New Blueprint
           </Button>
         )
       }
-      icon={<FileText className="size-4" aria-hidden="true" />}
-      title="New Blueprint"
-      description="Milestones, tasks and a fixed price. Nothing is sent until you choose."
-      size="xl"
+      size="md"
     >
-      {(close) => (
-        <BlueprintForm requirementId={requirementId} plain onDone={close} />
-      )}
-    </Dialog>
+      <BlueprintDialogForm
+        requirementId={requirementId}
+        onClose={() => setOpen(false)}
+      />
+    </AppDialog>
+  );
+}
+
+function BlueprintDialogForm({
+  requirementId,
+  onClose,
+}: {
+  requirementId?: string;
+  onClose: () => void;
+}) {
+  const [form, setForm] = useState<Values>({
+    client: "Clearwater Fund",
+    title: requirementId ? "Donor CRM and impact reporting" : "",
+    price: "28000",
+    terms: "Service agreement",
+    validUntil: "2026-12-19",
+    payment: PAYMENTS[0],
+  });
+  const [milestones, setMilestones] = useState([
+    "Foundation",
+    "Donors and members",
+    "Applications",
+    "Reporting",
+    "Launch",
+  ]);
+  const [step, setStep] = useState(0);
+  const [errors, setErrors] = useState<Errors>({});
+  const [dirty, setDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  function update<K extends keyof Values>(key: K, value: Values[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
+    setErrors((current) => ({ ...current, [key]: undefined }));
+    setDirty(true);
+  }
+
+  function save() {
+    const parsed = schema.safeParse(form);
+    if (!parsed.success) {
+      const next: Errors = {};
+      for (const issue of parsed.error.issues) {
+        const key = issue.path[0] as keyof Values;
+        if (!next[key]) next[key] = issue.message;
+      }
+      setErrors(next);
+      setStep(0);
+      return;
+    }
+    if (milestones.some((item) => !item.trim())) return;
+    setSaving(true);
+    window.setTimeout(() => {
+      setSaving(false);
+      setSaved(true);
+      setDirty(false);
+      window.setTimeout(onClose, 2000);
+    }, 450);
+  }
+
+  return (
+    <>
+      <AppDialog.Header
+        icon={FileText}
+        title="New Blueprint"
+        subtitle={
+          step === 0
+            ? "Set the client, scope and fixed price."
+            : "Add the commercial terms and milestones."
+        }
+      />
+      <AppDialog.Body>
+        <form
+          id="new-blueprint-dialog"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (step === 0) setStep(1);
+            else save();
+          }}
+          className="flex flex-col gap-[18px]"
+        >
+          {requirementId ? (
+            <p className="rounded-[var(--radius-dialog-preview)] border border-border bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
+              Created from {requirementId}. Every point is copied into the tasks
+              below.
+            </p>
+          ) : null}
+
+          {step === 0 ? (
+            <>
+              <FormSelect
+                id="blueprint-client"
+                label="Client"
+                value={form.client}
+                onChange={(event) => update("client", event.target.value)}
+              >
+                {CLIENTS.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </FormSelect>
+              <FormField
+                id="blueprint-title"
+                label="Project name"
+                value={form.title}
+                onChange={(event) => update("title", event.target.value)}
+                error={errors.title}
+              />
+              <FormField
+                id="blueprint-price"
+                label="Fixed price (USD)"
+                type="number"
+                min={0}
+                step={500}
+                value={form.price}
+                onChange={(event) => update("price", event.target.value)}
+                error={errors.price}
+                inputClassName="font-mono"
+              />
+              <FormSelect
+                id="blueprint-terms"
+                label="Terms template"
+                value={form.terms}
+                onChange={(event) => update("terms", event.target.value)}
+              >
+                {TERMS.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </FormSelect>
+            </>
+          ) : (
+            <>
+              <FormField
+                id="blueprint-valid"
+                label="Valid until"
+                type="date"
+                value={form.validUntil}
+                onChange={(event) => update("validUntil", event.target.value)}
+              />
+              <FormSelect
+                id="blueprint-payment"
+                label="Payment schedule"
+                value={form.payment}
+                onChange={(event) => update("payment", event.target.value)}
+              >
+                {PAYMENTS.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </FormSelect>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-[13px] font-medium">Milestones</p>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="dialog-sm"
+                    onClick={() => {
+                      setMilestones((current) => [
+                        ...current,
+                        `Milestone ${current.length + 1}`,
+                      ]);
+                      setDirty(true);
+                    }}
+                  >
+                    <Plus className="size-3.5" aria-hidden="true" />
+                    Add milestone
+                  </Button>
+                </div>
+                <ul className="space-y-2">
+                  {milestones.map((milestone, index) => (
+                    <li key={index} className="flex items-center gap-2">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-secondary font-mono text-[10px] text-muted-foreground">
+                        {index + 1}
+                      </span>
+                      <Input
+                        value={milestone}
+                        onChange={(event) => {
+                          setMilestones((current) =>
+                            current.map((item, itemIndex) =>
+                              itemIndex === index ? event.target.value : item,
+                            ),
+                          );
+                          setDirty(true);
+                        }}
+                        aria-label={`Milestone ${index + 1}`}
+                        className="h-11 rounded-[var(--radius-dialog-control)]"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`Remove milestone ${index + 1}`}
+                        onClick={() => {
+                          setMilestones((current) =>
+                            current.filter((_, itemIndex) => itemIndex !== index),
+                          );
+                          setDirty(true);
+                        }}
+                        className="text-muted-foreground hover:text-destructive"
+                      >
+                        <Trash2 className="size-3.5" aria-hidden="true" />
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </form>
+      </AppDialog.Body>
+      <AppDialog.Footer
+        status={saved ? "saved" : dirty ? "dirty" : undefined}
+        secondary={
+          step === 0
+            ? { label: "Cancel" }
+            : { label: "Back", onClick: () => setStep(0) }
+        }
+        primary={
+          step === 0
+            ? { label: "Next", onClick: () => setStep(1) }
+            : {
+                label: "Save as draft",
+                type: "submit",
+                form: "new-blueprint-dialog",
+                disabled: !form.title.trim() || Number(form.price) <= 0 || saving,
+                loading: saving,
+              }
+        }
+      />
+    </>
   );
 }

@@ -5,9 +5,15 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { SidebarExpanded } from "./SidebarExpanded";
-import { UserAvatarMenu } from "./UserCard";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
-import type { SidebarCounts, SidebarRole } from "./nav-config";
+import { WorkspaceMenu } from "@/components/shared/WorkspaceMenu";
+import {
+  DEMO_USERS,
+  ROLE_LABELS,
+  WORKSPACE_LINKS,
+  type SidebarCounts,
+  type SidebarRole,
+} from "./nav-config";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 /**
@@ -91,7 +97,14 @@ export function SidebarMobile({
         </Link>
         <div className="ml-auto flex items-center gap-1">
           <ThemeToggle className="size-10 rounded-lg text-foreground hover:bg-secondary" />
-          <UserAvatarMenu role={role} tone="page" className="size-9" />
+          <WorkspaceMenu
+            name={DEMO_USERS[role].name}
+            role={ROLE_LABELS[role]}
+            initials={DEMO_USERS[role].initials}
+            links={WORKSPACE_LINKS}
+            tone="page"
+            className="size-9"
+          />
         </div>
       </header>
 

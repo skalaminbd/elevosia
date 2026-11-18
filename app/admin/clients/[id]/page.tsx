@@ -55,13 +55,13 @@ export default async function ClientDetailPage({ params }: { params: Params }) {
         >
           {client.status}
         </StatusBadge>
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href={`/admin/clients/${client.id}/edit`}>
             <Pencil className="size-4" aria-hidden="true" />
             Edit
           </Link>
         </Button>
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href={`/admin/preview/${client.id}`}>
             <ExternalLink className="size-4" aria-hidden="true" />
             Preview portal

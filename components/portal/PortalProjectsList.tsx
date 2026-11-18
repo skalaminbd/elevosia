@@ -1,44 +1,42 @@
 "use client";
 
 import { useState } from "react";
+import { FilterDisclosure } from "@/components/shared/FilterDisclosure";
+import { CheckCircle2, PauseCircle, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Progress } from "@/components/admin/ui/Progress";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { portalProjects } from "@/lib/portal-data";
-import { cn } from "@/lib/utils";
 
-const FILTERS = ["Active", "Completed", "On hold"] as const;
+const STATUS_OPTIONS = [
+  { id: "Active", label: "Active", icon: PlayCircle },
+  { id: "Completed", label: "Completed", icon: CheckCircle2 },
+  { id: "On hold", label: "On hold", icon: PauseCircle },
+];
 
 export function PortalProjectsList() {
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("Active");
-  const rows = portalProjects.filter((project) => project.status === filter);
+  const [statuses, setStatuses] = useState<string[]>([]);
+  const rows = portalProjects.filter(
+    (project) =>
+      statuses.length === 0 || statuses.includes(project.status),
+  );
 
   return (
     <div>
-      <div className="flex items-center gap-1 rounded-lg bg-secondary p-1 w-fit">
-        {FILTERS.map((item) => (
-          <button
-            key={item}
-            type="button"
-            onClick={() => setFilter(item)}
-            aria-pressed={filter === item}
-            className={cn(
-              "h-8 rounded-md px-3 text-xs font-medium transition-colors",
-              filter === item
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {item}
-          </button>
-        ))}
+            <div className="w-fit">
+        <FilterDisclosure
+          label="Filter"
+          values={statuses}
+          options={STATUS_OPTIONS}
+          onChange={setStatuses}
+        />
       </div>
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {rows.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border p-10 text-center md:col-span-2">
-            <p className="text-sm font-medium">No {filter.toLowerCase()} projects.</p>
+            <p className="text-sm font-medium">No projects match that filter.</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Everything else is in the other tabs.
             </p>

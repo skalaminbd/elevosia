@@ -18,7 +18,7 @@ export default function TasksPage() {
         meta="Delivery"
         description="Your week first, then the whole board. Client-visible work updates the portal the moment it moves."
       >
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/admin/tasks/mine">My tasks</Link>
         </Button>
       </PageHeader>

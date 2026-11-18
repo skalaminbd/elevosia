@@ -34,6 +34,7 @@
   --highlight-foreground: var(--brand-forest);
   --destructive: #dc2626;
   --success: #2f8f5b;
+  --success-strong: #1e5b34;
   --warning: #d97706;
   --info: #2563eb;
   --destructive-foreground: #ffffff;
@@ -57,6 +58,12 @@
   --chart-4: var(--brand-lime);
   --chart-5: #8a9a8f;
   --radius: 10px;
+  --radius-dialog: 20px;
+  --radius-dialog-control: 12px;
+  --radius-dialog-preview: 14px;
+  --dialog-chrome: #f6f4ee;
+  --dialog-icon-bg: #e4efcb;
+  --shadow-dialog: 0 24px 64px rgb(12 28 19 / 30%), 0 2px 6px rgb(12 28 19 / 10%);
   /* Height of the sticky site header, so heroes can sit behind it */
   --header-h: 3.5rem;
   --sidebar: #ffffff;
@@ -111,6 +118,7 @@
   --highlight-foreground: var(--brand-forest);
   --destructive: #ef4444;
   --success: #4ade80;
+  --success-strong: #4ade80;
   --warning: #f59e0b;
   --info: #60a5fa;
   --destructive-foreground: var(--brand-forest);
@@ -147,6 +155,8 @@
   --sb-accent: var(--sidebar-primary);
   --sb-accent-fg: var(--sidebar-primary-foreground);
   --sb-warning: var(--warning);
+  --dialog-chrome: var(--muted);
+  --dialog-icon-bg: var(--accent);
 }
 
 @theme inline {
@@ -173,6 +183,9 @@
   --color-highlight-foreground: var(--highlight-foreground);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
+  --color-dialog-chrome: var(--dialog-chrome);
+  --color-dialog-icon: var(--dialog-icon-bg);
   --color-warning: var(--warning);
   --color-info: var(--info);
   --color-destructive-foreground: var(--destructive-foreground);

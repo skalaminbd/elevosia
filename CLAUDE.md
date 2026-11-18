@@ -55,6 +55,13 @@ Rules:
 - Watermelon items that pull `@hugeicons/*`, `react-icons`, `react-use-measure` or another new package are adapted to lucide + `motion/react` by hand. Never add a new icon or animation package
 - Watermelon "base-ui" variants are adapted onto our existing `@/components/ui` primitives; do not add a second primitive system
 - Admin and portal layouts: fixed sidebar on desktop, bottom tab bar on mobile, `p-4 sm:p-6` page padding, `gap-4` or `gap-6`
+- Action buttons in admin and portal use `<Button>` or `<ButtonLink>` with the `default` or `outline` variant and the default size, the same as the marketing site. Use `size="sm"` only for dense table or toolbar utilities, and `size="icon"` with an `aria-label` for icon-only buttons. Never hand-style a primary or outline action button
+- Every native select uses `<NativeSelect>` from `@/components/shared/NativeSelect` so the chevron keeps its gap from the border
+- Every content popup uses `<AppDialog>` from `@/components/ui/app-dialog` (Radix Dialog, bottom sheet below 640px). Destructive confirmations use `useConfirm`; never use `window.confirm`. Large intake flows may use a full page instead of a dialog
+- Dialog forms use `FormField` / `FormSelect` / `FormTextarea`, keep 3–4 fields per step, and use the dialog-scoped radii, 55% overlay, muted chrome, card body and `size="dialog"` buttons. The old shared `Dialog` is removed
+- Any filter UI uses `<FilterDisclosure>` from `@/components/shared/FilterDisclosure`. Never hand-roll filter pills or a filter bar
+- Boards (tasks, projects, onboarding) support drag and drop: native HTML5 drag on desktop, with a `NativeSelect` move fallback on mobile. Keep the board state in the client component
+- Admin and portal sidebar footers hold only the theme toggle and the workspace/settings icon. Settings/Account is not a nav item; the icon opens `WorkspaceMenu` with profile, teams, security, wallets, settings and logout
 - Fetch or install a component only when the screen you are building needs it. Do not bulk-download registry entries in advance
 - Animated items must be purposeful (progress, status, lists, scheduling) and show their final state under reduced motion. No entrance animations on text or blocks
 

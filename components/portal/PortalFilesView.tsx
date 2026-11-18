@@ -5,6 +5,7 @@ import { FileText, Folder, Upload } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { portalContracts, portalFiles } from "@/lib/portal-data";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const TABS = ["Files", "Contracts"] as const;
 type Tab = (typeof TABS)[number];
@@ -84,13 +85,9 @@ export function PortalFilesView() {
                   ? chosen.join(", ")
                   : "Uploads go to your project's Client uploads folder."}
               </p>
-              <button
-                type="submit"
-                disabled={chosen.length === 0}
-                className="h-9 rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground transition-opacity disabled:opacity-40"
-              >
+              <Button type="submit" disabled={chosen.length === 0}>
                 Upload
-              </button>
+              </Button>
             </div>
             <p className="mt-2 text-[11px] text-warning">
               No patient data unless approved. Files are visible to your PM only.

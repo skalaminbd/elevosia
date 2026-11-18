@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -32,11 +33,11 @@ export function NewProjectForm({
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {onDone ? (
-            <Button size="sm" onClick={onDone}>
+            <Button onClick={onDone}>
               Done
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline">
             <Link href="/admin/projects">Back to projects</Link>
           </Button>
         </div>
@@ -56,10 +57,10 @@ export function NewProjectForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="from" className="text-xs font-medium">Start from</Label>
-          <select id="from" value={fromBlueprint} onChange={(e) => setFromBlueprint(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="from" value={fromBlueprint} onChange={(e) => setFromBlueprint(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             <option value="BP-309">BP-309 · Brightline Care · Approved · $16,000</option>
             <option value="internal">Internal project (no Blueprint)</option>
-          </select>
+          </NativeSelect>
           <p className="text-[11px] text-muted-foreground">
             Only approved Blueprints can become projects.
           </p>
@@ -70,10 +71,10 @@ export function NewProjectForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="p-pm" className="text-xs font-medium">Project manager</Label>
-          <select id="p-pm" value={pm} onChange={(e) => setPm(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="p-pm" value={pm} onChange={(e) => setPm(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             <option>Alamin</option>
             <option>Maya</option>
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="p-start" className="text-xs font-medium">Start date</Label>

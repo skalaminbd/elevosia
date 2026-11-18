@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check, Send, ShieldCheck } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
@@ -8,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import type { Ticket } from "@/lib/admin-data";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Message = {
   id: string;
@@ -149,14 +151,10 @@ export function TicketConversation({ ticket }: { ticket: Ticket }) {
               >
                 Canned replies
               </Link>
-              <button
-                type="submit"
-                disabled={!draft.trim()}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-medium text-primary-foreground disabled:opacity-40"
-              >
-                <Send className="size-3.5" aria-hidden="true" />
+              <Button type="submit" disabled={!draft.trim()}>
+                <Send className="size-4" aria-hidden="true" />
                 Send
-              </button>
+              </Button>
             </div>
           </div>
         </form>
@@ -170,7 +168,7 @@ export function TicketConversation({ ticket }: { ticket: Ticket }) {
               <Label htmlFor="priority" className="text-[10px] text-muted-foreground">
                 Priority
               </Label>
-              <select
+              <NativeSelect
                 id="priority"
                 value={priority}
                 onChange={(event) => setPriority(event.target.value as typeof priority)}
@@ -179,13 +177,13 @@ export function TicketConversation({ ticket }: { ticket: Ticket }) {
                 <option value="P1">P1 · 1 hour</option>
                 <option value="P2">P2 · 4 hours</option>
                 <option value="P3">P3 · 1 business day</option>
-              </select>
+              </NativeSelect>
             </div>
             <div>
               <Label htmlFor="assignee" className="text-[10px] text-muted-foreground">
                 Assignee
               </Label>
-              <select
+              <NativeSelect
                 id="assignee"
                 value={assignee}
                 onChange={(event) => setAssignee(event.target.value)}
@@ -194,13 +192,13 @@ export function TicketConversation({ ticket }: { ticket: Ticket }) {
                 {["Unassigned", "Rafi", "Maya", "Alamin"].map((item) => (
                   <option key={item}>{item}</option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
             <div>
               <Label htmlFor="status" className="text-[10px] text-muted-foreground">
                 Status
               </Label>
-              <select
+              <NativeSelect
                 id="status"
                 value={status}
                 onChange={(event) => setStatus(event.target.value as typeof status)}
@@ -209,7 +207,7 @@ export function TicketConversation({ ticket }: { ticket: Ticket }) {
                 {["New", "Open", "Waiting on client", "Resolved"].map((item) => (
                   <option key={item}>{item}</option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
           </div>
           <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border pt-3">
@@ -229,13 +227,13 @@ export function TicketConversation({ ticket }: { ticket: Ticket }) {
               Linked task created in this sample.
             </p>
           ) : (
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              className="mt-2"
               onClick={() => setEscalated(true)}
-              className="mt-2 h-9 rounded-lg border border-border px-3 text-xs font-medium hover:bg-secondary"
             >
               Escalate to developer
-            </button>
+            </Button>
           )}
         </div>
 

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { retainer } from "@/lib/portal-data";
+import { Button } from "@/components/ui/button";
 
 export function NewRequestForm({
   plain = false,
@@ -27,13 +29,9 @@ export function NewRequestForm({
           hours first.
         </p>
         {onDone ? (
-          <button
-            type="button"
-            onClick={onDone}
-            className="mt-4 h-9 rounded-lg bg-primary px-3.5 text-xs font-medium text-primary-foreground"
-          >
+          <Button type="button" onClick={onDone} className="mt-4">
             Done
-          </button>
+          </Button>
         ) : null}
       </div>
     );
@@ -66,7 +64,7 @@ export function NewRequestForm({
             <Label htmlFor="request-project" className="text-xs font-medium">
               Project
             </Label>
-            <select
+            <NativeSelect
               id="request-project"
               value={project}
               onChange={(event) => setProject(event.target.value)}
@@ -74,13 +72,13 @@ export function NewRequestForm({
             >
               <option>Care dashboard and client portal</option>
               <option>Online booking</option>
-            </select>
+            </NativeSelect>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="request-priority" className="text-xs font-medium">
               Priority
             </Label>
-            <select
+            <NativeSelect
               id="request-priority"
               value={priority}
               onChange={(event) => setPriority(event.target.value)}
@@ -89,7 +87,7 @@ export function NewRequestForm({
               <option>Normal</option>
               <option>Urgent</option>
               <option>Low</option>
-            </select>
+            </NativeSelect>
           </div>
         </div>
         <div className="space-y-1.5">
@@ -111,13 +109,9 @@ export function NewRequestForm({
           Uses your {retainer.plan} hours first. {retainer.hours - retainer.used} h
           left this month.
         </p>
-        <button
-          type="submit"
-          disabled={!title.trim() || !detail.trim()}
-          className="h-10 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground disabled:opacity-40"
-        >
+        <Button type="submit" disabled={!title.trim() || !detail.trim()}>
           Send request
-        </button>
+        </Button>
       </div>
     </form>
   );

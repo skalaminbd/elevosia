@@ -58,14 +58,14 @@ export default async function AdminProjectPage({ params }: { params: Params }) {
           {project.health}
         </StatusBadge>
         {client ? (
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline">
             <Link href={`/admin/clients/${client.id}`}>
               <Users className="size-4" aria-hidden="true" />
               Client
             </Link>
           </Button>
         ) : null}
-        <Button asChild variant="outline" size="sm">
+        <Button asChild variant="outline">
           <Link href="/portal" target="_blank" rel="noreferrer">
             <ExternalLink className="size-4" aria-hidden="true" />
             Portal

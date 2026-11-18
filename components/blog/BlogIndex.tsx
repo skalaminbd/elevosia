@@ -30,7 +30,7 @@ import { Label } from "@/components/ui/label";
 import { MagicCard } from "@/components/ui/magic-card";
 import { useInViewLoop } from "@/hooks/use-in-view-loop";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { cn } from "@/lib/utils";
+import { FilterDisclosure } from "@/components/shared/FilterDisclosure";
 
 const COVER_ICONS = {
   "Build vs buy": Scale,
@@ -48,44 +48,58 @@ const CATEGORY_BY_SLUG: Record<string, Category> = {
   "industry-playbooks": "Industry playbooks",
 };
 
+const CATEGORY_OPTIONS = categories
+  .filter((item): item is Exclude<Category, "All"> => item !== "All")
+  .map((item) => ({ id: item, label: item, icon: COVER_ICONS[item] }));
+
 /** Blog index: search, category filters, featured guide, animated grid. */
 export function BlogIndex() {
   const reduceMotion = useReducedMotion();
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<Category>("All");
+  const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("category");
-    if (!slug || !CATEGORY_BY_SLUG[slug]) return;
-    const frame = window.requestAnimationFrame(() =>
-      setCategory(CATEGORY_BY_SLUG[slug]),
-    );
+    const raw = new URLSearchParams(window.location.search).get("category");
+    if (!raw) return;
+    const names = raw
+      .split(",")
+      .map((slug) => CATEGORY_BY_SLUG[slug])
+      .filter((value): value is Category => Boolean(value));
+    if (names.length === 0) return;
+    const frame = window.requestAnimationFrame(() => setSelected(names));
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  function chooseCategory(next: Category) {
-    setCategory(next);
-    const slug = Object.entries(CATEGORY_BY_SLUG).find(
-      ([, value]) => value === next,
-    )?.[0];
-    const url = slug ? `/blog?category=${slug}` : "/blog";
-    window.history.replaceState(null, "", url);
+  function chooseCategories(next: string[]) {
+    setSelected(next);
+    const slugs = next
+      .map(
+        (name) =>
+          Object.entries(CATEGORY_BY_SLUG).find(([, value]) => value === name)?.[0],
+      )
+      .filter((slug): slug is string => Boolean(slug));
+    window.history.replaceState(
+      null,
+      "",
+      slugs.length ? `/blog?category=${slugs.join(",")}` : "/blog",
+    );
   }
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return posts.filter((post) => {
-      const matchesCategory = category === "All" || post.category === category;
+      const matchesCategory =
+        selected.length === 0 || selected.includes(post.category);
       const matchesQuery =
         needle.length === 0 ||
         post.title.toLowerCase().includes(needle) ||
         post.summary.toLowerCase().includes(needle);
       return matchesCategory && matchesQuery;
     });
-  }, [query, category]);
+  }, [query, selected]);
 
   const featured = posts.find((post) => post.published);
-  const filtering = query.trim().length > 0 || category !== "All";
+  const filtering = query.trim().length > 0 || selected.length > 0;
   const gridPosts = filtering
     ? filtered
     : filtered.filter((post) => post.slug !== featured?.slug);
@@ -94,7 +108,7 @@ export function BlogIndex() {
 
   return (
     <>
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-x-clip">
         <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-12 sm:px-6 md:pt-20 lg:px-8 lg:pt-24">
           <div className="mx-auto max-w-3xl text-center">
             <Eyebrow>{blogHero.eyebrow}</Eyebrow>
@@ -120,23 +134,13 @@ export function BlogIndex() {
               />
             </div>
 
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-              {categories.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => chooseCategory(item)}
-                  aria-pressed={category === item}
-                  className={cn(
-                    "rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
-                    category === item
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {item}
-                </button>
-              ))}
+            <div className="mt-5 flex justify-center">
+              <FilterDisclosure
+                label="Filter"
+                values={selected}
+                options={CATEGORY_OPTIONS}
+                onChange={chooseCategories}
+              />
             </div>
           </div>
         </div>
@@ -239,7 +243,7 @@ export function BlogIndex() {
               type="button"
               onClick={() => {
                 setQuery("");
-                chooseCategory("All");
+                chooseCategories([]);
               }}
               className="text-xs font-medium text-primary hover:underline"
             >
@@ -258,7 +262,7 @@ export function BlogIndex() {
               type="button"
               onClick={() => {
                 setQuery("");
-                chooseCategory("All");
+                chooseCategories([]);
               }}
               className="mt-4 text-sm font-medium text-primary hover:underline"
             >

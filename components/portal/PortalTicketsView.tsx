@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { Check, LifeBuoy, MessageSquare } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { portalTickets } from "@/lib/portal-data";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 type Ticket = (typeof portalTickets)[number];
 
@@ -118,7 +120,7 @@ export function PortalTicketsView() {
             <Label htmlFor="ticket-project" className="text-xs font-medium">
               Project
             </Label>
-            <select
+            <NativeSelect
               id="ticket-project"
               value={project}
               onChange={(event) => setProject(event.target.value)}
@@ -127,7 +129,7 @@ export function PortalTicketsView() {
               <option>Care dashboard and client portal</option>
               <option>Online booking</option>
               <option>Not project specific</option>
-            </select>
+            </NativeSelect>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="ticket-detail" className="text-xs font-medium">
@@ -145,7 +147,7 @@ export function PortalTicketsView() {
             <Label htmlFor="ticket-priority" className="text-xs font-medium">
               Priority
             </Label>
-            <select
+            <NativeSelect
               id="ticket-priority"
               value={priority}
               onChange={(event) => setPriority(event.target.value)}
@@ -154,20 +156,20 @@ export function PortalTicketsView() {
               <option>Normal</option>
               <option>Urgent</option>
               <option>Low</option>
-            </select>
+            </NativeSelect>
             <p className="text-[10px] text-muted-foreground">
               Your care plan: same-business-day support.
             </p>
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={!subject.trim() || !detail.trim()}
-          className="mt-4 h-10 w-full rounded-lg bg-primary text-sm font-medium text-primary-foreground transition-opacity disabled:opacity-40"
+          className="mt-4 w-full"
         >
           Submit ticket
-        </button>
+        </Button>
         <p className="mt-2 text-[10px] text-muted-foreground">
           {project} · {priority.toLowerCase()} priority
         </p>

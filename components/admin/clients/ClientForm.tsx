@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -49,15 +50,15 @@ export function ClientForm({
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {onDone ? (
-            <Button size="sm" onClick={onDone}>
+            <Button onClick={onDone}>
               Done
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline">
             <Link href="/admin/clients">Back to clients</Link>
           </Button>
           {mode === "edit" && client && !onDone ? (
-            <Button asChild size="sm">
+            <Button asChild>
               <Link href={`/admin/clients/${client.id}`}>Open client</Link>
             </Button>
           ) : null}
@@ -92,36 +93,36 @@ export function ClientForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="industry" className="text-xs font-medium">Service type</Label>
-          <select id="industry" value={industry} onChange={(e) => setIndustry(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+          <NativeSelect id="industry" value={industry} onChange={(e) => setIndustry(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
             {["Home care", "Field services", "Agency", "Nonprofit", "Care", "Cleaning", "Education", "Property"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="status" className="text-xs font-medium">Status</Label>
-          <select id="status" value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+          <NativeSelect id="status" value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
             {["Lead", "Onboarding", "Active", "Paused", "Former"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="pm" className="text-xs font-medium">Assigned PM</Label>
-          <select id="pm" value={pm} onChange={(e) => setPm(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+          <NativeSelect id="pm" value={pm} onChange={(e) => setPm(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
             {["Alamin", "Maya"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="timezone" className="text-xs font-medium">Client time zone</Label>
-          <select id="timezone" value={timezone} onChange={(e) => setTimezone(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+          <NativeSelect id="timezone" value={timezone} onChange={(e) => setTimezone(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
             <option value="America/New_York">US Eastern (ET)</option>
             <option value="America/Chicago">US Central (CT)</option>
             <option value="America/Denver">US Mountain (MT)</option>
             <option value="America/Los_Angeles">US Pacific (PT)</option>
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="source" className="text-xs font-medium">Lead source</Label>
-          <select id="source" value={source} onChange={(e) => setSource(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+          <NativeSelect id="source" value={source} onChange={(e) => setSource(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
             {["Website", "Referral", "Google", "Event", "Outbound"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
       </div>
 

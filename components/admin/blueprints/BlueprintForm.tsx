@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check, Plus, Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -48,15 +49,15 @@ export function BlueprintForm({
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {onDone ? (
-            <Button size="sm" onClick={onDone}>
+            <Button onClick={onDone}>
               Done
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline">
             <Link href="/admin/blueprints">All Blueprints</Link>
           </Button>
           {!onDone ? (
-            <Button asChild size="sm">
+            <Button asChild>
               <Link href="/admin/blueprints/BP-311">Open a Blueprint</Link>
             </Button>
           ) : null}
@@ -85,9 +86,9 @@ export function BlueprintForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="bp-client" className="text-xs font-medium">Client</Label>
-          <select id="bp-client" value={client} onChange={(e) => setClient(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="bp-client" value={client} onChange={(e) => setClient(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             {["Clearwater Fund", "Cedarbrook Schools", "Lumen Studio", "Brightline Care", "Northwind HVAC"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bp-title" className="text-xs font-medium">Project name</Label>
@@ -99,9 +100,9 @@ export function BlueprintForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bp-terms" className="text-xs font-medium">Terms template</Label>
-          <select id="bp-terms" value={terms} onChange={(e) => setTerms(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="bp-terms" value={terms} onChange={(e) => setTerms(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             {["Service agreement", "Retainer agreement", "Custom"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bp-valid" className="text-xs font-medium">Valid until</Label>
@@ -109,11 +110,11 @@ export function BlueprintForm({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bp-deposit" className="text-xs font-medium">Payment schedule</Label>
-          <select id="bp-deposit" className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="bp-deposit" className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             <option>40% deposit, 30% demo, 30% launch</option>
             <option>Monthly installments</option>
             <option>Paid in full</option>
-          </select>
+          </NativeSelect>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import { KeyRound, ShieldCheck, Users } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
@@ -59,7 +60,7 @@ export default function PortalAccountPage() {
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="timezone" className="text-xs font-medium">Time zone</Label>
-                <select
+                <NativeSelect
                   id="timezone"
                   defaultValue="America/Chicago"
                   className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -68,7 +69,7 @@ export default function PortalAccountPage() {
                   <option value="America/New_York">US Eastern (ET)</option>
                   <option value="America/Denver">US Mountain (MT)</option>
                   <option value="America/Los_Angeles">US Pacific (PT)</option>
-                </select>
+                </NativeSelect>
               </div>
             </div>
             <p className="text-xs text-muted-foreground">

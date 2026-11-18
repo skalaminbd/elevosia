@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -32,11 +33,11 @@ export function InvoiceForm({
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {onDone ? (
-            <Button size="sm" onClick={onDone}>
+            <Button onClick={onDone}>
               Done
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline">
             <Link href="/admin/invoices">All invoices</Link>
           </Button>
         </div>
@@ -58,15 +59,15 @@ export function InvoiceForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="inv-client" className="text-xs font-medium">Client</Label>
-          <select id="inv-client" value={client} onChange={(e) => setClient(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="inv-client" value={client} onChange={(e) => setClient(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             {["Brightline Care", "Lumen Studio", "Northwind HVAC", "Harbor Therapy", "Ridgeline Cleaning", "Cedarbrook Schools"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="inv-kind" className="text-xs font-medium">Type</Label>
-          <select id="inv-kind" value={kind} onChange={(e) => setKind(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+          <NativeSelect id="inv-kind" value={kind} onChange={(e) => setKind(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
             {["Milestone", "Care plan", "Retainer", "Change request", "Custom"].map((item) => <option key={item}>{item}</option>)}
-          </select>
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="inv-amount" className="text-xs font-medium">Amount (USD)</Label>
