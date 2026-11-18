@@ -14,7 +14,7 @@ export function ExperienceSection() {
   return (
     <Section id="experience">
       <div className="max-w-3xl">
-        <h2 className="font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] sm:text-5xl">
+        <h2 className="font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-[2.75rem]">
           {experience.title}
         </h2>
         <p className="mt-5 text-base text-muted-foreground sm:text-lg">

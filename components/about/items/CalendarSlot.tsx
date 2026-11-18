@@ -18,20 +18,20 @@ export function CalendarSlot({
   const pulsing = active && !reduceMotion;
 
   return (
-    <div className="rounded-lg border border-primary-foreground/15 bg-primary-foreground/5 p-4 dark:border-border dark:bg-card">
+    <div className="rounded-lg border border-border bg-background/60 p-4">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-primary-foreground/70 dark:text-muted-foreground">
+        <p className="text-xs font-medium text-secondary-foreground/70">
           {calendar.weekday}, {calendar.date}
         </p>
         <CalendarDays
-          className="size-4 text-primary-foreground/70 dark:text-muted-foreground"
+          className="size-4 text-secondary-foreground/70"
           aria-hidden="true"
         />
       </div>
 
-      <div className="mt-4 rounded-lg border border-primary-foreground/15 bg-primary-foreground/10 px-3 py-3 dark:border-border dark:bg-background">
+      <div className="mt-4 rounded-lg border border-border bg-background/70 px-3 py-3">
         <div className="flex items-center justify-between gap-3">
-          <span className="flex items-center gap-2 font-mono text-sm text-primary-foreground dark:text-foreground">
+          <span className="flex items-center gap-2 font-mono text-sm text-secondary-foreground">
             <Clock className="size-3.5" aria-hidden="true" />
             {calendar.time}
           </span>
@@ -44,12 +44,12 @@ export function CalendarSlot({
             {calendar.duration}
           </span>
         </div>
-        <p className="mt-2 text-sm font-medium text-primary-foreground dark:text-foreground">
+        <p className="mt-2 text-sm font-medium text-secondary-foreground">
           {calendar.title}
         </p>
       </div>
 
-      <p className="mt-3 text-xs text-primary-foreground/60 dark:text-muted-foreground">
+      <p className="mt-3 text-xs text-secondary-foreground/60">
         No pitch deck. Sample slot.
       </p>
     </div>

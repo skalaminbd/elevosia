@@ -29,7 +29,7 @@ export function IncludedSection() {
     <Section className="bg-highlight text-highlight-foreground dark:bg-secondary dark:text-foreground">
       <div ref={ref}>
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <h2 className="max-w-2xl font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+          <h2 className="max-w-2xl font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
             {included.title}
           </h2>
           <p className="max-w-xs text-sm text-highlight-foreground/75 dark:text-foreground/70">

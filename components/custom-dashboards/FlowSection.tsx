@@ -31,7 +31,7 @@ export function FlowSection() {
     <Section id="flow">
       <div ref={ref} className="max-w-2xl">
         <Eyebrow>Website + dashboard</Eyebrow>
-        <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+        <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
           {flow.title}
         </h2>
         <p className="mt-5 text-base text-muted-foreground sm:text-lg">
@@ -78,7 +78,7 @@ export function FlowSection() {
                   </span>
                   <Icon className="size-4 text-primary" aria-hidden="true" />
                 </div>
-                <p className="mt-5 max-w-[16rem] font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+                <p className="mt-5 max-w-[16rem] font-heading text-lg font-semibold tracking-tight text-foreground sm:text-xl">
                   {step.label}
                 </p>
               </li>

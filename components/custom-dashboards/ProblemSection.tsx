@@ -21,7 +21,7 @@ export function ProblemSection() {
       <div className="grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-16">
         <div className="lg:col-span-7">
           <Eyebrow>The honest version</Eyebrow>
-          <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+          <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
             {problem.title}
           </h2>
           <p className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
@@ -96,7 +96,7 @@ export function ProblemSection() {
             <span className="font-mono text-sm text-muted-foreground">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <span className="font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+            <span className="font-heading text-lg font-semibold tracking-tight text-foreground sm:text-xl">
               {pain}
             </span>
           </li>

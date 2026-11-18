@@ -30,7 +30,7 @@ export function ClosingSection() {
   return (
     <section
       id="next-monday"
-      className="relative overflow-hidden bg-primary py-15 text-primary-foreground md:py-20 lg:py-25 dark:bg-secondary dark:text-foreground"
+      className="relative overflow-hidden bg-secondary py-15 text-secondary-foreground md:py-20 lg:py-25"
     >
       {inView && !reduceMotion ? (
         <RetroGrid
@@ -39,7 +39,7 @@ export function ClosingSection() {
           angle={70}
           cellSize={70}
           opacity={0.12}
-          lightLineColor="var(--highlight)"
+          lightLineColor="var(--primary)"
           darkLineColor="var(--highlight)"
         />
       ) : null}
@@ -48,13 +48,13 @@ export function ClosingSection() {
         <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16">
           <div ref={ref} className="lg:col-span-5">
             <Reveal>
-              <h2 className="font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl lg:text-6xl">
+              <h2 className="font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem] lg:text-[3.25rem]">
                 {closing.title}
               </h2>
             </Reveal>
 
             <Reveal delay={0.07}>
-              <p className="mt-5 text-base text-primary-foreground/80 dark:text-foreground/80">
+              <p className="mt-5 text-base text-secondary-foreground/80">
                 {closing.body}
               </p>
             </Reveal>
@@ -89,7 +89,7 @@ export function ClosingSection() {
             <Reveal delay={0.2}>
               <Link
                 href={closing.checklist.href}
-                className="mt-5 inline-flex text-sm font-medium text-primary-foreground/80 underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:text-foreground/80"
+                className="mt-5 inline-flex text-sm font-medium text-secondary-foreground/80 underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none dark:text-foreground/80"
               >
                 {closing.checklist.label}
               </Link>
@@ -101,11 +101,11 @@ export function ClosingSection() {
             <Reveal delay={0.12}>
               <div
                 aria-hidden="true"
-                className="relative overflow-hidden rounded-lg border border-primary-foreground/15 bg-primary-foreground/5 p-5 shadow-md dark:border-border dark:bg-card"
+                className="relative overflow-hidden rounded-lg border border-border bg-background/60 p-5 shadow-md dark:border-border dark:bg-card"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs font-medium text-primary-foreground/70 dark:text-muted-foreground">
+                    <p className="text-xs font-medium text-secondary-foreground/70">
                       {closing.day}
                     </p>
                     <p className="mt-1 font-mono text-4xl font-semibold">
@@ -113,13 +113,13 @@ export function ClosingSection() {
                     </p>
                   </div>
 
-                  <div className="relative flex size-10 items-center justify-center rounded-full bg-primary-foreground/10 dark:bg-muted">
+                  <div className="relative flex size-10 items-center justify-center rounded-full bg-muted">
                     {!reduceMotion ? (
                       <span className="absolute -top-2 left-1/2 flex -translate-x-1/2 gap-0.5">
                         {[0, 1].map((index) => (
                           <motion.span
                             key={index}
-                            className="block h-2 w-px rounded-full bg-primary-foreground/60 dark:bg-foreground/60"
+                            className="block h-2 w-px rounded-full bg-muted dark:bg-foreground/60"
                             animate={{ y: [0, -4], opacity: [0.1, 0.8, 0] }}
                             transition={{
                               duration: 2.6,
@@ -146,9 +146,9 @@ export function ClosingSection() {
                         delay: reduceMotion ? 0 : 0.15 + index * 0.3,
                         ease: EASE,
                       }}
-                      className="rounded-lg border border-primary-foreground/10 bg-primary-foreground/5 p-4 dark:border-border dark:bg-background/40"
+                      className="rounded-lg border border-border bg-background/60 p-4 dark:border-border dark:bg-background/40"
                     >
-                      <p className="text-xs font-medium text-primary-foreground/70 dark:text-muted-foreground">
+                      <p className="text-xs font-medium text-secondary-foreground/70">
                         {widget.label}
                       </p>
                       <p className="mt-1 font-mono text-2xl font-semibold">

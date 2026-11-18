@@ -44,7 +44,7 @@ export function ModuleLibrary() {
       <div ref={ref} className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-xl">
           <Eyebrow>Module library</Eyebrow>
-          <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+          <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
             {library.title}
           </h2>
         </div>

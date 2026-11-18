@@ -25,7 +25,7 @@ export function AiSection() {
             <Eyebrow>{ai.eyebrow}</Eyebrow>
           </Reveal>
           <Reveal delay={0.07}>
-            <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+            <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
               {ai.title}
             </h2>
           </Reveal>

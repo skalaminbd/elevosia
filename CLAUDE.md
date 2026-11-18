@@ -134,7 +134,10 @@ Full-bleed brand band. Two layouts are allowed — pick one per page, never inve
 
 ### Section rules
 - Headings, intros and card titles follow the type-scale table above exactly — every page uses the same sizes.
-- Surfaces follow the theme: light cards in light mode, dark cards in dark mode. Only full-bleed brand bands (hero, closing) stay dark in both.
+- **Everything follows the theme.** Light mode uses light surfaces only (page, bands, cards, mockups, terminals); dark mode uses dark surfaces only. Never ship a forced-dark block on a light page or a white block on a dark page.
+  - Full-bleed bands (hero, feature bands, closing): `bg-secondary text-secondary-foreground` — soft green in light, deep green in dark.
+  - Cards, screens, mockups: `bg-card` / `bg-background` with `border-border`.
+  - Accents that must read on both: use `primary` (forest in light, lime in dark), not `highlight`, for chart strokes, icons and rules sitting on cards. Lime stays for chip backgrounds with `text-highlight-foreground`.
 - Sections alternate layout (split, ruled list, full-width band, sticky sequence) and each carries one live item.
 
 ## Layout

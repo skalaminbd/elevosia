@@ -40,7 +40,7 @@ export function TeamSection() {
 
         <div className="lg:col-span-7">
           <Eyebrow>{team.eyebrow}</Eyebrow>
-          <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] sm:text-5xl">
+          <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-[2.75rem]">
             {founder.name}, {founder.role.toLowerCase()}.
           </h2>
           <p className="mt-4 max-w-xl text-base text-muted-foreground">

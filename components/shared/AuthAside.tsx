@@ -42,10 +42,10 @@ export function AuthAside() {
   const content = CONTENT[pathname] ?? CONTENT["/login"];
 
   return (
-    <aside className="relative hidden flex-1 items-center justify-center overflow-hidden bg-primary p-12 text-primary-foreground dark:bg-secondary dark:text-foreground lg:flex lg:p-16">
+    <aside className="relative hidden flex-1 items-center justify-center overflow-hidden bg-secondary p-12 text-secondary-foreground lg:flex lg:p-16">
       <Link
         href="/"
-        className="absolute top-8 left-8 z-10 flex items-center gap-2 text-primary-foreground dark:text-foreground"
+        className="absolute top-8 left-8 z-10 flex items-center gap-2 text-secondary-foreground"
       >
         <span className="flex size-8 items-center justify-center rounded-lg bg-highlight font-heading text-base font-bold text-highlight-foreground">
           e
@@ -66,13 +66,13 @@ export function AuthAside() {
                 className="mt-0.5 size-4 shrink-0 text-highlight"
                 aria-hidden="true"
               />
-              <span className="text-primary-foreground/80 dark:text-foreground/80">
+              <span className="text-secondary-foreground/80">
                 {feature}
               </span>
             </li>
           ))}
         </ul>
-        <p className="text-sm text-primary-foreground/60 dark:text-foreground/60">
+        <p className="text-sm text-secondary-foreground/60">
           {content.body}
         </p>
       </div>

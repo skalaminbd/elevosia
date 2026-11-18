@@ -17,7 +17,7 @@ export function IntegrationsSection() {
   return (
     <Section id="integrations">
       <div ref={ref} className="flex flex-wrap items-end justify-between gap-6">
-        <h2 className="max-w-xl font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+        <h2 className="max-w-xl font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
           {integrations.title}
         </h2>
         <p className="max-w-md text-base text-muted-foreground">

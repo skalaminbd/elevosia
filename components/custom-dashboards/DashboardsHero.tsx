@@ -108,7 +108,7 @@ export function DashboardsHero() {
   const alive = inView && !reduceMotion;
 
   return (
-    <section className="relative overflow-hidden bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground">
+    <section className="relative overflow-hidden bg-secondary text-secondary-foreground">
       <div
         aria-hidden="true"
         className="line-grid pointer-events-none absolute inset-0 opacity-[0.07] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]"
@@ -116,11 +116,11 @@ export function DashboardsHero() {
 
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-16 sm:px-6 md:pt-20 lg:px-8 lg:pt-24">
         <div className="mx-auto max-w-5xl text-center">
-          <Eyebrow tone="inverse">{dashboardsHero.eyebrow}</Eyebrow>
+          <Eyebrow>{dashboardsHero.eyebrow}</Eyebrow>
           <h1 className="mt-6 font-heading text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.96] font-bold tracking-[-0.04em] text-balance">
             {dashboardsHero.title}
           </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
+          <p className="mx-auto mt-6 max-w-3xl text-base text-secondary-foreground/80 sm:text-lg dark:text-foreground/75">
             {dashboardsHero.subhead}
           </p>
 
@@ -141,9 +141,9 @@ export function DashboardsHero() {
             {TRUST.map((line) => (
               <li
                 key={line}
-                className="flex items-center gap-1.5 text-xs text-primary-foreground/70 dark:text-foreground/70"
+                className="flex items-center gap-1.5 text-xs text-secondary-foreground/70 dark:text-foreground/70"
               >
-                <Check className="size-3.5 text-highlight" aria-hidden="true" />
+                <Check className="size-3.5 text-primary" aria-hidden="true" />
                 {line}
               </li>
             ))}
@@ -153,11 +153,11 @@ export function DashboardsHero() {
         <div ref={ref} className="relative mt-14 lg:mt-20">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-x-8 top-0 h-52 bg-highlight/20 blur-3xl"
+            className="pointer-events-none absolute -inset-x-8 top-0 h-52 bg-highlight/10 blur-3xl"
           />
 
           <div className="relative mx-auto max-w-5xl">
-            <div className="overflow-hidden rounded-t-xl border border-b-0 border-primary-foreground/15 shadow-md dark:border-border">
+            <div className="overflow-hidden rounded-t-xl border border-b-0 border-border shadow-md">
               <Screen active={alive} />
             </div>
           </div>

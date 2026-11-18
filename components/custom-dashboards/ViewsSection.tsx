@@ -299,14 +299,14 @@ export function ViewsSection() {
   return (
     <Section
       id="views"
-      className="bg-primary text-primary-foreground dark:bg-secondary dark:text-foreground"
+      className="bg-secondary text-secondary-foreground"
     >
       <div className="max-w-2xl">
-        <Eyebrow tone="inverse">One system, four views</Eyebrow>
-        <h2 className="mt-5 font-heading text-4xl leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-5xl">
+        <Eyebrow>One system, four views</Eyebrow>
+        <h2 className="mt-5 font-heading text-[2.125rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-[2.75rem]">
           {views.title}
         </h2>
-        <p className="mt-5 text-base text-primary-foreground/75 sm:text-lg dark:text-foreground/75">
+        <p className="mt-5 text-base text-secondary-foreground/80 sm:text-lg dark:text-foreground/75">
           {views.intro}
         </p>
       </div>
@@ -320,29 +320,29 @@ export function ViewsSection() {
               ref={(element) => {
                 blocks.current[index] = element;
               }}
-              className="border-t border-primary-foreground/15 py-8 first:border-t-0 lg:flex lg:min-h-[48vh] lg:flex-col lg:justify-center lg:py-10 lg:first:justify-start lg:first:pt-0 dark:border-border"
+              className="border-t border-primary-foreground/15 py-8 first:border-t-0 lg:flex lg:min-h-[48vh] lg:flex-col lg:justify-center lg:py-10 lg:first:justify-start lg:first:pt-0"
             >
               <p
                 className={cn(
                   "font-mono text-sm transition-colors",
                   active === index
-                    ? "text-highlight"
-                    : "text-primary-foreground/45 dark:text-foreground/45",
+                    ? "text-primary"
+                    : "text-secondary-foreground/45 dark:text-foreground/45",
                 )}
               >
                 {String(index + 1).padStart(2, "0")}
               </p>
-              <h3 className="mt-3 font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
+              <h3 className="mt-3 font-heading text-xl font-semibold tracking-tight sm:text-2xl">
                 {item.headline}
               </h3>
               <ul className="mt-5 flex flex-col gap-2.5">
                 {item.bullets.map((bullet) => (
                   <li
                     key={bullet}
-                    className="flex items-start gap-2.5 text-sm text-primary-foreground/75 sm:text-base dark:text-foreground/75"
+                    className="flex items-start gap-2.5 text-sm text-secondary-foreground/80 sm:text-base dark:text-foreground/75"
                   >
                     <Check
-                      className="mt-1 size-4 shrink-0 text-highlight"
+                      className="mt-1 size-4 shrink-0 text-primary"
                       aria-hidden="true"
                     />
                     {bullet}
@@ -362,7 +362,7 @@ export function ViewsSection() {
             <div className="relative">
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -inset-6 rounded-3xl bg-highlight/15 blur-3xl"
+                className="pointer-events-none absolute -inset-6 rounded-3xl bg-highlight/10 blur-3xl"
               />
               <div
                 key={tab.id}
@@ -371,7 +371,7 @@ export function ViewsSection() {
                 <ScreenWindow roleId={tab.id} />
               </div>
             </div>
-            <p className="mt-4 text-center font-mono text-xs text-primary-foreground/50 dark:text-foreground/50">
+            <p className="mt-4 text-center font-mono text-xs text-secondary-foreground/50 dark:text-foreground/50">
               {String(active + 1).padStart(2, "0")} / 04 · {tab.label}
             </p>
           </div>

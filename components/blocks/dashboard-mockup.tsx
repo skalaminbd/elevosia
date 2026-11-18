@@ -117,7 +117,7 @@ function Trend({
 }) {
   if (trend === "flat") {
     return (
-      <span className="flex items-center gap-1 text-xs text-white/50">
+      <span className="flex items-center gap-1 text-xs text-muted-foreground">
         {label}
       </span>
     );
@@ -143,16 +143,16 @@ function AiSummary() {
   return (
     <div className="rounded-lg border border-highlight/30 bg-black/30 p-4">
       <div className="flex items-center gap-2">
-        <Sparkles className="size-4 text-highlight" aria-hidden="true" />
-        <p className="text-xs font-semibold tracking-wide text-highlight uppercase">
+        <Sparkles className="size-4 text-primary" aria-hidden="true" />
+        <p className="text-xs font-semibold tracking-wide text-primary uppercase">
           AI summary
         </p>
       </div>
-      <p className="mt-2 text-xs leading-relaxed text-white/70">
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
         Two jobs slipped past their deadline and $4.8k is overdue. Adding two
         crews on Thursday keeps the month on target.
       </p>
-      <p className="mt-3 flex items-center gap-1 text-xs font-medium text-highlight">
+      <p className="mt-3 flex items-center gap-1 text-xs font-medium text-primary">
         Open weekly plan
         <ArrowUpRight className="size-3.5" aria-hidden="true" />
       </p>
@@ -167,7 +167,7 @@ export function DashboardMockup() {
     <div
       role="img"
       aria-label="Preview of the Elevosia dashboard with revenue, jobs, invoices and an AI summary"
-      className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-lg border border-white/10 bg-[var(--brand-forest)] text-white shadow-md"
+      className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-md"
     >
       <ShineBorder
         borderWidth={1}
@@ -182,7 +182,7 @@ export function DashboardMockup() {
       />
 
       <div className="flex">
-        <aside className="flex w-52 shrink-0 flex-col gap-1 border-r border-white/10 bg-black/20 p-4">
+        <aside className="flex w-52 shrink-0 flex-col gap-1 border-r border-border bg-black/20 p-4">
           <div className="mb-4 flex items-center gap-2">
             <span className="flex size-8 items-center justify-center rounded-lg bg-highlight font-heading text-base font-bold text-highlight-foreground">
               e
@@ -192,7 +192,7 @@ export function DashboardMockup() {
             </span>
           </div>
 
-          <p className="px-2 pb-1 text-[11px] tracking-wide text-white/40 uppercase">
+          <p className="px-2 pb-1 text-[11px] tracking-wide text-muted-foreground uppercase">
             Overview
           </p>
 
@@ -201,8 +201,8 @@ export function DashboardMockup() {
               key={item.label}
               className={
                 item.active
-                  ? "flex items-center gap-2 rounded-lg bg-white/10 px-2.5 py-2 text-sm font-medium text-white"
-                  : "flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-white/60"
+                  ? "flex items-center gap-2 rounded-lg bg-muted px-2.5 py-2 text-sm font-medium text-foreground"
+                  : "flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-muted-foreground"
               }
             >
               <item.icon className="size-4" aria-hidden="true" />
@@ -210,12 +210,12 @@ export function DashboardMockup() {
             </div>
           ))}
 
-          <div className="mt-auto flex flex-col gap-1 border-t border-white/10 pt-3">
-            <div className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-white/60">
+          <div className="mt-auto flex flex-col gap-1 border-t border-border pt-3">
+            <div className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-muted-foreground">
               <Settings className="size-4" aria-hidden="true" />
               Settings
             </div>
-            <div className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-white/60">
+            <div className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm text-muted-foreground">
               <Bell className="size-4" aria-hidden="true" />
               Notifications
             </div>
@@ -228,7 +228,7 @@ export function DashboardMockup() {
               <h3 className="font-heading text-xl font-semibold">
                 Business overview
               </h3>
-              <p className="mt-1 flex items-center gap-1.5 text-xs text-white/50">
+              <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                 <span className="relative flex size-1.5">
                   <span className="absolute inset-0 rounded-full bg-success" />
                   <motion.span
@@ -242,7 +242,7 @@ export function DashboardMockup() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/70">
+              <span className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground">
                 Feb 18 – Mar 18 · Monthly
               </span>
               <span className="flex items-center gap-1 rounded-lg bg-highlight px-3 py-1.5 text-xs font-semibold text-highlight-foreground">
@@ -256,9 +256,9 @@ export function DashboardMockup() {
             {STATS.map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-lg border border-white/10 bg-white/5 p-4"
+                className="rounded-lg border border-border bg-muted/60 p-4"
               >
-                <p className="text-xs text-white/50">{stat.label}</p>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
                 <p className="mt-1 font-heading text-2xl font-semibold">
                   <LiveNumber {...stat.live} />
                 </p>
@@ -267,21 +267,21 @@ export function DashboardMockup() {
                 </div>
                 <Sparkline
                   path={stat.spark}
-                  className={stat.trend === "down" ? "stroke-warning" : "stroke-highlight"}
+                  className={stat.trend === "down" ? "stroke-warning" : "stroke-primary"}
                 />
               </div>
             ))}
           </div>
 
           <div className="mt-3 grid grid-cols-3 gap-3">
-            <div className="relative rounded-lg border border-white/10 bg-white/5 p-4 col-span-2">
+            <div className="relative rounded-lg border border-border bg-muted/60 p-4 col-span-2">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-medium">Revenue performance</p>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-success/10 px-2 py-0.5 text-[11px] font-medium text-success">
                     +14.7% QTD
                   </span>
-                  <span className="text-[11px] text-white/50">
+                  <span className="text-[11px] text-muted-foreground">
                     Full analysis ↗
                   </span>
                 </div>
@@ -330,7 +330,7 @@ export function DashboardMockup() {
                     fill="none"
                     strokeWidth="2.5"
                     strokeLinecap="round"
-                    className="stroke-highlight"
+                    className="stroke-primary"
                   />
                   <motion.path
                     d="M0 152 C40 144 60 128 90 132 C120 136 150 104 180 108 C210 112 240 74 270 82 C300 90 330 116 360 102 C390 88 420 50 450 58 C480 66 510 44 540 34 C570 24 590 30 600 24"
@@ -352,9 +352,9 @@ export function DashboardMockup() {
                   />
                 </svg>
 
-                <div className="mt-2 flex items-center gap-4 text-[11px] text-white/60">
+                <div className="mt-2 flex items-center gap-4 text-[11px] text-muted-foreground">
                   <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-highlight" />
+                    <span className="size-2 rounded-full bg-primary" />
                     Your revenue
                   </span>
                   <span className="flex items-center gap-1.5">
@@ -369,7 +369,7 @@ export function DashboardMockup() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+            <div className="rounded-lg border border-border bg-muted/60 p-4">
               <p className="text-sm font-medium">Revenue mix</p>
 
               <div className="mt-3 flex justify-center">
@@ -458,7 +458,7 @@ export function DashboardMockup() {
                     key={item.label}
                     className="flex items-center justify-between text-xs"
                   >
-                    <span className="flex items-center gap-2 text-white/70">
+                    <span className="flex items-center gap-2 text-muted-foreground">
                       <span
                         className={cn(
                           "size-2 rounded-full animate-pulse-soft motion-reduce:animate-none",
@@ -468,8 +468,8 @@ export function DashboardMockup() {
                       {item.label}
                     </span>
                     <span className="flex items-center gap-3">
-                      <span className="text-white">{item.value}</span>
-                      <span className="w-8 text-right text-white/50">
+                      <span className="text-foreground">{item.value}</span>
+                      <span className="w-8 text-right text-muted-foreground">
                         {item.share}
                       </span>
                     </span>
@@ -483,28 +483,28 @@ export function DashboardMockup() {
             {MINI_STATS.map((item) => (
               <div
                 key={item.label}
-                className="rounded-lg border border-white/10 bg-white/5 p-3"
+                className="rounded-lg border border-border bg-muted/60 p-3"
               >
-                <p className="text-[11px] text-white/50">{item.label}</p>
+                <p className="text-[11px] text-muted-foreground">{item.label}</p>
                 <p className="mt-1 font-heading text-lg font-semibold">
                   <LiveNumber {...item.live} />
                 </p>
-                <p className="text-[11px] text-white/40">{item.note}</p>
+                <p className="text-[11px] text-muted-foreground">{item.note}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-3 flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+          <div className="mt-3 flex items-center justify-between rounded-lg border border-border bg-muted/60 px-3 py-2">
             <div className="flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-full bg-highlight text-xs font-semibold text-highlight-foreground">
                 SA
               </span>
               <div>
                 <p className="text-xs font-medium">Sk Alamin</p>
-                <p className="text-[11px] text-white/50">Owner</p>
+                <p className="text-[11px] text-muted-foreground">Owner</p>
               </div>
             </div>
-            <span className="rounded-full bg-highlight/20 px-2 py-0.5 text-[11px] font-medium text-highlight">
+            <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[11px] font-medium text-primary">
               Pro
             </span>
           </div>
