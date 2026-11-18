@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { SidebarExpanded } from "./SidebarExpanded";
 import { UserAvatarMenu } from "./UserCard";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import type { SidebarCounts, SidebarRole } from "./nav-config";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
@@ -88,7 +89,8 @@ export function SidebarMobile({
             Elevosia
           </span>
         </Link>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-1">
+          <ThemeToggle className="size-10 rounded-lg text-foreground hover:bg-secondary" />
           <UserAvatarMenu role={role} tone="page" className="size-9" />
         </div>
       </header>

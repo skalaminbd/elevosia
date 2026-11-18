@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const emptySubscribe = () => () => {};
 
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme();
 
   // False during SSR and hydration, true afterwards. Keeps the first client
@@ -29,6 +29,7 @@ export function ThemeToggle() {
       className={cn(
         buttonVariants({ variant: "ghost", size: "icon" }),
         "[&_svg]:size-4",
+        className,
       )}
     />
   );

@@ -54,14 +54,14 @@ export function CommandPalette({
       id: `client-${client.id}`,
       label: client.label,
       meta: client.meta,
-      href: `/admin/clients/${client.id}`,
+      href: "/admin/clients",
       group: "Clients" as const,
     }));
     const projects = SEARCH_PROJECTS.map((project) => ({
       id: `project-${project.id}`,
       label: project.label,
       meta: project.meta,
-      href: `/admin/projects/${project.id}`,
+      href: "/admin/projects",
       group: "Projects" as const,
     }));
     return [...pages, ...clients, ...projects];

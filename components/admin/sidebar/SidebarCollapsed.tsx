@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronsRight, Search } from "lucide-react";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { NavItem } from "./NavItem";
 import { UserAvatarMenu } from "./UserCard";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -101,6 +102,7 @@ export function SidebarCollapsed({
 
       <div className="shrink-0 border-t border-sb-border px-4 pt-2.5 pb-3.5">
         <div className="flex flex-col items-center gap-1.5">
+          <ThemeToggle className="size-11 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
           {allowed.has("settings") ? (
             <ul>
               <NavItem item={SETTINGS_ITEM} badge={null} collapsed />

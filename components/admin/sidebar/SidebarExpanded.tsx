@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronsLeft, Search } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { BriefingCard } from "./BriefingCard";
 import { NavItem } from "./NavItem";
 import { UserCard } from "./UserCard";
@@ -65,14 +66,23 @@ export function SidebarExpanded({
           Admin
         </span>
         {!inDrawer ? (
-          <button
-            type="button"
-            onClick={onCollapse}
-            aria-label="Collapse sidebar"
-            className="ml-auto flex size-8 shrink-0 items-center justify-center rounded-lg text-sb-text transition-colors hover:bg-sb-hover-bg hover:text-sb-text-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sb-focus"
-          >
-            <ChevronsLeft className="size-[18px]" aria-hidden="true" />
-          </button>
+          <div className="ml-auto flex shrink-0">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={onCollapse}
+                  aria-label="Collapse sidebar"
+                  className="flex size-8 items-center justify-center rounded-lg text-sb-text transition-colors hover:bg-sb-hover-bg hover:text-sb-text-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sb-focus"
+                >
+                  <ChevronsLeft className="size-[18px]" aria-hidden="true" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right" sideOffset={8}>
+                Collapse sidebar
+              </TooltipContent>
+            </Tooltip>
+          </div>
         ) : null}
       </div>
 

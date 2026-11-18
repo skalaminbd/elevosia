@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { DEMO_USERS, ROLE_LABELS, type SidebarRole } from "./nav-config";
 
 function AccountMenu({ role, children }: { role: SidebarRole; children: React.ReactNode }) {
@@ -70,6 +71,7 @@ export function UserCard({ role }: { role: SidebarRole }) {
         <p className="truncate text-sm font-semibold text-sb-text-hover">{user.name}</p>
         <p className="truncate text-xs text-sb-text-muted">{ROLE_LABELS[role]}</p>
       </div>
+      <ThemeToggle className="size-8 shrink-0 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
       <AccountMenu role={role}>
         <button
           type="button"
