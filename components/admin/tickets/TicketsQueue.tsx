@@ -1,168 +1,179 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { FilterDisclosure } from "@/components/shared/FilterDisclosure";
-import { Inbox, User } from "lucide-react";
-import Link from "next/link";
-import { Avatar } from "@/components/admin/ui/Avatar";
-import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
-import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
-import { tickets, type Ticket, type TicketPriority } from "@/lib/admin-data";
+import { useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
+import { Circle } from "lucide-react";
+import { toast } from "sonner";
+import {
+  FilterDisclosure,
+  type FilterOption,
+} from "@/components/shared/FilterDisclosure";
+import { TicketRow, slaChip } from "@/components/admin/tickets/TicketRow";
+import { NewTicketButton } from "@/components/admin/tickets/TicketTabs";
+import { updateTicket } from "@/app/admin/tickets/actions";
+import { Input } from "@/components/ui/input";
+import { NativeSelect } from "@/components/shared/NativeSelect";
+import { TICKET_STATUSES, type TicketRecord } from "@/lib/tickets/types";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
-const QUEUE_OPTIONS = [
-  { id: "unassigned", label: "Unassigned", icon: Inbox },
-  { id: "mine", label: "Mine", icon: User },
-];
+const NOW = new Date("2026-11-20T10:20:00");
+const ME = "Alamin";
 
-const PRIORITY: Record<TicketPriority, BadgeTone> = {
-  P1: "danger",
-  P2: "warning",
-  P3: "neutral",
-};
+const VIEWS = [
+  { id: "all", label: "All" },
+  { id: "unassigned", label: "Unassigned" },
+  { id: "mine", label: "Mine" },
+] as const;
+type ViewId = (typeof VIEWS)[number]["id"];
 
-const initials = (name: string) =>
-  name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("");
+const statusOptions: FilterOption[] = TICKET_STATUSES.map((status) => ({
+  id: status,
+  label: status,
+  icon: Circle,
+}));
 
-/** Ticket queue: filter, claim unassigned work. */
-export function TicketsQueue() {
-  const [queues, setQueues] = useState<string[]>([]);
-  const [claimed, setClaimed] = useState<Record<string, boolean>>({});
+const emptySubscribe = () => () => {};
 
-  const rows = useMemo(() => {
-    return tickets.filter((ticket) => {
-      const isMine = ticket.assignee === "Alamin" || claimed[ticket.id];
-      const isUnassigned =
-        ticket.assignee === null && !claimed[ticket.id];
-      if (queues.length === 0) return true;
+/** Simple ticket queue: three views, search, status filter, sort. */
+export function TicketsQueue({ tickets }: { tickets: TicketRecord[] }) {
+  const router = useRouter();
+  const hydrated = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+  const [view, setView] = useState<ViewId>("all");
+  const [search, setSearch] = useState("");
+  const [statuses, setStatuses] = useState<string[]>([]);
+  const [sort, setSort] = useState("sla");
+
+  const rows = tickets
+    .filter((ticket) => {
+      if (view === "unassigned" && ticket.assignee) return false;
+      if (view === "mine" && ticket.assignee !== ME) return false;
+      if (statuses.length > 0 && !statuses.includes(ticket.status)) return false;
+      const needle = search.trim().toLowerCase();
+      if (!needle) return true;
       return (
-        (queues.includes("mine") && isMine) ||
-        (queues.includes("unassigned") && isUnassigned)
+        ticket.id.toLowerCase().includes(needle) ||
+        ticket.subject.toLowerCase().includes(needle) ||
+        ticket.client.company.toLowerCase().includes(needle)
       );
+    })
+    .sort((a, b) =>
+      sort === "newest"
+        ? b.updatedAt.localeCompare(a.updatedAt)
+        : slaChip(a, NOW).minutesLeft - slaChip(b, NOW).minutesLeft,
+    );
+
+  async function claim(ticket: TicketRecord) {
+    const result = await updateTicket({
+      id: ticket.id,
+      patch: { assignee: ME },
     });
-  }, [queues, claimed]);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success(`Claimed ${ticket.id}`);
+    router.refresh();
+  }
+
+  if (!hydrated) {
+    return (
+      <div className="rounded-lg border border-border bg-card">
+        <ul>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <li
+              key={index}
+              className="flex items-center gap-3 border-t border-border px-4 py-3.5 first:border-t-0"
+            >
+              <span className="h-3 w-2/3 animate-pulse rounded bg-secondary" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg border border-border bg-card">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <FilterDisclosure
-          label="Filter"
-          values={queues}
-          options={QUEUE_OPTIONS}
-          onChange={setQueues}
-        />
-        <p className="text-xs text-muted-foreground">{rows.length} tickets · sample data</p>
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
+        <div className="flex items-center gap-1">
+          {VIEWS.map((entry) => (
+            <button
+              key={entry.id}
+              type="button"
+              onClick={() => setView(entry.id)}
+              aria-pressed={view === entry.id}
+              className={cn(
+                "h-8 rounded-md px-3 text-sm font-medium transition-colors",
+                view === entry.id
+                  ? "bg-secondary text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {entry.label}
+            </button>
+          ))}
+        </div>
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search tickets"
+            aria-label="Search tickets"
+            className="h-8 w-44 text-sm"
+          />
+          <FilterDisclosure
+            compact
+            label="Status"
+            values={statuses}
+            options={statusOptions}
+            onChange={setStatuses}
+          />
+          <div className="w-40">
+            <NativeSelect
+              aria-label="Sort tickets"
+              value={sort}
+              onChange={(event) => setSort(event.target.value)}
+              className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+            >
+              <option value="sla">SLA due soonest</option>
+              <option value="newest">Newest first</option>
+            </NativeSelect>
+          </div>
+          <NewTicketButton />
+        </div>
       </div>
 
-      <Table minWidth bare>
-        <THead>
-          <tr>
-            <TH>Ticket</TH>
-            <TH>Client</TH>
-            <TH>Priority</TH>
-            <TH>SLA</TH>
-            <TH>Status</TH>
-            <TH>Care plan</TH>
-            <TH>Assignee</TH>
-          </tr>
-        </THead>
-        <TBody>
-          {rows.length === 0 ? (
-            <tr>
-              <td colSpan={7} className="px-5 py-10 text-center text-sm text-muted-foreground">
-                Nothing in this queue.
-              </td>
-            </tr>
-          ) : (
-            rows.map((ticket) => {
-              const assignee = claimed[ticket.id] ? "Alamin" : ticket.assignee;
-              return (
-                <TicketRow
-                  key={ticket.id}
-                  ticket={ticket}
-                  assignee={assignee}
-                  onClaim={() =>
-                    setClaimed((current) => ({ ...current, [ticket.id]: true }))
-                  }
-                />
-              );
-            })
-          )}
-        </TBody>
-      </Table>
-    </div>
-  );
-}
+      <div className="grid grid-cols-[minmax(0,1fr)_52px_76px] items-center gap-3 border-b border-border bg-secondary/40 px-4 py-2 text-xs font-medium text-muted-foreground sm:grid-cols-[minmax(0,1fr)_56px_150px_110px_90px]">
+        <span>Ticket</span>
+        <span>Priority</span>
+        <span className="hidden sm:block">SLA</span>
+        <span className="hidden sm:block">Status</span>
+        <span className="text-right">Assignee</span>
+      </div>
 
-function TicketRow({
-  ticket,
-  assignee,
-  onClaim,
-}: {
-  ticket: Ticket;
-  assignee: string | null;
-  onClaim: () => void;
-}) {
-  return (
-    <TR>
-      <TD>
-        <Link href={`/admin/tickets/${ticket.id}`} className="font-medium hover:underline">
-          {ticket.subject}
-        </Link>
-        <p className="font-mono text-[10px] text-muted-foreground">{ticket.id}</p>
-      </TD>
-      <TD className="text-xs text-muted-foreground">{ticket.client}</TD>
-      <TD>
-        <StatusBadge tone={PRIORITY[ticket.priority]}>{ticket.priority}</StatusBadge>
-      </TD>
-      <TD>
-        <span
-          className={cn(
-            "font-mono text-xs",
-            ticket.close || ticket.sla === "Breached"
-              ? "font-semibold text-destructive"
-              : "text-muted-foreground",
-          )}
-        >
-          {ticket.sla}
-        </span>
-      </TD>
-      <TD>
-        <div className="flex flex-wrap gap-1.5">
-          <StatusBadge
-            tone={
-              ticket.status === "New"
-                ? "info"
-                : ticket.status === "Resolved"
-                  ? "success"
-                  : ticket.status === "Waiting on client"
-                    ? "warning"
-                    : "neutral"
-            }
-          >
-            {ticket.status}
-          </StatusBadge>
-          {ticket.warranty ? <StatusBadge tone="accent">Warranty</StatusBadge> : null}
-        </div>
-      </TD>
-      <TD className="text-xs text-muted-foreground">{ticket.care}</TD>
-      <TD>
-        {assignee ? (
-          <div className="flex items-center gap-2">
-            <Avatar initials={initials(assignee)} muted />
-            <span className="text-xs text-muted-foreground">{assignee}</span>
-          </div>
+      <ul>
+        {rows.length === 0 ? (
+          <li className="px-5 py-14 text-center">
+            <p className="text-sm font-medium">No tickets here.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Try All, or clear the search.
+            </p>
+          </li>
         ) : (
-          <Button variant="outline" size="sm" onClick={onClaim}>
-            Claim
-          </Button>
+          rows.map((ticket) => (
+            <TicketRow
+              key={ticket.id}
+              ticket={ticket}
+              now={NOW}
+              onClaim={() => claim(ticket)}
+            />
+          ))
         )}
-      </TD>
-    </TR>
+      </ul>
+    </div>
   );
 }

@@ -21,7 +21,6 @@
 import {
   Clock,
   FileText,
-  Folder,
   FolderKanban,
   Inbox,
   LayoutGrid,
@@ -32,7 +31,6 @@ import {
   Receipt,
   Settings,
   SquareCheck,
-  UserPlus,
   Users,
   Video,
   type LucideIcon,
@@ -46,7 +44,6 @@ export type SidebarRole =
   | "support";
 
 export type SidebarCounts = {
-  onboarding: number;
   requirementsNew: number;
   blueprintsDue: number;
   projectsActive: number;
@@ -85,13 +82,11 @@ export const GROUP_LABELS: { id: NavGroupId; label: string | null }[] = [
 export const NAV_ITEMS: NavItemConfig[] = [
   { id: "dashboard", label: "Dashboard", href: "/admin", icon: LayoutGrid, group: "main" },
   { id: "clients", label: "Clients", href: "/admin/clients", icon: Users, group: "clients" },
-  { id: "onboarding", label: "Onboarding", href: "/admin/onboarding", icon: UserPlus, group: "clients" },
   { id: "requirements", label: "Requirements", href: "/admin/requirements", icon: Inbox, group: "clients" },
   { id: "blueprints", label: "Blueprints", href: "/admin/blueprints", icon: FileText, group: "clients" },
   { id: "projects", label: "Projects", href: "/admin/projects", icon: FolderKanban, group: "delivery" },
   { id: "tasks", label: "Tasks", href: "/admin/tasks", icon: SquareCheck, group: "delivery" },
   { id: "calls", label: "Calls", href: "/admin/calls", icon: Video, group: "delivery" },
-  { id: "files", label: "Files", href: "/admin/files", icon: Folder, group: "delivery" },
   { id: "tickets", label: "Tickets", href: "/admin/tickets", icon: LifeBuoy, group: "support" },
   { id: "messages", label: "Messages", href: "/admin/messages", icon: MessageSquare, group: "support" },
   { id: "invoices", label: "Invoices", href: "/admin/invoices", icon: Receipt, group: "finance" },
@@ -111,13 +106,11 @@ export const SETTINGS_ITEM: NavItemConfig = {
 export const ALL_ITEM_IDS = [
   "dashboard",
   "clients",
-  "onboarding",
   "requirements",
   "blueprints",
   "projects",
   "tasks",
   "calls",
-  "files",
   "tickets",
   "messages",
   "invoices",
@@ -132,13 +125,12 @@ export type NavItemId = (typeof ALL_ITEM_IDS)[number];
 export const ROLE_ACCESS: Record<SidebarRole, NavItemId[]> = {
   admin: [...ALL_ITEM_IDS],
   pm: ALL_ITEM_IDS.filter((id) => id !== "settings"),
-  developer: ["dashboard", "projects", "tasks", "files", "tickets", "messages", "team"],
+  developer: ["dashboard", "projects", "tasks", "tickets", "messages", "team"],
   marketing: [
     "dashboard",
     "clients",
     "projects",
     "tasks",
-    "files",
     "tickets",
     "messages",
     "marketing",
@@ -149,7 +141,6 @@ export const ROLE_ACCESS: Record<SidebarRole, NavItemId[]> = {
     "clients",
     "projects",
     "tasks",
-    "files",
     "tickets",
     "messages",
     "invoices",
@@ -165,8 +156,11 @@ export const ROLE_LABELS: Record<SidebarRole, string> = {
   support: "Support",
 };
 
-export const DEMO_USERS: Record<SidebarRole, { name: string; initials: string }> = {
-  admin: { name: "Alamin Rahman", initials: "AR" },
+export const DEMO_USERS: Record<
+  SidebarRole,
+  { name: string; initials: string; photo?: string }
+> = {
+  admin: { name: "Alamin Rahman", initials: "AR", photo: "/founder/alamin.svg" },
   pm: { name: "Maya Chen", initials: "MC" },
   developer: { name: "Sam Okafor", initials: "SO" },
   marketing: { name: "Lena Ortiz", initials: "LO" },
@@ -193,14 +187,6 @@ export function getNavBadge(
   counts: SidebarCounts,
 ): NavBadgeConfig | null {
   switch (id) {
-    case "onboarding":
-      return counts.onboarding > 0
-        ? {
-            variant: "neutral",
-            count: counts.onboarding,
-            aria: `Onboarding, ${counts.onboarding} clients`,
-          }
-        : null;
     case "requirements":
       return counts.requirementsNew > 0
         ? {
@@ -269,7 +255,6 @@ export function getNavBadge(
 }
 
 export const DEMO_COUNTS: SidebarCounts = {
-  onboarding: 2,
   requirementsNew: 4,
   blueprintsDue: 2,
   projectsActive: 6,
@@ -299,8 +284,6 @@ export const SEARCH_PROJECTS = [
 
 export const WORKSPACE_LINKS = {
   profile: "/admin/profile",
-  teams: "/admin/team",
-  security: "/admin/settings?tab=security",
   wallets: "/admin/invoices",
   settings: "/admin/settings",
 };

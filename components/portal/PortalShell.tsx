@@ -11,11 +11,10 @@ import {
   ChevronsRight,
   ClipboardCheck,
   FileText,
-  Folder,
   FolderKanban,
   LayoutDashboard,
   Menu,
-  MessageSquare,
+  LifeBuoy,
   Receipt,
   Video,
   X,
@@ -32,6 +31,9 @@ import {
 import { useSidebar } from "@/components/admin/sidebar/use-sidebar";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { portalClient } from "@/lib/portal-data";
+import { authClient } from "@/lib/auth-client";
+import { usePortalContext } from "@/hooks/use-portal-context";
+import { usePortalSidebarCounts } from "@/hooks/use-portal-sidebar-counts";
 import { cn } from "@/lib/utils";
 
 type PortalBadge = { label: string; count: number; tone: "accent" | "warning" | "text" };
@@ -58,10 +60,8 @@ const NAV_GROUPS: { label: string | null; items: PortalNavItem[] }[] = [
         label: "Approvals",
         href: "/portal/approvals",
         icon: ClipboardCheck,
-        badge: { label: "2", count: 2, tone: "accent" },
       },
       { id: "blueprints", label: "Blueprints", href: "/portal/blueprints", icon: FileText },
-      { id: "files", label: "Files", href: "/portal/files", icon: Folder },
     ],
   },
   {
@@ -72,7 +72,6 @@ const NAV_GROUPS: { label: string | null; items: PortalNavItem[] }[] = [
         label: "Invoices",
         href: "/portal/invoices",
         icon: Receipt,
-        badge: { label: "1 due", count: 1, tone: "warning" },
       },
     ],
   },
@@ -80,11 +79,10 @@ const NAV_GROUPS: { label: string | null; items: PortalNavItem[] }[] = [
     label: "Support",
     items: [
       {
-        id: "messages",
-        label: "Messages",
-        href: "/portal/messages",
-        icon: MessageSquare,
-        badge: { label: "2", count: 2, tone: "accent" },
+        id: "tickets",
+        label: "Tickets",
+        href: "/portal/tickets",
+        icon: LifeBuoy,
       },
       { id: "reports", label: "Reports", href: "/portal/reports", icon: BarChart3 },
       {
@@ -92,7 +90,6 @@ const NAV_GROUPS: { label: string | null; items: PortalNavItem[] }[] = [
         label: "Calls",
         href: "/portal/calls",
         icon: Video,
-        badge: { label: "Fri", count: 1, tone: "text" },
       },
     ],
   },
@@ -100,8 +97,6 @@ const NAV_GROUPS: { label: string | null; items: PortalNavItem[] }[] = [
 
 const WORKSPACE_LINKS: WorkspaceLinks = {
   profile: "/portal/profile",
-  teams: "/portal/account?tab=team",
-  security: "/portal/account?tab=security",
   wallets: "/portal/invoices",
   settings: "/portal/account",
 };
@@ -222,6 +217,18 @@ function PortalNavRow({
 }
 
 function ClientChip({ onNavigate }: { onNavigate?: () => void }) {
+  const context = usePortalContext();
+  const company = context.company || portalClient.company;
+  const initials = company
+    .split(/\s+/)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+  const projectLine = context.project
+    ? `${context.project.name} · ${context.project.phase}`
+    : "Project portal";
+
   return (
     <Link
       href="/portal/projects"
@@ -229,14 +236,14 @@ function ClientChip({ onNavigate }: { onNavigate?: () => void }) {
       className="mx-3 flex items-center gap-2.5 rounded-lg border border-sb-surface-border bg-sb-surface p-2.5 transition-colors hover:bg-sb-hover-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sb-focus"
     >
       <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sb-accent-soft font-mono text-[10px] font-bold text-sb-accent">
-        BC
+        {initials}
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate text-xs font-semibold text-sb-text-hover">
-          {portalClient.company}
+          {company}
         </span>
         <span className="block truncate text-[10px] text-sb-text-muted">
-          Care dashboard · Week 3
+          {projectLine}
         </span>
       </span>
       <ChevronsUpDown className="size-4 shrink-0 text-sb-text-muted" aria-hidden="true" />
@@ -289,6 +296,91 @@ function SidebarContent({
   onCollapse?: () => void;
   inDrawer?: boolean;
 }) {
+  const { data: authData } = authClient.useSession();
+  const authUser = authData?.user as { name?: string } | undefined;
+  const identity = authUser?.name
+    ? {
+        name: authUser.name,
+        role: "Client owner",
+        initials: authUser.name
+          .split(" ")
+          .map((part) => part[0])
+          .slice(0, 2)
+          .join("")
+          .toUpperCase(),
+      }
+    : {
+        name: portalClient.user,
+        role: portalClient.role,
+        initials: portalClient.initials,
+      };
+  const counts = usePortalSidebarCounts();
+  const groups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.map((item) => {
+      if (item.id === "approvals") {
+        return {
+          ...item,
+          badge:
+            counts.approvals > 0
+              ? {
+                  label: String(counts.approvals),
+                  count: counts.approvals,
+                  tone: "accent" as const,
+                }
+              : undefined,
+        };
+      }
+      if (item.id === "blueprints") {
+        return {
+          ...item,
+          badge:
+            counts.blueprints > 0
+              ? {
+                  label: String(counts.blueprints),
+                  count: counts.blueprints,
+                  tone: "accent" as const,
+                }
+              : undefined,
+        };
+      }
+      if (item.id === "invoices") {
+        return {
+          ...item,
+          badge:
+            counts.invoices > 0
+              ? {
+                  label: `${counts.invoices} due`,
+                  count: counts.invoices,
+                  tone: "warning" as const,
+                }
+              : undefined,
+        };
+      }
+      if (item.id === "tickets") {
+        return {
+          ...item,
+          badge:
+            counts.tickets > 0
+              ? {
+                  label: String(counts.tickets),
+                  count: counts.tickets,
+                  tone: "accent" as const,
+                }
+              : undefined,
+        };
+      }
+      if (item.id === "calls") {
+        return {
+          ...item,
+          badge: counts.nextCall
+            ? { label: "Next", count: 1, tone: "text" as const }
+            : undefined,
+        };
+      }
+      return { ...item, badge: undefined };
+    }),
+  }));
   if (collapsed) {
     return (
       <div className="flex h-full min-h-0 flex-col items-center bg-sb-bg text-sb-fg">
@@ -299,7 +391,7 @@ function SidebarContent({
           aria-label="Client portal"
           className="min-h-0 flex-1 overflow-y-auto px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {NAV_GROUPS.map((group, index) => (
+          {groups.map((group, index) => (
             <div key={group.label ?? "home"}>
               {index > 0 ? (
                 <span
@@ -319,9 +411,9 @@ function SidebarContent({
           <div className="flex flex-col items-center gap-1.5">
             <ThemeToggle className="size-11 rounded-lg text-sb-text hover:bg-sb-hover-bg hover:text-sb-text-hover" />
             <WorkspaceMenu
-              name={portalClient.user}
-              role={portalClient.role}
-              initials={portalClient.initials}
+              name={identity.name}
+              role={identity.role}
+              initials={identity.initials}
               links={WORKSPACE_LINKS}
               className="size-11"
             />
@@ -368,7 +460,7 @@ function SidebarContent({
         aria-label="Client portal"
         className="mt-2 min-h-0 flex-1 overflow-y-auto px-3 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {NAV_GROUPS.map((group) => (
+        {groups.map((group) => (
           <div key={group.label ?? "home"} className={group.label ? "mt-3" : "mt-1"}>
             {group.label ? (
               <p className="px-3.5 pt-3 pb-1.5 text-[11px] font-semibold tracking-[0.08em] text-sb-text-label uppercase">
@@ -387,9 +479,9 @@ function SidebarContent({
       <div className="flex shrink-0 items-center justify-between border-t border-sb-border px-3 pt-2.5 pb-3.5">
         <div className="px-1.5">
           <WorkspaceMenu
-            name={portalClient.user}
-            role={portalClient.role}
-            initials={portalClient.initials}
+            name={identity.name}
+            role={identity.role}
+            initials={identity.initials}
             links={WORKSPACE_LINKS}
           />
         </div>
@@ -409,6 +501,24 @@ function MobileBar({
   onNavigate: () => void;
 }) {
   const reduceMotion = useReducedMotion();
+  const { data: authData } = authClient.useSession();
+  const authUser = authData?.user as { name?: string } | undefined;
+  const identity = authUser?.name
+    ? {
+        name: authUser.name,
+        role: "Client owner",
+        initials: authUser.name
+          .split(" ")
+          .map((part) => part[0])
+          .slice(0, 2)
+          .join("")
+          .toUpperCase(),
+      }
+    : {
+        name: portalClient.user,
+        role: portalClient.role,
+        initials: portalClient.initials,
+      };
   const trapRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -470,9 +580,9 @@ function MobileBar({
         <div className="ml-auto flex items-center gap-1">
           <ThemeToggle className="size-10 rounded-lg text-foreground hover:bg-secondary" />
           <WorkspaceMenu
-            name={portalClient.user}
-            role={portalClient.role}
-            initials={portalClient.initials}
+            name={identity.name}
+            role={identity.role}
+            initials={identity.initials}
             links={WORKSPACE_LINKS}
             tone="page"
             className="size-10"

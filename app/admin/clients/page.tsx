@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { CreditCard, UserPlus, Users, Wallet } from "lucide-react";
-import { ClientsTable } from "@/components/admin/clients/ClientsTable";
+import { Suspense } from "react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { StatCard } from "@/components/admin/ui/StatCard";
+import { ClientsData } from "@/components/admin/clients/ClientsData";
 import { NewClientDialog } from "@/components/admin/clients/NewClientDialog";
 
 export const metadata: Metadata = {
@@ -19,16 +18,30 @@ export default function ClientsPage() {
         <NewClientDialog />
       </PageHeader>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <StatCard label="Active clients" value={4} note="1 onboarding this week" icon={Users} />
-        <StatCard label="Leads" value={1} note="From the website" icon={UserPlus} />
-        <StatCard label="Balance due" value="$13,500" note="2 invoices past due" icon={Wallet} tone="warning" />
-        <StatCard label="Care plans" value={1} note="Growth plan" icon={CreditCard} />
-      </div>
-
-      <div className="mt-4">
-        <ClientsTable />
-      </div>
+      <Suspense
+        fallback={
+          <div className="mt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
+              {[0, 1, 2].map((item) => (
+                <div
+                  key={item}
+                  className="h-24 rounded-lg border border-border bg-card"
+                />
+              ))}
+            </div>
+            <div className="rounded-lg border border-border bg-card p-5">
+              <div className="h-4 w-32 rounded bg-secondary" />
+              <div className="mt-4 space-y-2">
+                <div className="h-9 w-full rounded bg-secondary/60" />
+                <div className="h-9 w-full rounded bg-secondary/60" />
+                <div className="h-9 w-3/4 rounded bg-secondary/60" />
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <ClientsData />
+      </Suspense>
     </div>
   );
 }

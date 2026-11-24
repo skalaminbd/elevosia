@@ -7,7 +7,7 @@ import { Avatar } from "@/components/admin/ui/Avatar";
 import { Progress } from "@/components/admin/ui/Progress";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
-import { adminProjects, type AdminProject, type ProjectHealth } from "@/lib/admin-data";
+import type { AdminProject, ProjectHealth } from "@/lib/admin-data";
 import { NativeSelect } from "@/components/shared/NativeSelect";
 import { cn } from "@/lib/utils";
 
@@ -35,9 +35,11 @@ const initials = (name: string) =>
     .join("");
 
 /** Projects with list, board and timeline views. */
-export function ProjectsView() {
+export function ProjectsView({ projects: initialProjects }: { projects: AdminProject[] }) {
   const [view, setView] = useState<View>("list");
-  const [projects, setProjects] = useState<AdminProject[]>(adminProjects);
+  const [projects, setProjects] = useState<AdminProject[]>(initialProjects);
+
+  const rows = projects;
 
   function moveProject(id: string, status: string) {
     setProjects((current) =>
@@ -73,15 +75,15 @@ export function ProjectsView() {
           })}
         </div>
         <p className="text-xs text-muted-foreground">
-          {projects.length} projects · sample data
+          {rows.length} projects · live data
         </p>
       </div>
 
-      {view === "list" ? <ListView projects={projects} /> : null}
+      {view === "list" ? <ListView projects={rows} /> : null}
       {view === "board" ? (
-        <BoardView projects={projects} onMove={moveProject} />
+        <BoardView projects={rows} onMove={moveProject} />
       ) : null}
-      {view === "timeline" ? <TimelineView projects={projects} /> : null}
+      {view === "timeline" ? <TimelineView projects={rows} /> : null}
     </div>
   );
 }

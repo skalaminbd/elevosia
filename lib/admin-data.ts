@@ -3,15 +3,31 @@
  * so a client or project reads the same wherever it appears.
  */
 
+import type { TicketRecord } from "@/lib/tickets/types";
+
 export type ClientStatus = "Lead" | "Onboarding" | "Active" | "Paused" | "Former";
+
+export type AdminCompany = {
+  name: string;
+  address: string;
+  city: string;
+  region: string;
+  zip: string;
+  phone: string;
+  website: string;
+};
 
 export type AdminClient = {
   id: string;
   name: string;
+  /** Every company under this client. The first one is the primary. */
+  companies: AdminCompany[];
   initials: string;
   industry: string;
   contact: string;
   email: string;
+  phone: string;
+  clientSince: string;
   status: ClientStatus;
   source: string;
   since: string;
@@ -26,14 +42,36 @@ export const adminClients: AdminClient[] = [
   {
     id: "brightline",
     name: "Brightline Care",
+  companies: [
+    {
+      name: "Brightline Care",
+      address: "412 W Erie St, Suite 300",
+      city: "Chicago",
+      region: "IL",
+      zip: "60654",
+      phone: "(312) 555-0148",
+      website: "brightlinecare.com",
+    },
+    {
+      name: "Brightline Staffing",
+      address: "900 N Michigan Ave, Floor 6",
+      city: "Chicago",
+      region: "IL",
+      zip: "60611",
+      phone: "(312) 555-0192",
+      website: "brightlinestaffing.com",
+    },
+  ],
     initials: "BC",
     industry: "Home care",
     contact: "Sarah Whitfield",
     email: "sarah@brightlinecare.com",
+    phone: "(312) 555-0148",
+    clientSince: "2026-09-14",
     status: "Active",
     source: "Referral",
     since: "Sep 2026",
-    projects: 1,
+    projects: 3,
     plan: "Operate · $16,000",
     balance: 4800,
     pm: "Alamin",
@@ -42,10 +80,23 @@ export const adminClients: AdminClient[] = [
   {
     id: "northwind",
     name: "Northwind HVAC",
+  companies: [
+    {
+      name: "Northwind HVAC",
+      address: "77 Industrial Row",
+      city: "Buffalo",
+      region: "NY",
+      zip: "14204",
+      phone: "(716) 555-0110",
+      website: "northwindhvac.com",
+    },
+  ],
     initials: "NH",
     industry: "Field services",
     contact: "Dale Mercer",
     email: "dale@northwindhvac.com",
+    phone: "(716) 555-0110",
+    clientSince: "2026-10-02",
     status: "Active",
     source: "Website",
     since: "Oct 2026",
@@ -58,10 +109,32 @@ export const adminClients: AdminClient[] = [
   {
     id: "lumen",
     name: "Lumen Studio",
+  companies: [
+    {
+      name: "Lumen Studio",
+      address: "1200 Abbot Kinney Blvd",
+      city: "Venice",
+      region: "CA",
+      zip: "90291",
+      phone: "(310) 555-0173",
+      website: "lumenstudio.co",
+    },
+    {
+      name: "Lumen Labs",
+      address: "88 Colin P Kelly Jr St",
+      city: "San Francisco",
+      region: "CA",
+      zip: "94107",
+      phone: "(415) 555-0164",
+      website: "lumenlabs.dev",
+    },
+  ],
     initials: "LS",
     industry: "Agency",
     contact: "Priya Raman",
     email: "priya@lumenstudio.co",
+    phone: "(310) 555-0173",
+    clientSince: "2026-08-11",
     status: "Active",
     source: "Website",
     since: "Aug 2026",
@@ -74,10 +147,23 @@ export const adminClients: AdminClient[] = [
   {
     id: "clearwater",
     name: "Clearwater Fund",
+  companies: [
+    {
+      name: "Clearwater Fund",
+      address: "210 Harbor Way",
+      city: "Portland",
+      region: "ME",
+      zip: "04101",
+      phone: "(207) 555-0102",
+      website: "clearwaterfund.org",
+    },
+  ],
     initials: "CF",
     industry: "Nonprofit",
     contact: "Tom Bailey",
     email: "tom@clearwaterfund.org",
+    phone: "(207) 555-0102",
+    clientSince: "2026-11-06",
     status: "Lead",
     source: "Website",
     since: "Nov 2026",
@@ -90,10 +176,23 @@ export const adminClients: AdminClient[] = [
   {
     id: "harbor",
     name: "Harbor Therapy",
+  companies: [
+    {
+      name: "Harbor Therapy",
+      address: "1601 Ocean Dr, Suite 4",
+      city: "Denver",
+      region: "CO",
+      zip: "80202",
+      phone: "(303) 555-0127",
+      website: "harbortherapy.com",
+    },
+  ],
     initials: "HT",
     industry: "Care",
     contact: "Nina Patel",
     email: "nina@harbortherapy.com",
+    phone: "(303) 555-0127",
+    clientSince: "2026-06-18",
     status: "Active",
     source: "Google",
     since: "Jun 2026",
@@ -106,10 +205,23 @@ export const adminClients: AdminClient[] = [
   {
     id: "ridgeline",
     name: "Ridgeline Cleaning",
+  companies: [
+    {
+      name: "Ridgeline Cleaning",
+      address: "5300 Ridge Rd",
+      city: "Austin",
+      region: "TX",
+      zip: "78745",
+      phone: "(512) 555-0155",
+      website: "ridgelineclean.com",
+    },
+  ],
     initials: "RC",
     industry: "Cleaning",
     contact: "Marco Reyes",
     email: "marco@ridgelineclean.com",
+    phone: "(512) 555-0155",
+    clientSince: "2026-05-21",
     status: "Paused",
     source: "Referral",
     since: "May 2026",
@@ -122,10 +234,23 @@ export const adminClients: AdminClient[] = [
   {
     id: "cedarbrook",
     name: "Cedarbrook Schools",
+  companies: [
+    {
+      name: "Cedarbrook Schools",
+      address: "14 Brook Lane",
+      city: "Albany",
+      region: "NY",
+      zip: "12203",
+      phone: "(518) 555-0139",
+      website: "cedarbrook.edu",
+    },
+  ],
     initials: "CS",
     industry: "Education",
     contact: "Elaine Ford",
     email: "elaine@cedarbrook.edu",
+    phone: "(518) 555-0139",
+    clientSince: "2026-11-09",
     status: "Onboarding",
     source: "Event",
     since: "Nov 2026",
@@ -138,10 +263,23 @@ export const adminClients: AdminClient[] = [
   {
     id: "atlas",
     name: "Atlas Property",
+  companies: [
+    {
+      name: "Atlas Property",
+      address: "320 Peachtree St NE",
+      city: "Atlanta",
+      region: "GA",
+      zip: "30308",
+      phone: "(404) 555-0186",
+      website: "atlasproperty.co",
+    },
+  ],
     initials: "AP",
     industry: "Property",
     contact: "Ray Khan",
     email: "ray@atlasproperty.co",
+    phone: "(404) 555-0186",
+    clientSince: "2026-03-03",
     status: "Former",
     source: "Website",
     since: "Mar 2026",
@@ -260,7 +398,7 @@ export const blueprints: Blueprint[] = [
     id: "BP-312",
     client: "Cedarbrook Schools",
     title: "Enrollment and family portal",
-    status: "Draft",
+    status: "Approved",
     version: "v1",
     validUntil: "19 Dec 2026",
     price: 28000,
@@ -339,6 +477,32 @@ export const adminProjects: AdminProject[] = [
     modules: 6,
   },
   {
+    id: "brightline-social",
+    client: "Brightline Care",
+    name: "Social media setup",
+    status: "Building",
+    health: "On track",
+    progress: 25,
+    due: "4 Jan 2027",
+    pm: "Maya",
+    price: 3500,
+    used: 800,
+    modules: 2,
+  },
+  {
+    id: "brightline-staffing-site",
+    client: "Brightline Staffing",
+    name: "Website design",
+    status: "Building",
+    health: "On track",
+    progress: 15,
+    due: "20 Jan 2027",
+    pm: "Maya",
+    price: 6200,
+    used: 900,
+    modules: 3,
+  },
+  {
     id: "northwind-dispatch",
     client: "Northwind HVAC",
     name: "Dispatch and invoicing",
@@ -413,6 +577,9 @@ export type AdminTask = {
   project: string;
   client: string;
   assignee: string;
+  reviewer?: string;
+  milestone?: string;
+  linked?: { type: "Ticket" | "Work request"; id: string; title: string };
   week: string;
   status: TaskStatus;
   due: string;
@@ -429,6 +596,13 @@ export const adminTasks: AdminTask[] = [
     project: "Care dashboard + portal",
     client: "Brightline Care",
     assignee: "Alamin",
+    reviewer: "Maya",
+    milestone: "Clients and portal",
+    linked: {
+      type: "Ticket",
+      id: "TK-58",
+      title: "Reminder emails go to the wrong address",
+    },
     week: "This week",
     status: "review",
     due: "Today",
@@ -438,11 +612,26 @@ export const adminTasks: AdminTask[] = [
     clientVisible: false,
   },
   {
+    id: "T-910",
+    title: "Care plan field mapping",
+    project: "Care dashboard + portal",
+    client: "Brightline Care",
+    assignee: "",
+    week: "Next week",
+    status: "todo",
+    due: "26 Nov",
+    priority: "Normal",
+    estimate: 3,
+    logged: 0,
+    clientVisible: false,
+  },
+  {
     id: "T-902",
     title: "Family access roles",
     project: "Care dashboard + portal",
     client: "Brightline Care",
     assignee: "Sam",
+    milestone: "Clients and portal",
     week: "This week",
     status: "progress",
     due: "Thu",
@@ -457,6 +646,7 @@ export const adminTasks: AdminTask[] = [
     project: "Care dashboard + portal",
     client: "Brightline Care",
     assignee: "Ava",
+    milestone: "Billing",
     week: "This week",
     status: "progress",
     due: "Fri",
@@ -669,7 +859,7 @@ export type InvoiceStatus = "Paid" | "Due" | "Overdue";
 export type AdminInvoice = {
   id: string;
   client: string;
-  kind: "Milestone" | "Care plan" | "Retainer" | "Change request";
+  kind: "Milestone" | "Care plan" | "Retainer" | "Change request" | "Custom";
   amount: number;
   due: string;
   status: InvoiceStatus;
@@ -691,12 +881,75 @@ export const installments = [
   { id: "IP-16", client: "Lumen Studio", total: 16000, paid: 8000, next: "12 Nov 2026", months: 4, missed: 1 },
 ];
 
-export const contracts = [
-  { id: "CT-41", client: "Brightline Care", type: "Service agreement", status: "Signed", date: "18 Sep 2026" },
-  { id: "CT-42", client: "Northwind HVAC", type: "Service agreement", status: "Sent", date: "12 Nov 2026" },
-  { id: "CT-43", client: "Lumen Studio", type: "Change request", status: "Signed", date: "3 Nov 2026" },
-  { id: "CT-44", client: "Clearwater Fund", type: "NDA", status: "Signed", date: "14 Nov 2026" },
-  { id: "CT-45", client: "Cedarbrook Schools", type: "NDA", status: "Draft", date: "—" },
+export type ContractStatus = "Signed" | "Sent" | "Draft";
+
+/** A contract belongs to one client and, once the project exists, one project. */
+export type Contract = {
+  id: string;
+  clientId: string;
+  client: string;
+  /** Null for contracts signed before the project exists, like NDAs. */
+  projectId: string | null;
+  /** Resolved when the row comes from Postgres. */
+  projectName?: string | null;
+  type: string;
+  status: ContractStatus;
+  date: string;
+  /** ISO date used to keep the newest contract on top. */
+  createdAt: string;
+};
+
+export const contracts: Contract[] = [
+  {
+    id: "CT-41",
+    clientId: "brightline",
+    client: "Brightline Care",
+    projectId: "brightline-portal",
+    type: "Service agreement",
+    status: "Signed",
+    date: "18 Sep 2026",
+    createdAt: "2026-09-18",
+  },
+  {
+    id: "CT-42",
+    clientId: "northwind",
+    client: "Northwind HVAC",
+    projectId: "northwind-dispatch",
+    type: "Service agreement",
+    status: "Sent",
+    date: "12 Nov 2026",
+    createdAt: "2026-11-12",
+  },
+  {
+    id: "CT-43",
+    clientId: "lumen",
+    client: "Lumen Studio",
+    projectId: "lumen-ops",
+    type: "Change request",
+    status: "Signed",
+    date: "3 Nov 2026",
+    createdAt: "2026-11-03",
+  },
+  {
+    id: "CT-44",
+    clientId: "clearwater",
+    client: "Clearwater Fund",
+    projectId: null,
+    type: "NDA",
+    status: "Signed",
+    date: "14 Nov 2026",
+    createdAt: "2026-11-14",
+  },
+  {
+    id: "CT-45",
+    clientId: "cedarbrook",
+    client: "Cedarbrook Schools",
+    projectId: null,
+    type: "NDA",
+    status: "Draft",
+    date: "—",
+    createdAt: "2026-11-19",
+  },
 ];
 
 export const campaigns = [
@@ -987,5 +1240,804 @@ export const cannedReplies = [
     title: "Under warranty",
     category: "Billing",
     body: "This one is covered by your warranty, so there is no charge. We will keep you posted here.",
+  },
+];
+
+/**
+ * Full support tickets used by the advanced workspace. The compact `tickets`
+ * array above stays for the older queue until phase 2 switches over.
+ */
+export const ticketRecords: TicketRecord[] = [
+  {
+    id: "TKT-812",
+    subject: "Invoice reminder sent twice",
+    description:
+      "We got the same payment reminder email twice this morning. Can you check the schedule?",
+    requester: {
+      name: "Sarah Whitfield",
+      email: "sarah@brightlinecare.com",
+      role: "Owner",
+      initials: "SW",
+    },
+    client: {
+      id: "brightline",
+      company: "Brightline Care",
+      contact: "Sarah Whitfield",
+      email: "sarah@brightlinecare.com",
+      address: "412 W Erie St, Chicago IL",
+      carePlan: "Growth",
+    },
+    project: "Care dashboard and client portal",
+    channel: "Portal",
+    status: "New",
+    priority: "P1",
+    category: "Billing",
+    assignee: null,
+    followers: ["Maya Chen"],
+    cc: [{ name: "Nora Patel", email: "nora@brightlinecare.com", role: "Billing" }],
+    tags: ["billing", "email"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-20T10:12:00",
+      resolutionDue: "2026-11-20T12:12:00",
+    },
+    linked: [],
+    createdAt: "2026-11-20T09:12:00",
+    updatedAt: "2026-11-20T09:14:00",
+    unread: 1,
+    messages: [
+      {
+        id: "m-812-1",
+        author: "Sarah Whitfield",
+        sender: "Client",
+        channel: "Portal",
+        body: "We got the same payment reminder twice this morning. Can you check the schedule?",
+        at: "2026-11-20T09:12:00",
+        unread: true,
+      },
+    ],
+    events: [
+      {
+        id: "e-812-1",
+        kind: "created",
+        text: "Ticket created from the portal",
+        at: "2026-11-20T09:12:00",
+        actor: "Sarah Whitfield",
+      },
+      {
+        id: "e-812-2",
+        kind: "sla-warning",
+        text: "First response SLA at 80%",
+        at: "2026-11-20T09:50:00",
+        actor: "System",
+      },
+    ],
+  },
+  {
+    id: "TKT-811",
+    subject: "Crew cannot see Thursday jobs",
+    description:
+      "The Thursday run is missing from the crew app on two phones. Dispatch shows it fine.",
+    requester: {
+      name: "Dale Mercer",
+      email: "dale@northwindhvac.com",
+      role: "Owner",
+      initials: "DM",
+    },
+    client: {
+      id: "northwind",
+      company: "Northwind HVAC",
+      contact: "Dale Mercer",
+      email: "dale@northwindhvac.com",
+      address: "77 Industrial Row, Buffalo NY",
+      carePlan: "Essential",
+    },
+    project: "Dispatch and invoicing",
+    channel: "Email",
+    status: "Open",
+    priority: "P1",
+    category: "Bug",
+    assignee: "Rafi",
+    followers: ["Maya Chen", "Alamin"],
+    cc: [],
+    tags: ["crew", "jobs"],
+    warranty: true,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-20T09:40:00",
+      resolutionDue: "2026-11-20T11:40:00",
+      firstRespondedAt: "2026-11-20T09:21:00",
+    },
+    linked: [
+      {
+        id: "T-811",
+        type: "task",
+        label: "Crew app Thursday run",
+        meta: "Rafi · In progress",
+        href: "/admin/tasks/T-811",
+      },
+    ],
+    createdAt: "2026-11-20T08:40:00",
+    updatedAt: "2026-11-20T09:55:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-811-1",
+        author: "Dale Mercer",
+        sender: "Client",
+        channel: "Email",
+        body: "The Thursday run is missing from the crew app on two phones. Dispatch shows it fine.",
+        at: "2026-11-20T08:40:00",
+        attachments: [
+          { id: "a-811-1", name: "crew-app.png", size: "412 KB", kind: "image" },
+        ],
+      },
+      {
+        id: "m-811-2",
+        author: "Rafi Ahmed",
+        sender: "Staff",
+        channel: "Email",
+        body: "Thanks Dale, I can reproduce it. Pushing a cache fix now and will confirm on your phones.",
+        at: "2026-11-20T09:21:00",
+      },
+      {
+        id: "m-811-3",
+        author: "Rafi Ahmed",
+        sender: "Staff",
+        channel: "Portal",
+        internal: true,
+        body: "Cache key collision between two crew ids. Needs the app rebuild, not a data fix.",
+        at: "2026-11-20T09:52:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-811-1",
+        kind: "created",
+        text: "Ticket created from email",
+        at: "2026-11-20T08:40:00",
+        actor: "System",
+      },
+      {
+        id: "e-811-2",
+        kind: "assigned",
+        text: "Assigned to Rafi",
+        at: "2026-11-20T09:02:00",
+        actor: "Maya Chen",
+      },
+      {
+        id: "e-811-3",
+        kind: "escalated",
+        text: "Linked to dev task T-811",
+        at: "2026-11-20T09:53:00",
+        actor: "Rafi Ahmed",
+      },
+    ],
+  },
+  {
+    id: "TKT-810",
+    subject: "Export to QuickBooks mismatch",
+    description:
+      "November invoices export with the tax line doubled in QuickBooks.",
+    requester: {
+      name: "Priya Raman",
+      email: "priya@lumenstudio.co",
+      role: "Owner",
+      initials: "PR",
+    },
+    client: {
+      id: "lumen",
+      company: "Lumen Studio",
+      contact: "Priya Raman",
+      email: "priya@lumenstudio.co",
+      address: "1200 Abbot Kinney Blvd, Venice CA",
+      carePlan: "Growth",
+    },
+    project: "Projects, time and retainers",
+    channel: "Web form",
+    status: "Open",
+    priority: "P2",
+    category: "Bug",
+    assignee: "Alamin",
+    followers: ["Maya Chen"],
+    cc: [],
+    tags: ["export", "quickbooks"],
+    warranty: false,
+    billableHours: 1.5,
+    sla: {
+      firstResponseDue: "2026-11-20T12:30:00",
+      resolutionDue: "2026-11-21T12:30:00",
+      firstRespondedAt: "2026-11-20T10:05:00",
+    },
+    linked: [],
+    createdAt: "2026-11-20T10:30:00",
+    updatedAt: "2026-11-20T11:40:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-810-1",
+        author: "Priya Raman",
+        sender: "Client",
+        channel: "Web form",
+        body: "November invoices export with the tax line doubled in QuickBooks.",
+        at: "2026-11-20T10:30:00",
+      },
+      {
+        id: "m-810-2",
+        author: "Alamin",
+        sender: "Staff",
+        channel: "Portal",
+        body: "I can see the duplicate tax mapping. Testing a patch against your November set today.",
+        at: "2026-11-20T11:05:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-810-1",
+        kind: "created",
+        text: "Ticket created from the website form",
+        at: "2026-11-20T10:30:00",
+        actor: "System",
+      },
+      {
+        id: "e-810-2",
+        kind: "priority",
+        text: "Priority set to P2",
+        at: "2026-11-20T10:32:00",
+        actor: "Alamin",
+      },
+    ],
+  },
+  {
+    id: "TKT-809",
+    subject: "Add a second contact to the portal",
+    description:
+      "Can Jamie get access as a second contact? She only needs invoices and files.",
+    requester: {
+      name: "Nina Patel",
+      email: "nina@harbortherapy.com",
+      role: "Owner",
+      initials: "NP",
+    },
+    client: {
+      id: "harbor",
+      company: "Harbor Therapy",
+      contact: "Nina Patel",
+      email: "nina@harbortherapy.com",
+      address: "1601 Ocean Dr, Denver CO",
+      carePlan: "Growth",
+      hipaa: true,
+    },
+    project: "Online booking",
+    channel: "Portal",
+    status: "Waiting on client",
+    priority: "P3",
+    category: "Access",
+    assignee: "Maya",
+    followers: ["Alamin"],
+    cc: [],
+    tags: ["access", "team"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-20T13:00:00",
+      resolutionDue: "2026-11-23T13:00:00",
+      firstRespondedAt: "2026-11-20T11:50:00",
+    },
+    linked: [],
+    createdAt: "2026-11-20T10:00:00",
+    updatedAt: "2026-11-20T11:50:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-809-1",
+        author: "Nina Patel",
+        sender: "Client",
+        channel: "Portal",
+        body: "Can Jamie get access as a second contact? She only needs invoices and files.",
+        at: "2026-11-20T10:00:00",
+      },
+      {
+        id: "m-809-2",
+        author: "Maya Chen",
+        sender: "Staff",
+        channel: "Portal",
+        body: "Yes. What email should I use for Jamie, and should she stay out of care notes?",
+        at: "2026-11-20T11:50:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-809-1",
+        kind: "created",
+        text: "Ticket created from the portal",
+        at: "2026-11-20T10:00:00",
+        actor: "Nina Patel",
+      },
+      {
+        id: "e-809-2",
+        kind: "status",
+        text: "Status set to Waiting on client",
+        at: "2026-11-20T11:50:00",
+        actor: "Maya Chen",
+      },
+    ],
+  },
+  {
+    id: "TKT-808",
+    subject: "Payment did not show as paid",
+    description:
+      "The card was charged but the invoice still says due in the portal.",
+    requester: {
+      name: "Sarah Whitfield",
+      email: "sarah@brightlinecare.com",
+      role: "Owner",
+      initials: "SW",
+    },
+    client: {
+      id: "brightline",
+      company: "Brightline Care",
+      contact: "Sarah Whitfield",
+      email: "sarah@brightlinecare.com",
+      address: "412 W Erie St, Chicago IL",
+      carePlan: "Growth",
+    },
+    project: null,
+    channel: "Portal",
+    status: "Open",
+    priority: "P2",
+    category: "Billing",
+    assignee: null,
+    followers: [],
+    cc: [],
+    tags: ["payments"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-20T14:20:00",
+      resolutionDue: "2026-11-23T14:20:00",
+    },
+    linked: [
+      {
+        id: "INV-1044",
+        type: "invoice",
+        label: "INV-1044",
+        meta: "$6,400 · Paid",
+        href: "/admin/invoices/INV-1044",
+      },
+    ],
+    createdAt: "2026-11-20T12:20:00",
+    updatedAt: "2026-11-20T12:24:00",
+    unread: 2,
+    messages: [
+      {
+        id: "m-808-1",
+        author: "Sarah Whitfield",
+        sender: "Client",
+        channel: "Portal",
+        body: "The card was charged but the invoice still says due in the portal.",
+        at: "2026-11-20T12:20:00",
+        unread: true,
+      },
+      {
+        id: "m-808-2",
+        author: "Sarah Whitfield",
+        sender: "Client",
+        channel: "Portal",
+        body: "Added the bank reference here as well.",
+        at: "2026-11-20T12:24:00",
+        unread: true,
+        attachments: [
+          { id: "a-808-1", name: "bank-reference.pdf", size: "88 KB", kind: "file" },
+        ],
+      },
+    ],
+    events: [
+      {
+        id: "e-808-1",
+        kind: "created",
+        text: "Ticket created from the portal",
+        at: "2026-11-20T12:20:00",
+        actor: "Sarah Whitfield",
+      },
+    ],
+  },
+  {
+    id: "TKT-807",
+    subject: "Where do I download my files?",
+    description: "Looking for the handover files from the launch.",
+    requester: {
+      name: "Marco Reyes",
+      email: "marco@ridgelineclean.com",
+      role: "Owner",
+      initials: "MR",
+    },
+    client: {
+      id: "ridgeline",
+      company: "Ridgeline Cleaning",
+      contact: "Marco Reyes",
+      email: "marco@ridgelineclean.com",
+      address: "5300 Ridge Rd, Austin TX",
+      carePlan: "None",
+    },
+    project: "Job checklists",
+    channel: "Email",
+    status: "Resolved",
+    priority: "P3",
+    category: "Question",
+    assignee: "Rafi",
+    followers: [],
+    cc: [],
+    tags: ["files"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-14T11:00:00",
+      resolutionDue: "2026-11-17T11:00:00",
+      firstRespondedAt: "2026-11-14T10:20:00",
+      resolvedAt: "2026-11-14T10:45:00",
+    },
+    linked: [],
+    createdAt: "2026-11-14T09:00:00",
+    updatedAt: "2026-11-14T10:45:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-807-1",
+        author: "Marco Reyes",
+        sender: "Client",
+        channel: "Email",
+        body: "Looking for the handover files from the launch.",
+        at: "2026-11-14T09:00:00",
+      },
+      {
+        id: "m-807-2",
+        author: "Rafi Ahmed",
+        sender: "Staff",
+        channel: "Email",
+        body: "They are under Files -> Handover. I re-shared the folder with your team.",
+        at: "2026-11-14T10:20:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-807-1",
+        kind: "created",
+        text: "Ticket created from email",
+        at: "2026-11-14T09:00:00",
+        actor: "System",
+      },
+      {
+        id: "e-807-2",
+        kind: "resolved",
+        text: "Marked resolved, waiting for client confirmation",
+        at: "2026-11-14T10:45:00",
+        actor: "Rafi Ahmed",
+      },
+    ],
+  },
+  {
+    id: "TKT-806",
+    subject: "Homepage form not sending",
+    description:
+      "The quote form on the homepage shows success but no email arrives.",
+    requester: {
+      name: "Dale Mercer",
+      email: "dale@northwindhvac.com",
+      role: "Owner",
+      initials: "DM",
+    },
+    client: {
+      id: "northwind",
+      company: "Northwind HVAC",
+      contact: "Dale Mercer",
+      email: "dale@northwindhvac.com",
+      address: "77 Industrial Row, Buffalo NY",
+      carePlan: "Essential",
+    },
+    project: "Dispatch and invoicing",
+    channel: "Web form",
+    status: "Open",
+    priority: "P1",
+    category: "Bug",
+    assignee: "Rafi",
+    followers: ["Maya Chen", "Alamin"],
+    cc: [],
+    tags: ["forms", "email"],
+    warranty: true,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-19T15:00:00",
+      resolutionDue: "2026-11-19T17:00:00",
+      firstRespondedAt: "2026-11-19T16:10:00",
+    },
+    linked: [],
+    createdAt: "2026-11-19T14:00:00",
+    updatedAt: "2026-11-20T09:10:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-806-1",
+        author: "Dale Mercer",
+        sender: "Client",
+        channel: "Web form",
+        body: "The quote form on the homepage shows success but no email arrives.",
+        at: "2026-11-19T14:00:00",
+      },
+      {
+        id: "m-806-2",
+        author: "Rafi Ahmed",
+        sender: "Staff",
+        channel: "Email",
+        body: "Confirmed, the form handler is timing out. Fix is in review today.",
+        at: "2026-11-19T16:10:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-806-1",
+        kind: "created",
+        text: "Ticket created from the website form",
+        at: "2026-11-19T14:00:00",
+        actor: "System",
+      },
+      {
+        id: "e-806-2",
+        kind: "sla-breach",
+        text: "First response SLA breached",
+        at: "2026-11-19T15:00:00",
+        actor: "System",
+      },
+    ],
+  },
+  {
+    id: "TKT-813",
+    subject: "Donor list needs a saved filter",
+    description:
+      "We filter donors by gift year every week. Can the view remember it?",
+    requester: {
+      name: "Tom Bailey",
+      email: "tom@clearwaterfund.org",
+      role: "Owner",
+      initials: "TB",
+    },
+    client: {
+      id: "clearwater",
+      company: "Clearwater Fund",
+      contact: "Tom Bailey",
+      email: "tom@clearwaterfund.org",
+      address: "210 Harbor Way, Portland ME",
+      carePlan: "None",
+    },
+    project: null,
+    channel: "Portal",
+    status: "Waiting on development",
+    priority: "P2",
+    category: "Feature request",
+    assignee: "Alamin",
+    followers: ["Maya Chen"],
+    cc: [],
+    tags: ["donors", "filters"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-20T09:00:00",
+      resolutionDue: "2026-11-23T09:00:00",
+      firstRespondedAt: "2026-11-19T16:30:00",
+    },
+    linked: [
+      {
+        id: "T-905",
+        type: "task",
+        label: "Saved donor filters",
+        meta: "Alamin · To do",
+        href: "/admin/tasks/T-905",
+      },
+      {
+        id: "CR-12",
+        type: "change",
+        label: "CR-12 Saved filters",
+        meta: "$1,200 · Sent",
+        href: "/admin/projects/clearwater-fund/changes/CR-12",
+      },
+    ],
+    createdAt: "2026-11-19T15:40:00",
+    updatedAt: "2026-11-20T08:55:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-813-1",
+        author: "Tom Bailey",
+        sender: "Client",
+        channel: "Portal",
+        body: "We filter donors by gift year every week. Can the view remember it?",
+        at: "2026-11-19T15:40:00",
+      },
+      {
+        id: "m-813-2",
+        author: "Alamin",
+        sender: "Staff",
+        channel: "Portal",
+        body: "This is new scope, so I sent change request CR-12 with the price and timeline.",
+        at: "2026-11-19T16:30:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-813-1",
+        kind: "created",
+        text: "Ticket created from the portal",
+        at: "2026-11-19T15:40:00",
+        actor: "Tom Bailey",
+      },
+      {
+        id: "e-813-2",
+        kind: "status",
+        text: "Status set to Waiting on development",
+        at: "2026-11-20T08:55:00",
+        actor: "Alamin",
+      },
+    ],
+  },
+  {
+    id: "TKT-805",
+    subject: "Report export spacing looks off",
+    description: "The PDF report has tight spacing on the second page.",
+    requester: {
+      name: "Elaine Ford",
+      email: "elaine@cedarbrook.edu",
+      role: "Owner",
+      initials: "EF",
+    },
+    client: {
+      id: "cedarbrook",
+      company: "Cedarbrook Schools",
+      contact: "Elaine Ford",
+      email: "elaine@cedarbrook.edu",
+      address: "14 Brook Lane, Albany NY",
+      carePlan: "None",
+    },
+    project: "Enrollment and family portal",
+    channel: "Portal",
+    status: "Snoozed",
+    priority: "P3",
+    category: "Question",
+    assignee: "Maya",
+    followers: [],
+    cc: [],
+    tags: ["report"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-20T10:00:00",
+      resolutionDue: "2026-11-23T10:00:00",
+      firstRespondedAt: "2026-11-19T14:45:00",
+    },
+    snoozeUntil: "2026-11-24T09:00:00",
+    linked: [],
+    createdAt: "2026-11-19T13:30:00",
+    updatedAt: "2026-11-19T14:45:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-805-1",
+        author: "Elaine Ford",
+        sender: "Client",
+        channel: "Portal",
+        body: "The PDF report has tight spacing on the second page.",
+        at: "2026-11-19T13:30:00",
+      },
+      {
+        id: "m-805-2",
+        author: "Maya Chen",
+        sender: "Staff",
+        channel: "Portal",
+        body: "Noted. We are bundling this with the next report polish pass. Snoozed until 24 Nov.",
+        at: "2026-11-19T14:45:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-805-1",
+        kind: "created",
+        text: "Ticket created from the portal",
+        at: "2026-11-19T13:30:00",
+        actor: "Elaine Ford",
+      },
+      {
+        id: "e-805-2",
+        kind: "snoozed",
+        text: "Snoozed until 24 Nov 09:00",
+        at: "2026-11-19T14:45:00",
+        actor: "Maya Chen",
+      },
+    ],
+  },
+  {
+    id: "TKT-804",
+    subject: "Domain renewal invoice",
+    description: "Please send the renewal invoice with the new billing address.",
+    requester: {
+      name: "Ray Khan",
+      email: "ray@atlasproperty.co",
+      role: "Owner",
+      initials: "RK",
+    },
+    client: {
+      id: "atlas",
+      company: "Atlas Property",
+      contact: "Ray Khan",
+      email: "ray@atlasproperty.co",
+      address: "320 Peachtree St NE, Atlanta GA",
+      carePlan: "None",
+    },
+    project: "Marketing site",
+    channel: "Email",
+    status: "Closed",
+    priority: "P2",
+    category: "Billing",
+    assignee: "Rafi",
+    followers: [],
+    cc: [],
+    tags: ["billing", "domain"],
+    warranty: false,
+    billableHours: 0,
+    sla: {
+      firstResponseDue: "2026-11-17T12:00:00",
+      resolutionDue: "2026-11-18T12:00:00",
+      firstRespondedAt: "2026-11-17T11:20:00",
+      resolvedAt: "2026-11-17T15:00:00",
+    },
+    rating: {
+      stars: 5,
+      comment: "Fast, and the invoice had everything the first time.",
+      at: "2026-11-18T09:30:00",
+    },
+    linked: [],
+    createdAt: "2026-11-17T10:30:00",
+    updatedAt: "2026-11-18T09:30:00",
+    unread: 0,
+    messages: [
+      {
+        id: "m-804-1",
+        author: "Ray Khan",
+        sender: "Client",
+        channel: "Email",
+        body: "Please send the renewal invoice with the new billing address.",
+        at: "2026-11-17T10:30:00",
+      },
+      {
+        id: "m-804-2",
+        author: "Rafi Ahmed",
+        sender: "Staff",
+        channel: "Email",
+        body: "Sent with the updated address. Let me know if anything looks off.",
+        at: "2026-11-17T11:20:00",
+      },
+    ],
+    events: [
+      {
+        id: "e-804-1",
+        kind: "created",
+        text: "Ticket created from email",
+        at: "2026-11-17T10:30:00",
+        actor: "System",
+      },
+      {
+        id: "e-804-2",
+        kind: "closed",
+        text: "Closed after client confirmation",
+        at: "2026-11-18T09:00:00",
+        actor: "System",
+      },
+      {
+        id: "e-804-3",
+        kind: "rated",
+        text: "Client rated the ticket 5 stars",
+        at: "2026-11-18T09:30:00",
+        actor: "Ray Khan",
+      },
+    ],
   },
 ];

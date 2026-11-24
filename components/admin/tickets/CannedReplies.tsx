@@ -1,48 +1,106 @@
 "use client";
 
 import { useState } from "react";
+import { Check, Copy, Hash, Plus } from "lucide-react";
+import { FilterDisclosure, type FilterOption } from "@/components/shared/FilterDisclosure";
 import { NativeSelect } from "@/components/shared/NativeSelect";
-import { Check, Copy, Plus } from "lucide-react";
-import { Label } from "@/components/ui/label";
+import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { cannedReplies } from "@/lib/admin-data";
+import { FormField, FormTextarea } from "@/components/ui/form-field";
+import {
+  CANNED_CATEGORIES,
+  cannedReplySeeds,
+  type CannedReply,
+  type CannedScope,
+} from "@/lib/tickets/canned-replies";
 
+const categoryOptions: FilterOption[] = CANNED_CATEGORIES.map((category) => ({
+  id: category,
+  label: category,
+  icon: Hash,
+}));
+
+/** Canned replies: variables, categories, shortcuts, scope and usage. */
 export function CannedReplies() {
-  const [replies, setReplies] = useState(cannedReplies);
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Acknowledgment");
-  const [body, setBody] = useState("");
+  const [replies, setReplies] = useState<CannedReply[]>(cannedReplySeeds);
+  const [categories, setCategories] = useState<string[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState(CANNED_CATEGORIES[0]);
+  const [shortcut, setShortcut] = useState("/");
+  const [scope, setScope] = useState<CannedScope>("Team");
+  const [body, setBody] = useState("");
+
+  const rows =
+    categories.length === 0
+      ? replies
+      : replies.filter((reply) => categories.includes(reply.category));
+
+  function copy(reply: CannedReply) {
+    void navigator.clipboard?.writeText(reply.body);
+    setCopied(reply.id);
+    setReplies((current) =>
+      current.map((item) =>
+        item.id === reply.id ? { ...item, uses: item.uses + 1 } : item,
+      ),
+    );
+  }
 
   function add(event: React.FormEvent) {
     event.preventDefault();
     if (!title.trim() || !body.trim()) return;
     setReplies((current) => [
-      { id: `CR-${current.length + 1}`, title, category, body },
+      {
+        id: `CR-${Date.now()}`,
+        title: title.trim(),
+        category,
+        shortcut: shortcut.startsWith("/") ? shortcut.trim() : `/${shortcut.trim()}`,
+        scope,
+        uses: 0,
+        body: body.trim(),
+      },
       ...current,
     ]);
     setTitle("");
+    setShortcut("/");
     setBody("");
   }
 
   return (
     <div className="grid gap-4 xl:grid-cols-3">
       <div className="space-y-3 xl:col-span-2">
-        {replies.map((reply) => (
-          <div key={reply.id} className="rounded-lg border border-border bg-card p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <FilterDisclosure
+            label="Category"
+            values={categories}
+            options={categoryOptions}
+            onChange={setCategories}
+          />
+          <span className="text-[11px] text-muted-foreground">
+            {rows.length} replies · variables fill with the ticket&apos;s values
+          </span>
+        </div>
+
+        {rows.map((reply) => (
+          <div
+            key={reply.id}
+            className="rounded-lg border border-border bg-card p-5"
+          >
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-semibold">{reply.title}</p>
-                <p className="text-xs text-muted-foreground">{reply.category}</p>
+                <p className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <span className="font-mono text-[10px]">{reply.shortcut}</span>
+                  <span>{reply.category}</span>
+                  <StatusBadge tone={reply.scope === "Team" ? "accent" : "neutral"}>
+                    {reply.scope}
+                  </StatusBadge>
+                  <span className="font-mono text-[10px]">
+                    {reply.uses} uses
+                  </span>
+                </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  navigator.clipboard?.writeText(reply.body);
-                  setCopied(reply.id);
-                }}
-              >
+              <Button variant="outline" size="sm" onClick={() => copy(reply)}>
                 {copied === reply.id ? (
                   <Check className="size-3.5 text-success" aria-hidden="true" />
                 ) : (
@@ -51,31 +109,75 @@ export function CannedReplies() {
                 {copied === reply.id ? "Copied" : "Copy"}
               </Button>
             </div>
-            <p className="mt-3 text-sm text-muted-foreground">{reply.body}</p>
+            <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">
+              {reply.body}
+            </p>
           </div>
         ))}
       </div>
 
       <form onSubmit={add} className="rounded-lg border border-border bg-card p-5">
         <h2 className="text-sm font-semibold">New canned reply</h2>
-        <p className="text-xs text-muted-foreground">Saved for everyone on support.</p>
+        <p className="text-xs text-muted-foreground">
+          Use {"{first_name}"}, {"{project}"} and {"{pm_name}"} as variables.
+        </p>
         <div className="mt-3 space-y-3">
-          <div className="space-y-1.5">
-            <Label htmlFor="reply-title" className="text-xs font-medium">Title</Label>
-            <input id="reply-title" value={title} onChange={(e) => setTitle(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring" />
+          <FormField
+            id="reply-title"
+            label="Title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <p className="text-[13px] font-medium">Category</p>
+              <NativeSelect
+                aria-label="Category"
+                value={category}
+                onChange={(event) => setCategory(event.target.value)}
+                className="h-11.5 w-full"
+              >
+                {CANNED_CATEGORIES.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </NativeSelect>
+            </div>
+            <div className="space-y-2">
+              <p className="text-[13px] font-medium">Scope</p>
+              <NativeSelect
+                aria-label="Scope"
+                value={scope}
+                onChange={(event) =>
+                  setScope(event.target.value as CannedScope)
+                }
+                className="h-11.5 w-full"
+              >
+                <option value="Team">Team</option>
+                <option value="Personal">Personal</option>
+              </NativeSelect>
+            </div>
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="reply-category" className="text-xs font-medium">Category</Label>
-            <NativeSelect id="reply-category" value={category} onChange={(e) => setCategory(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
-              {["Acknowledgment", "Information", "Resolution", "Billing"].map((item) => <option key={item}>{item}</option>)}
-            </NativeSelect>
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="reply-body" className="text-xs font-medium">Message</Label>
-            <textarea id="reply-body" value={body} onChange={(e) => setBody(e.target.value)} rows={4} className="w-full resize-none rounded-lg border border-input bg-card px-3 py-2 text-sm outline-none focus-visible:border-ring" />
-          </div>
+          <FormField
+            id="reply-shortcut"
+            label="Shortcut"
+            value={shortcut}
+            onChange={(event) => setShortcut(event.target.value)}
+            inputClassName="font-mono"
+            placeholder="/shortcut"
+          />
+          <FormTextarea
+            id="reply-body"
+            label="Message"
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            placeholder="Hi {first_name}, …"
+          />
         </div>
-        <Button type="submit" className="mt-3 w-full" disabled={!title.trim() || !body.trim()}>
+        <Button
+          type="submit"
+          className="mt-3 w-full"
+          disabled={!title.trim() || !body.trim()}
+        >
           <Plus className="size-4" aria-hidden="true" />
           Add reply
         </Button>

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { FileCheck, FileText, Upload } from "lucide-react";
+import { Suspense } from "react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { StatCard } from "@/components/admin/ui/StatCard";
-import { PortalFilesView } from "@/components/portal/PortalFilesView";
+import { PortalFilesData } from "@/components/portal/PortalFilesData";
 
 export const metadata: Metadata = {
   title: "Files | Elevosia client portal",
@@ -17,15 +16,20 @@ export default function PortalFilesPage() {
         description="Every file your team shared, the Blueprints and the agreements. Uploads go straight to your PM."
       />
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatCard label="Shared files" value={5} note="Across 2 projects" icon={FileText} />
-        <StatCard label="Signed" value={3} note="1 waiting for signature" icon={FileCheck} tone="success" />
-        <StatCard label="This month" value={2} note="Uploaded by your team" icon={Upload} />
-      </div>
-
-      <div className="mt-4">
-        <PortalFilesView />
-      </div>
+      <Suspense
+        fallback={
+          <div className="mt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {[0, 1, 2].map((item) => (
+                <div key={item} className="h-24 rounded-lg border border-border bg-card" />
+              ))}
+            </div>
+            <div className="h-64 rounded-lg border border-border bg-card" />
+          </div>
+        }
+      >
+        <PortalFilesData />
+      </Suspense>
     </div>
   );
 }

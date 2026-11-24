@@ -47,7 +47,7 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <ButtonLink href="/start">Start a project</ButtonLink>
+            <ButtonLink href="/start-project">Start a project</ButtonLink>
             <ButtonLink href="/demo" variant="outline">
               Try the live demo
             </ButtonLink>

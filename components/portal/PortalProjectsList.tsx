@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Progress } from "@/components/admin/ui/Progress";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { portalProjects } from "@/lib/portal-data";
+import type { PortalProject } from "@/lib/portal-data";
 
 const STATUS_OPTIONS = [
   { id: "Active", label: "Active", icon: PlayCircle },
@@ -15,9 +15,14 @@ const STATUS_OPTIONS = [
   { id: "On hold", label: "On hold", icon: PauseCircle },
 ];
 
-export function PortalProjectsList() {
+export function PortalProjectsList({
+  projects,
+}: {
+  projects: PortalProject[];
+}) {
   const [statuses, setStatuses] = useState<string[]>([]);
-  const rows = portalProjects.filter(
+
+  const rows = projects.filter(
     (project) =>
       statuses.length === 0 || statuses.includes(project.status),
   );

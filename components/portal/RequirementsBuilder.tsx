@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
+import { submitRequirements } from "@/app/portal/actions";
 import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { ArrowUpRight, Check, Plus, Trash2 } from "lucide-react";
@@ -44,6 +46,7 @@ export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
   const [nda, setNda] = useState(false);
   const [saved, setSaved] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const points = sections.flatMap((section) => section.points);
   const filledPoints = points.filter((point) => point.text.trim().length > 0);
@@ -316,11 +319,34 @@ export function RequirementsBuilder({ onDone }: { onDone?: () => void } = {}) {
             <Button
               type="button"
               onClick={() => {
-                if (!name.trim() || filledPoints.length === 0) return;
-                setSubmitted(true);
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                if (!name.trim() || filledPoints.length === 0 || submitting) {
+                  return;
+                }
+                setSubmitting(true);
+                void submitRequirements({
+                  title: name,
+                  budget,
+                  sections: sections
+                    .map((section) => ({
+                      title: section.title,
+                      points: section.points
+                        .filter((point) => point.text.trim().length > 0)
+                        .map((point) => ({ text: point.text, must: point.must })),
+                    }))
+                    .filter((section) => section.points.length > 0),
+                }).then((result) => {
+                  setSubmitting(false);
+                  if (!result.ok) {
+                    toast.error(result.error);
+                    return;
+                  }
+                  setSubmitted(true);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                });
               }}
-              disabled={!name.trim() || filledPoints.length === 0}
+              disabled={
+                !name.trim() || filledPoints.length === 0 || submitting
+              }
             >
               Submit requirements
             </Button>

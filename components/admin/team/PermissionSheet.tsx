@@ -10,7 +10,6 @@ import {
   PERMISSION_KEYS,
   PERMISSION_SECTIONS,
   TEAM_ROLES,
-  permissionsFor,
   type Permissions,
   type PermissionKey,
   type TeamMember,
@@ -18,31 +17,48 @@ import {
 } from "@/lib/team-data";
 import { cn } from "@/lib/utils";
 
+/**
+ * Member mode edits one teammate. Role mode edits a global role with no
+ * member picker; saving it applies to everyone who has that role.
+ */
 export function PermissionSheet({
   open,
   onOpenChange,
+  mode,
   members,
   memberId,
-  onMemberChange,
-  onSave,
+  initialRole = "Developer",
+  roleDefaults,
+  onSaveMember,
+  onSaveRole,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  mode: "member" | "role";
   members: TeamMember[];
-  memberId: string;
-  onMemberChange: (id: string) => void;
-  onSave: (id: string, role: TeamRole, permissions: Permissions) => void;
+  memberId?: string;
+  initialRole?: TeamRole;
+  roleDefaults: Record<TeamRole, Permissions>;
+  onSaveMember: (id: string, role: TeamRole, permissions: Permissions) => void;
+  onSaveRole: (role: TeamRole, permissions: Permissions) => void;
 }) {
-  const member = members.find((item) => item.id === memberId) ?? members[0];
-  const [role, setRole] = useState<TeamRole>(member?.role ?? "Developer");
+  const member =
+    mode === "member"
+      ? (members.find((item) => item.id === memberId) ?? members[0])
+      : undefined;
+  const [role, setRole] = useState<TeamRole>(member?.role ?? initialRole);
   const [permissions, setPermissions] = useState<Permissions>(() =>
-    structuredClone(member?.permissions ?? permissionsFor("Developer")),
+    structuredClone(member ? member.permissions : roleDefaults[initialRole]),
   );
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  if (!member) return null;
+  if (mode === "member" && !member) return null;
+
+  const roleCount = member
+    ? 0
+    : members.filter((item) => item.role === role).length;
 
   function toggle(sectionId: string, key: PermissionKey) {
     setPermissions((current) => ({
@@ -57,13 +73,18 @@ export function PermissionSheet({
 
   function changeRole(nextRole: TeamRole) {
     setRole(nextRole);
-    setPermissions(permissionsFor(nextRole));
+    setPermissions(structuredClone(roleDefaults[nextRole]));
     setDirty(true);
   }
 
   function discard() {
-    setRole(member.role);
-    setPermissions(structuredClone(member.permissions));
+    if (member) {
+      setRole(member.role);
+      setPermissions(structuredClone(member.permissions));
+    } else {
+      setRole(initialRole);
+      setPermissions(structuredClone(roleDefaults[initialRole]));
+    }
     setDirty(false);
   }
 
@@ -73,10 +94,17 @@ export function PermissionSheet({
       setSaving(false);
       setSaved(true);
       setDirty(false);
-      onSave(member.id, role, permissions);
-      toast.success("Role and permissions updated", {
-        description: `${member.name} now has ${role.toLowerCase()} access.`,
-      });
+      if (member) {
+        onSaveMember(member.id, role, permissions);
+        toast.success("Role and permissions updated", {
+          description: `${member.name} now has ${role.toLowerCase()} access.`,
+        });
+      } else {
+        onSaveRole(role, permissions);
+        toast.success(`${role} role updated`, {
+          description: `${roleCount} ${roleCount === 1 ? "member" : "members"} now use these permissions.`,
+        });
+      }
       window.setTimeout(() => onOpenChange(false), 2000);
     }, 450);
   }
@@ -91,36 +119,48 @@ export function PermissionSheet({
     >
       <AppDialog.Header
         icon={ShieldCheck}
-        title="User permissions"
-        subtitle="Select what a user can see or do in the app."
+        title={mode === "member" ? "User permissions" : "Global role permissions"}
+        subtitle={
+          mode === "member"
+            ? "Select what this teammate can see or do in the app."
+            : "Set what everyone with this role can see or do. Individual members can still be adjusted from the team list."
+        }
       />
       <AppDialog.Body>
-        <div className="flex items-center gap-3 rounded-[var(--radius-dialog-preview)] border border-border bg-card p-3">
-          <Avatar initials={member.initials} />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">{member.name}</p>
-            <p className="truncate text-xs text-muted-foreground">
-              {member.email}
-            </p>
+        {member ? (
+          <div className="flex items-center gap-3 rounded-[var(--radius-dialog-preview)] border border-border bg-card p-3">
+            <Avatar initials={member.initials} />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold">{member.name}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {member.email}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex items-center gap-3 rounded-[var(--radius-dialog-preview)] border border-border bg-card p-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <ShieldCheck className="size-4" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold">{role}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {roleCount} {roleCount === 1 ? "member" : "members"} · applies
+                globally
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <FormSelect
-            id="permission-member"
-            label="Team member"
-            value={member.id}
-            onChange={(event) => onMemberChange(event.target.value)}
-          >
-            {members.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </FormSelect>
-          <FormSelect
             id="permission-role"
-            label="Role"
+            label={member ? "Role" : "Global role"}
+            hint={
+              member
+                ? undefined
+                : "Saving updates every member with this role."
+            }
             value={role}
             onChange={(event) => changeRole(event.target.value as TeamRole)}
           >

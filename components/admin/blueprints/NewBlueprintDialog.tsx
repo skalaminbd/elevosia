@@ -1,20 +1,17 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { createBlueprint } from "@/app/admin/blueprints/actions";
 import { FileText, Plus, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { AppDialog } from "@/components/ui/app-dialog";
 import { Button } from "@/components/ui/button";
 import { FormField, FormSelect } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
+import { useDirectory, type DirectoryClient } from "@/hooks/use-directory";
 
-const CLIENTS = [
-  "Clearwater Fund",
-  "Cedarbrook Schools",
-  "Lumen Studio",
-  "Brightline Care",
-  "Northwind HVAC",
-];
 const TERMS = ["Service agreement", "Retainer agreement", "Custom"];
 const PAYMENTS = [
   "40% deposit, 30% demo, 30% launch",
@@ -24,6 +21,7 @@ const PAYMENTS = [
 
 const schema = z.object({
   client: z.string().min(1),
+  company: z.string().min(1),
   title: z.string().trim().min(2, "Enter the project name"),
   price: z.string().refine((value) => Number(value) > 0, "Enter a price"),
   terms: z.string().min(1),
@@ -72,8 +70,41 @@ function BlueprintDialogForm({
   requirementId?: string;
   onClose: () => void;
 }) {
+  const { clients } = useDirectory();
+
+  if (clients.length === 0) {
+    return (
+      <AppDialog.Body>
+        <p className="py-8 text-center text-sm text-muted-foreground">
+          Loading clients…
+        </p>
+      </AppDialog.Body>
+    );
+  }
+
+  return (
+    <BlueprintDialogFormInner
+      requirementId={requirementId}
+      onClose={onClose}
+      clients={clients}
+    />
+  );
+}
+
+function BlueprintDialogFormInner({
+  requirementId,
+  onClose,
+  clients,
+}: {
+  requirementId?: string;
+  onClose: () => void;
+  clients: DirectoryClient[];
+}) {
+  const preferred =
+    clients.find((client) => client.name === "Clearwater Fund") ?? clients[0];
   const [form, setForm] = useState<Values>({
-    client: "Clearwater Fund",
+    client: preferred.name,
+    company: preferred.companies[0]?.name ?? "",
     title: requirementId ? "Donor CRM and impact reporting" : "",
     price: "28000",
     terms: "Service agreement",
@@ -90,8 +121,13 @@ function BlueprintDialogForm({
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
   const [dirty, setDirty] = useState(false);
+  const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Guards against a click that lands on the footer button right after Next
+  // swaps it for the save action.
+  const stepEnteredAt = useRef(0);
 
   function update<K extends keyof Values>(key: K, value: Values[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -99,7 +135,16 @@ function BlueprintDialogForm({
     setDirty(true);
   }
 
-  function save() {
+  function chooseClient(name: string) {
+    const next = clients.find((client) => client.name === name);
+    update("client", name);
+    update("company", next?.companies[0]?.name ?? "");
+  }
+
+  const selectedClient = clients.find((client) => client.name === form.client);
+
+  async function save() {
+    if (Date.now() - stepEnteredAt.current < 500) return;
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
       const next: Errors = {};
@@ -112,13 +157,32 @@ function BlueprintDialogForm({
       return;
     }
     if (milestones.some((item) => !item.trim())) return;
+    const client =
+      clients.find((item) => item.name === form.client) ?? clients[0];
     setSaving(true);
+    const result = await createBlueprint({
+      clientId: client.id,
+      requirementId: requirementId ?? null,
+      title: form.title,
+      priceCents: Math.round(Number(form.price) * 100),
+      validUntil: form.validUntil,
+      milestones,
+    });
+    setSaving(false);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    setSaved(true);
+    setDirty(false);
+    toast.success("Blueprint created", {
+      description: `${result.id} for ${form.client}.`,
+    });
+    router.refresh();
     window.setTimeout(() => {
-      setSaving(false);
-      setSaved(true);
-      setDirty(false);
-      window.setTimeout(onClose, 2000);
-    }, 450);
+      onClose();
+      router.push(`/admin/blueprints/${result.id}`);
+    }, 900);
   }
 
   return (
@@ -136,9 +200,12 @@ function BlueprintDialogForm({
         <form
           id="new-blueprint-dialog"
           onSubmit={(event) => {
+            // Enter only advances the step. Saving is always an explicit click.
             event.preventDefault();
-            if (step === 0) setStep(1);
-            else save();
+            if (step === 0) {
+              stepEnteredAt.current = Date.now();
+              setStep(1);
+            }
           }}
           className="flex flex-col gap-[18px]"
         >
@@ -155,10 +222,21 @@ function BlueprintDialogForm({
                 id="blueprint-client"
                 label="Client"
                 value={form.client}
-                onChange={(event) => update("client", event.target.value)}
+                onChange={(event) => chooseClient(event.target.value)}
               >
-                {CLIENTS.map((item) => (
-                  <option key={item}>{item}</option>
+                {clients.map((client) => (
+                  <option key={client.id}>{client.name}</option>
+                ))}
+              </FormSelect>
+              <FormSelect
+                id="blueprint-company"
+                label="Company"
+                value={form.company}
+                onChange={(event) => update("company", event.target.value)}
+                hint="The company under this client the work belongs to."
+              >
+                {(selectedClient?.companies ?? []).map((company) => (
+                  <option key={company.name}>{company.name}</option>
                 ))}
               </FormSelect>
               <FormField
@@ -179,6 +257,9 @@ function BlueprintDialogForm({
                 error={errors.price}
                 inputClassName="font-mono"
               />
+            </>
+          ) : (
+            <>
               <FormSelect
                 id="blueprint-terms"
                 label="Terms template"
@@ -189,9 +270,6 @@ function BlueprintDialogForm({
                   <option key={item}>{item}</option>
                 ))}
               </FormSelect>
-            </>
-          ) : (
-            <>
               <FormField
                 id="blueprint-valid"
                 label="Valid until"
@@ -279,11 +357,16 @@ function BlueprintDialogForm({
         }
         primary={
           step === 0
-            ? { label: "Next", onClick: () => setStep(1) }
+            ? {
+                label: "Next",
+                onClick: () => {
+                  stepEnteredAt.current = Date.now();
+                  setStep(1);
+                },
+              }
             : {
                 label: "Save as draft",
-                type: "submit",
-                form: "new-blueprint-dialog",
+                onClick: save,
                 disabled: !form.title.trim() || Number(form.price) <= 0 || saving,
                 loading: saving,
               }

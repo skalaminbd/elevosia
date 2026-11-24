@@ -143,6 +143,7 @@ export function SidebarExpanded({
             name={DEMO_USERS[role].name}
             role={ROLE_LABELS[role]}
             initials={DEMO_USERS[role].initials}
+            photo={DEMO_USERS[role].photo}
             links={WORKSPACE_LINKS}
           />
         </div>

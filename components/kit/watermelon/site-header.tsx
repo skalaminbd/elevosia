@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { authClient } from "@/lib/auth-client";
 import {
   Accordion,
   AccordionContent,
@@ -102,7 +103,7 @@ const MENUS: MegaMenu[] = [
       title: "Get your Blueprint in 5 days",
       body: "Share what you need. Get milestones, a timeline and a fixed price, free.",
       linkLabel: "Start a project",
-      href: "/start",
+      href: "/start-project",
     },
   },
   {
@@ -277,10 +278,40 @@ function megaPanel(menu: MegaMenu) {
   );
 }
 
+const STAFF_ROLES = ["admin", "pm", "developer", "marketing", "support"];
+
+function initialsOf(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("");
+}
+
 export function SiteHeader({ invert = false }: { invert?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState("");
   const [hidden, setHidden] = useState(false);
+  const { data: authData, isPending } = authClient.useSession();
+  const authUser = authData?.user as
+    | { name?: string | null; image?: string | null; role?: string | null }
+    | undefined;
+  const accountName = authUser?.name?.trim() || "Your account";
+  const accountHref = STAFF_ROLES.includes(authUser?.role ?? "")
+    ? "/admin"
+    : "/portal";
+
+  const accountAvatar = authUser ? (
+    <span className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-xs font-bold text-primary">
+      {authUser.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={authUser.image} alt="" className="size-full object-cover" />
+      ) : (
+        initialsOf(accountName)
+      )}
+    </span>
+  ) : null;
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -407,13 +438,36 @@ export function SiteHeader({ invert = false }: { invert?: boolean }) {
 
         <div className="hidden items-center gap-2 lg:flex">
           <ThemeToggle />
-          <Button asChild variant="ghost" className="text-muted-foreground">
-            <Link href="/login">
-              <User className="size-4" aria-hidden="true" />
-              Login
-            </Link>
-          </Button>
-          <ButtonLink href="/start">Start a project</ButtonLink>
+          {isPending ? (
+            <span
+              aria-hidden="true"
+              className="size-9 animate-pulse rounded-full bg-secondary"
+            />
+          ) : authUser ? (
+            <Button
+              asChild
+              variant="ghost"
+              className="gap-2 px-1.5 text-muted-foreground hover:text-foreground"
+            >
+              <Link
+                href={accountHref}
+                aria-label={`Open ${accountName}'s account`}
+              >
+                {accountAvatar}
+                <span className="max-w-28 truncate text-sm font-medium">
+                  {accountName}
+                </span>
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild variant="ghost" className="text-muted-foreground">
+              <Link href="/login">
+                <User className="size-4" aria-hidden="true" />
+                Login
+              </Link>
+            </Button>
+          )}
+          <ButtonLink href="/start-project">Start a project</ButtonLink>
         </div>
 
         <div className="flex items-center gap-1 lg:hidden">
@@ -517,13 +571,38 @@ export function SiteHeader({ invert = false }: { invert?: boolean }) {
               </nav>
 
               <SheetFooter>
-                <Button asChild variant="outline" className="text-base">
-                  <Link href="/login">
-                    <User className="size-4" aria-hidden="true" />
-                    Login
-                  </Link>
-                </Button>
-                <ButtonLink href="/start" className="text-base">
+                {isPending ? (
+                  <span
+                    aria-hidden="true"
+                    className="h-10 w-full animate-pulse rounded-lg bg-secondary"
+                  />
+                ) : authUser ? (
+                  <Button asChild variant="outline" className="text-base">
+                    <Link href={accountHref}>
+                      <span className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                        {authUser.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={authUser.image}
+                            alt=""
+                            className="size-full object-cover"
+                          />
+                        ) : (
+                          initialsOf(accountName)
+                        )}
+                      </span>
+                      <span className="truncate">{accountName}</span>
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button asChild variant="outline" className="text-base">
+                    <Link href="/login">
+                      <User className="size-4" aria-hidden="true" />
+                      Login
+                    </Link>
+                  </Button>
+                )}
+                <ButtonLink href="/start-project" className="text-base">
                   Start a project
                 </ButtonLink>
               </SheetFooter>

@@ -1,13 +1,12 @@
-import type { NextRequest } from "next/server";
-import { z } from "zod";
-import { getSidebarCounts } from "@/lib/admin/sidebar-counts";
+import { getSessionUser, STAFF_ROLES } from "@/lib/portal-session";
+import { getAdminSidebarCounts } from "@/db/queries";
 
-const roleSchema = z.enum(["admin", "pm", "developer", "marketing", "support"]);
+/** Live sidebar counts from Postgres for signed-in staff. */
+export async function GET() {
+  const user = await getSessionUser();
+  if (!user || !STAFF_ROLES.includes(user.role as (typeof STAFF_ROLES)[number])) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-export async function GET(request: NextRequest) {
-  const parsed = roleSchema.safeParse(
-    request.nextUrl.searchParams.get("role") ?? "admin",
-  );
-  const role = parsed.success ? parsed.data : "admin";
-  return Response.json(getSidebarCounts(role));
+  return Response.json(await getAdminSidebarCounts());
 }

@@ -1,14 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  LogOut,
-  Settings2,
-  ShieldCheck,
-  User,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { Settings2, User, Wallet } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,24 +9,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LogoutMenuItem } from "@/components/shared/LogoutMenuItem";
 import { cn } from "@/lib/utils";
 
 export type WorkspaceLinks = {
   profile: string;
-  teams: string;
-  security: string;
   wallets: string;
   settings: string;
 };
 
 /**
  * Settings/workspace trigger with the account menu: profile header, then
- * profile, teams, security, wallets, settings and logout.
+ * profile, wallets, settings and logout.
  */
 export function WorkspaceMenu({
   name,
   role,
   initials,
+  photo,
   links,
   className,
   tone = "sidebar",
@@ -41,6 +34,7 @@ export function WorkspaceMenu({
   name: string;
   role: string;
   initials: string;
+  photo?: string;
   links: WorkspaceLinks;
   className?: string;
   tone?: "sidebar" | "page";
@@ -59,7 +53,21 @@ export function WorkspaceMenu({
             className,
           )}
         >
-          <Settings2 className="size-4" aria-hidden="true" />
+          <span
+            className={cn(
+              "relative flex size-8 items-center justify-center overflow-hidden rounded-full text-[11px] font-bold",
+              tone === "sidebar"
+                ? "bg-sb-accent-soft text-sb-accent"
+                : "bg-primary/10 text-primary",
+            )}
+          >
+            {photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photo} alt="" className="size-full object-cover" />
+            ) : (
+              initials
+            )}
+          </span>
         </button>
       </DropdownMenuTrigger>
 
@@ -71,8 +79,13 @@ export function WorkspaceMenu({
       >
         <div className="flex items-center gap-3 rounded-lg p-2">
           <span className="relative shrink-0">
-            <span className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-              {initials}
+            <span className="flex size-9 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-xs font-bold text-primary">
+              {photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={photo} alt="" className="size-full object-cover" />
+              ) : (
+                initials
+              )}
             </span>
             <span className="absolute right-0 bottom-0 size-2.5 rounded-full border-2 border-popover bg-success" />
           </span>
@@ -96,32 +109,6 @@ export function WorkspaceMenu({
               aria-hidden="true"
             />
             <span className="text-sm font-medium">My profile</span>
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          asChild
-          className="group flex items-center gap-3 rounded-lg p-2"
-        >
-          <Link href={links.teams}>
-            <Users
-              className="size-4 text-muted-foreground transition-transform group-hover:scale-110 group-hover:text-foreground"
-              aria-hidden="true"
-            />
-            <span className="text-sm font-medium">Teams</span>
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          asChild
-          className="group flex items-center gap-3 rounded-lg p-2"
-        >
-          <Link href={links.security}>
-            <ShieldCheck
-              className="size-4 text-muted-foreground transition-transform group-hover:scale-110 group-hover:text-foreground"
-              aria-hidden="true"
-            />
-            <span className="text-sm font-medium">Security</span>
           </Link>
         </DropdownMenuItem>
 
@@ -153,19 +140,7 @@ export function WorkspaceMenu({
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          asChild
-          variant="destructive"
-          className="group flex items-center gap-3 rounded-lg p-2"
-        >
-          <Link href="/login">
-            <LogOut
-              className="size-4 transition-transform group-hover:translate-x-0.5"
-              aria-hidden="true"
-            />
-            <span className="text-sm font-medium">Logout</span>
-          </Link>
-        </DropdownMenuItem>
+        <LogoutMenuItem className="flex items-center gap-3 rounded-lg p-2" />
       </DropdownMenuContent>
     </DropdownMenu>
   );

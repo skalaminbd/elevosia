@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowLeft, Send } from "lucide-react";
 import { Avatar } from "@/components/admin/ui/Avatar";
-import { threads, type Thread } from "@/lib/admin-data";
+import type { Thread } from "@/lib/admin-data";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -17,24 +17,23 @@ const initials = (name: string) =>
 type ExtraMessage = { id: string; from: string; self: boolean; body: string; time: string };
 
 /** Two-pane messages: thread list, conversation and a working composer. */
-export function MessagesView() {
-  const [activeId, setActiveId] = useState(threads[0].id);
+export function MessagesView({ threads }: { threads: Thread[] }) {
+  const [activeId, setActiveId] = useState(threads[0]?.id ?? "");
   const [extra, setExtra] = useState<Record<string, ExtraMessage[]>>({});
   const [draft, setDraft] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  const active: Thread =
+  const active: Thread | undefined =
     threads.find((thread) => thread.id === activeId) ?? threads[0];
-  const messages = useMemo(
-    () => [...active.messages, ...(extra[active.id] ?? [])],
-    [active, extra],
-  );
+  const messages = active
+    ? [...active.messages, ...(extra[active.id] ?? [])]
+    : [];
 
   function send(event: React.FormEvent) {
     event.preventDefault();
     const body = draft.trim();
-    if (!body) return;
+    if (!body || !active) return;
     setExtra((current) => ({
       ...current,
       [active.id]: [
@@ -51,6 +50,14 @@ export function MessagesView() {
     setDraft("");
     window.requestAnimationFrame(() =>
       endRef.current?.scrollIntoView({ block: "end" }),
+    );
+  }
+
+  if (!active) {
+    return (
+      <div className="rounded-lg border border-border bg-card px-5 py-10 text-center text-sm text-muted-foreground">
+        No client threads yet.
+      </div>
     );
   }
 

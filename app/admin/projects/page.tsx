@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { AlertTriangle, FolderKanban, ShieldCheck, Wrench } from "lucide-react";
+import { Suspense } from "react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { ProjectsView } from "@/components/admin/projects/ProjectsView";
+import { ProjectsData } from "@/components/admin/projects/ProjectsData";
 import { NewProjectDialog } from "@/components/admin/projects/NewProjectDialog";
-import { StatCard } from "@/components/admin/ui/StatCard";
 
 export const metadata: Metadata = {
   title: "Projects | Elevosia Admin",
@@ -20,16 +19,30 @@ export default function ProjectsPage() {
         <NewProjectDialog />
       </PageHeader>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <StatCard label="Active projects" value={4} note="2 building, 1 review" icon={FolderKanban} />
-        <StatCard label="At risk" value={1} note="Lumen Studio · blocked" icon={AlertTriangle} tone="warning" />
-        <StatCard label="Late" value={1} note="Ridgeline · on hold" icon={Wrench} tone="danger" />
-        <StatCard label="In warranty" value={1} note="Harbor ends 18 Dec" icon={ShieldCheck} />
-      </div>
-
-      <div className="mt-4">
-        <ProjectsView />
-      </div>
+      <Suspense
+        fallback={
+          <div className="mt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+              {[0, 1, 2, 3].map((item) => (
+                <div
+                  key={item}
+                  className="h-24 rounded-lg border border-border bg-card"
+                />
+              ))}
+            </div>
+            <div className="rounded-lg border border-border bg-card p-5">
+              <div className="h-4 w-32 rounded bg-secondary" />
+              <div className="mt-4 space-y-2">
+                <div className="h-9 w-full rounded bg-secondary/60" />
+                <div className="h-9 w-full rounded bg-secondary/60" />
+                <div className="h-9 w-3/4 rounded bg-secondary/60" />
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <ProjectsData />
+      </Suspense>
     </div>
   );
 }

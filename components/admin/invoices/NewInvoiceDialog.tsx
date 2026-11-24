@@ -1,21 +1,17 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Plus, Receipt } from "lucide-react";
 import { z } from "zod";
 import { AppDialog } from "@/components/ui/app-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormField, FormSelect } from "@/components/ui/form-field";
+import { createManualInvoice } from "@/app/admin/invoices/actions";
+import { useDirectory } from "@/hooks/use-directory";
 
-const CLIENTS = [
-  "Brightline Care",
-  "Lumen Studio",
-  "Northwind HVAC",
-  "Harbor Therapy",
-  "Ridgeline Cleaning",
-  "Cedarbrook Schools",
-];
 const KINDS = ["Milestone", "Care plan", "Retainer", "Change request", "Custom"];
 
 const schema = z.object({
@@ -61,6 +57,8 @@ function InvoiceDialogForm({ onClose }: { onClose: () => void }) {
     description: "Milestone 3 of 3 · care dashboard",
     send: true,
   });
+  const router = useRouter();
+  const { clients } = useDirectory();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
   const [dirty, setDirty] = useState(false);
@@ -73,7 +71,7 @@ function InvoiceDialogForm({ onClose }: { onClose: () => void }) {
     setDirty(true);
   }
 
-  function save() {
+  async function save() {
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
       const next: Errors = {};
@@ -85,13 +83,32 @@ function InvoiceDialogForm({ onClose }: { onClose: () => void }) {
       setStep(next.description ? 1 : 0);
       return;
     }
+    const client =
+      clients.find((item) => item.name === form.client) ?? clients[0];
+    if (!client) {
+      toast.error("Clients are still loading. Try again in a second.");
+      return;
+    }
     setSaving(true);
-    window.setTimeout(() => {
-      setSaving(false);
-      setSaved(true);
-      setDirty(false);
-      window.setTimeout(onClose, 2000);
-    }, 450);
+    const result = await createManualInvoice({
+      clientId: client.id,
+      kind: form.kind,
+      amountCents: Math.round(Number(form.amount) * 100),
+      due: form.due || null,
+      lineItem: form.description,
+    });
+    setSaving(false);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    setSaved(true);
+    setDirty(false);
+    toast.success("Invoice created", {
+      description: `${result.id} for ${client.name}.`,
+    });
+    router.refresh();
+    window.setTimeout(onClose, 1200);
   }
 
   return (
@@ -120,11 +137,11 @@ function InvoiceDialogForm({ onClose }: { onClose: () => void }) {
               <FormSelect
                 id="invoice-client"
                 label="Client"
-                value={form.client}
+                value={form.client || clients[0]?.name || ""}
                 onChange={(event) => update("client", event.target.value)}
               >
-                {CLIENTS.map((item) => (
-                  <option key={item}>{item}</option>
+                {clients.map((item) => (
+                  <option key={item.id}>{item.name}</option>
                 ))}
               </FormSelect>
               <FormSelect

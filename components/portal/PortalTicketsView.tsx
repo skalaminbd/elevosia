@@ -1,179 +1,135 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { NativeSelect } from "@/components/shared/NativeSelect";
-import { Check, LifeBuoy, MessageSquare } from "lucide-react";
+import { ChevronRight, Clock, LifeBuoy, Plus, ShieldCheck } from "lucide-react";
+import {
+  FilterDisclosure,
+  type FilterOption,
+} from "@/components/shared/FilterDisclosure";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { portalTickets } from "@/lib/portal-data";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import type { PortalTicketRecord } from "@/lib/ticket-store";
 
-type Ticket = (typeof portalTickets)[number];
+const STATUSES: PortalTicketRecord["status"][] = [
+  "Open",
+  "In progress",
+  "Waiting on you",
+  "Resolved",
+];
+const PRIORITIES = ["Low", "Normal", "High", "Urgent"] as const;
 
-export function PortalTicketsView() {
-  const [tickets, setTickets] = useState<Ticket[]>(portalTickets);
-  const [subject, setSubject] = useState("");
-  const [project, setProject] = useState("Care dashboard and client portal");
-  const [detail, setDetail] = useState("");
-  const [priority, setPriority] = useState("Normal");
-  const [submitted, setSubmitted] = useState<string | null>(null);
+const STATUS_TONE: Record<
+  PortalTicketRecord["status"],
+  "success" | "warning" | "accent" | "neutral"
+> = {
+  Open: "accent",
+  "In progress": "accent",
+  "Waiting on you": "warning",
+  Resolved: "success",
+};
 
-  function submit(event: React.FormEvent) {
-    event.preventDefault();
-    if (!subject.trim() || !detail.trim()) return;
-    const id = `TKT-${813 + tickets.length}`;
-    setTickets((current) => [
-      {
-        id,
-        subject: subject.trim(),
-        status: "Submitted",
-        updated: "Just now",
-        warranty: false,
-        messages: 0,
-      },
-      ...current,
-    ]);
-    setSubmitted(id);
-    setSubject("");
-    setDetail("");
-  }
+const statusOptions: FilterOption[] = STATUSES.map((status) => ({
+  id: status,
+  label: status,
+  icon: LifeBuoy,
+}));
+const priorityOptions: FilterOption[] = PRIORITIES.map((priority) => ({
+  id: priority,
+  label: priority,
+  icon: Clock,
+}));
+
+/** Portal ticket list. Opening a ticket is a page, not a popup. */
+export function PortalTicketsView({
+  tickets,
+}: {
+  tickets: PortalTicketRecord[];
+}) {
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [priorityFilter, setPriorityFilter] = useState<string[]>([]);
+
+  const rows = tickets.filter(
+    (ticket) =>
+      (statusFilter.length === 0 || statusFilter.includes(ticket.status)) &&
+      (priorityFilter.length === 0 ||
+        priorityFilter.includes(ticket.priority)),
+  );
 
   return (
-    <div className="grid gap-4 xl:grid-cols-3">
-      <div className="space-y-3 xl:col-span-2">
-        {submitted ? (
-          <div className="flex items-start gap-2 rounded-lg border border-success/30 bg-success/5 p-4">
-            <Check className="mt-0.5 size-4 shrink-0 text-success" aria-hidden="true" />
-            <p className="text-sm text-success">
-              {submitted} submitted. Your PM is notified and the response target is one
-              business day.
-            </p>
-          </div>
-        ) : null}
-
-        <div className="rounded-lg border border-border bg-card">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <div>
-              <h2 className="text-sm font-semibold">Your tickets</h2>
-              <p className="text-xs text-muted-foreground">Open and closed</p>
-            </div>
-            <span className="font-mono text-[10px] text-muted-foreground">
-              {tickets.length}
-            </span>
-          </div>
-          <ul className="divide-y divide-border">
-            {tickets.map((ticket) => (
-              <li key={ticket.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-secondary text-muted-foreground">
-                  <LifeBuoy className="size-4" aria-hidden="true" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium">{ticket.subject}</p>
-                  <p className="font-mono text-[10px] text-muted-foreground">
-                    {ticket.id} · updated {ticket.updated}
-                  </p>
-                </div>
-                <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                  <MessageSquare className="size-3" aria-hidden="true" />
-                  {ticket.messages}
-                </span>
-                {ticket.warranty ? (
-                  <StatusBadge tone="accent">Warranty</StatusBadge>
-                ) : null}
-                <StatusBadge
-                  tone={
-                    ticket.status === "Resolved"
-                      ? "success"
-                      : ticket.status === "Submitted"
-                        ? "info"
-                        : "accent"
-                  }
-                >
-                  {ticket.status}
-                </StatusBadge>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <FilterDisclosure
+          label="Status"
+          values={statusFilter}
+          options={statusOptions}
+          onChange={setStatusFilter}
+        />
+        <FilterDisclosure
+          label="Priority"
+          values={priorityFilter}
+          options={priorityOptions}
+          onChange={setPriorityFilter}
+        />
+        <Button asChild className="ml-auto">
+          <Link href="/portal/tickets/new">
+            <Plus className="size-4" aria-hidden="true" />
+            New ticket
+          </Link>
+        </Button>
       </div>
 
-      <form onSubmit={submit} className="rounded-lg border border-border bg-card p-5">
-        <h2 className="text-sm font-semibold">New ticket</h2>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          Something broken or a small question.
-        </p>
-
-        <div className="mt-4 space-y-3">
-          <div className="space-y-1.5">
-            <Label htmlFor="ticket-subject" className="text-xs font-medium">
-              Subject
-            </Label>
-            <input
-              id="ticket-subject"
-              value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-              placeholder="What is happening?"
-              className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="ticket-project" className="text-xs font-medium">
-              Project
-            </Label>
-            <NativeSelect
-              id="ticket-project"
-              value={project}
-              onChange={(event) => setProject(event.target.value)}
-              className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-            >
-              <option>Care dashboard and client portal</option>
-              <option>Online booking</option>
-              <option>Not project specific</option>
-            </NativeSelect>
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="ticket-detail" className="text-xs font-medium">
-              What happened?
-            </Label>
-            <textarea
-              id="ticket-detail"
-              value={detail}
-              onChange={(event) => setDetail(event.target.value)}
-              rows={4}
-              className="w-full resize-none rounded-lg border border-input bg-card px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="ticket-priority" className="text-xs font-medium">
-              Priority
-            </Label>
-            <NativeSelect
-              id="ticket-priority"
-              value={priority}
-              onChange={(event) => setPriority(event.target.value)}
-              className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-            >
-              <option>Normal</option>
-              <option>Urgent</option>
-              <option>Low</option>
-            </NativeSelect>
-            <p className="text-[10px] text-muted-foreground">
-              Your care plan: same-business-day support.
-            </p>
-          </div>
+      <div className="rounded-lg border border-border bg-card">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-5 py-3.5">
+          <h2 className="text-sm font-semibold">Your tickets</h2>
+          <span className="font-mono text-xs text-muted-foreground">
+            {rows.length} of {tickets.length}
+          </span>
         </div>
-
-        <Button
-          type="submit"
-          disabled={!subject.trim() || !detail.trim()}
-          className="mt-4 w-full"
-        >
-          Submit ticket
-        </Button>
-        <p className="mt-2 text-[10px] text-muted-foreground">
-          {project} · {priority.toLowerCase()} priority
-        </p>
-      </form>
+        <ul className="divide-y divide-border">
+          {rows.length === 0 ? (
+            <li className="px-5 py-12 text-center text-sm text-muted-foreground">
+              No tickets match those filters.
+            </li>
+          ) : (
+            rows.map((ticket) => (
+              <li key={ticket.id}>
+                <Link
+                  href={`/portal/tickets/${ticket.id}`}
+                  className="flex flex-wrap items-center gap-3 px-5 py-3.5 transition-colors hover:bg-secondary/40"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">
+                      {ticket.subject}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {ticket.id} · {ticket.category}
+                      {ticket.project ? ` · ${ticket.project}` : ""} · updated{" "}
+                      {ticket.updated}
+                    </p>
+                  </div>
+                  {ticket.warranty ? (
+                    <StatusBadge tone="success">
+                      <ShieldCheck className="size-3" aria-hidden="true" />
+                      Warranty
+                    </StatusBadge>
+                  ) : null}
+                  <StatusBadge tone={STATUS_TONE[ticket.status]}>
+                    {ticket.status}
+                  </StatusBadge>
+                  <span className="hidden w-16 text-right text-xs text-muted-foreground sm:block">
+                    {ticket.priority}
+                  </span>
+                  <ChevronRight
+                    className="size-4 shrink-0 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -6,18 +6,14 @@ import { Check } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
-const ITEMS = [
-  "All accounts are in the client's name",
-  "Credentials handed over and rotated",
-  "Final files shared in the portal",
-  "Final invoice paid",
-  "All milestones approved",
-];
-
-export function HandoverChecklist() {
+export function HandoverChecklist({
+  items,
+}: {
+  items: { id: string; label: string }[];
+}) {
   const [done, setDone] = useState<Record<number, boolean>>({});
   const [complete, setComplete] = useState(false);
-  const remaining = ITEMS.filter((_, index) => !done[index]).length;
+  const remaining = items.filter((_, index) => !done[index]).length;
 
   if (complete) {
     return (
@@ -41,12 +37,12 @@ export function HandoverChecklist() {
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold">Handover checklist</p>
         <span className="font-mono text-[10px] text-muted-foreground">
-          {ITEMS.length - remaining}/{ITEMS.length}
+          {items.length - remaining}/{items.length}
         </span>
       </div>
       <ul className="mt-4 space-y-3">
-        {ITEMS.map((item, index) => (
-          <li key={item} className="flex items-start gap-2.5">
+        {items.map((item, index) => (
+          <li key={item.id} className="flex items-start gap-2.5">
             <Checkbox
               id={`handover-${index}`}
               checked={Boolean(done[index])}
@@ -56,7 +52,7 @@ export function HandoverChecklist() {
               className="mt-0.5"
             />
             <Label htmlFor={`handover-${index}`} className="text-sm font-normal">
-              {item}
+              {item.label}
             </Label>
           </li>
         ))}

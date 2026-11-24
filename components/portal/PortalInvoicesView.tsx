@@ -1,21 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { Check, CreditCard, Landmark } from "lucide-react";
+import { Check, CreditCard, Download, Landmark } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { portalInvoices, portalBlueprint, retainer } from "@/lib/portal-data";
+import {
+  portalClient,
+  portalBlueprint,
+} from "@/lib/portal-data";
+import { InvoicePreviewDialog } from "@/components/invoices/InvoicePreviewDialog";
+import { downloadInvoicePdf } from "@/lib/invoice-pdf";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-export function PortalInvoicesView() {
+type InvoiceRow = {
+  id: string;
+  project: string;
+  kind: string;
+  amount: number;
+  due: string;
+  status: string;
+};
+
+export function PortalInvoicesView({
+  invoices,
+  retainer,
+}: {
+  invoices: InvoiceRow[];
+  retainer: { plan: string; price: number; hours: number; used: number; next: string; sla: string; work: { id: string; title: string; hours: number; date: string }[] };
+}) {
   const [paid, setPaid] = useState<Record<string, boolean>>({});
   const [paying, setPaying] = useState<string | null>(null);
   const [autoPay, setAutoPay] = useState(false);
   const [confirmed, setConfirmed] = useState<string | null>(null);
 
-  const active = portalInvoices.find((invoice) => invoice.id === paying);
+  const active = invoices.find((invoice) => invoice.id === paying);
 
   return (
     <div className="space-y-4">
@@ -26,11 +46,11 @@ export function PortalInvoicesView() {
             <p className="text-xs text-muted-foreground">All projects</p>
           </div>
           <span className="font-mono text-[10px] text-muted-foreground">
-            {portalInvoices.length} invoices
+            {invoices.length} invoices
           </span>
         </div>
         <ul className="divide-y divide-border">
-          {portalInvoices.map((invoice) => {
+          {invoices.map((invoice) => {
             const isPaid = paid[invoice.id] || invoice.status === "Paid";
             return (
               <li
@@ -49,19 +69,57 @@ export function PortalInvoicesView() {
                 <span className="hidden text-xs text-muted-foreground sm:block">
                   {invoice.due}
                 </span>
-                {isPaid ? (
-                  <StatusBadge tone="success">
-                    <Check className="size-3" aria-hidden="true" />
-                    Paid
-                  </StatusBadge>
-                ) : (
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  {isPaid ? (
+                    <StatusBadge tone="success">
+                      <Check className="size-3" aria-hidden="true" />
+                      Paid
+                    </StatusBadge>
+                  ) : (
                     <StatusBadge tone="warning">Due</StatusBadge>
+                  )}
+                  <InvoicePreviewDialog
+                    invoice={{
+                      id: invoice.id,
+                      client: portalClient.company,
+                      kind: invoice.kind,
+                      amount: invoice.amount,
+                      due: invoice.due,
+                      status: isPaid ? "Paid" : invoice.status,
+                      project: invoice.project,
+                      email: portalClient.email,
+                    }}
+                  >
+                    <Button variant="outline" size="sm">
+                      View
+                    </Button>
+                  </InvoicePreviewDialog>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={`Download ${invoice.id}`}
+                    onClick={() =>
+                      downloadInvoicePdf({
+                        id: invoice.id,
+                        client: portalClient.company,
+                        kind: invoice.kind,
+                        amount: invoice.amount,
+                        due: invoice.due,
+                        status: isPaid ? "Paid" : invoice.status,
+                        project: invoice.project,
+                        email: portalClient.email,
+                      })
+                    }
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Download className="size-3.5" aria-hidden="true" />
+                  </Button>
+                  {!isPaid ? (
                     <Button onClick={() => setPaying(invoice.id)}>
                       Pay now
                     </Button>
-                  </div>
-                )}
+                  ) : null}
+                </div>
               </li>
             );
           })}

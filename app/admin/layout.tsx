@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: ReactNode }) {
   // Auth lands in a later phase. Until then the panel renders as Admin.
   const role: SidebarRole = "admin";
-  const counts = getSidebarCounts(role);
+  const counts = getSidebarCounts();
 
   return (
     <Sidebar role={role} initialCounts={counts}>

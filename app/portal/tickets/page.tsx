@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Clock, LifeBuoy, ShieldCheck } from "lucide-react";
+import { Suspense } from "react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { StatCard } from "@/components/admin/ui/StatCard";
-import { PortalTicketsView } from "@/components/portal/PortalTicketsView";
+import { PortalTicketsData } from "@/components/portal/PortalTicketsData";
 
 export const metadata: Metadata = {
   title: "Tickets | Elevosia client portal",
@@ -17,15 +16,23 @@ export default function PortalTicketsPage() {
         description="Something broken or a small question. Your PM sees it right away."
       />
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatCard label="Open" value={1} note="Invoice reminder" icon={LifeBuoy} />
-        <StatCard label="Response target" value="1 day" note="Same-business-day care" icon={Clock} />
-        <StatCard label="Under warranty" value={1} note="No charge" icon={ShieldCheck} tone="success" />
-      </div>
-
-      <div className="mt-4">
-        <PortalTicketsView />
-      </div>
+      <Suspense
+        fallback={
+          <div className="mt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {[0, 1, 2].map((item) => (
+                <div
+                  key={item}
+                  className="h-24 rounded-lg border border-border bg-card"
+                />
+              ))}
+            </div>
+            <div className="h-64 rounded-lg border border-border bg-card" />
+          </div>
+        }
+      >
+        <PortalTicketsData />
+      </Suspense>
     </div>
   );
 }

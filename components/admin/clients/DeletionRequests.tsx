@@ -6,24 +6,20 @@ import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/hooks/use-confirm";
 
-const REQUESTS = [
-  {
-    id: "DR-7",
-    client: "Atlas Property",
-    contact: "Ray Khan",
-    requested: "14 Nov 2026",
-    reason: "Closed the business, wants all data removed.",
-  },
-  {
-    id: "DR-6",
-    client: "Ridgeline Cleaning",
-    contact: "Marco Reyes",
-    requested: "9 Nov 2026",
-    reason: "Moved to another provider, asks for an export first.",
-  },
-];
+type DeletionRequest = {
+  id: string;
+  client: string;
+  contact: string;
+  requested: string;
+  reason: string;
+  status: string;
+};
 
-export function DeletionRequests() {
+export function DeletionRequests({
+  requests,
+}: {
+  requests: DeletionRequest[];
+}) {
   const [states, setStates] = useState<Record<string, "exported" | "purged">>({});
   const confirm = useConfirm();
 
@@ -36,7 +32,7 @@ export function DeletionRequests() {
         </p>
       </div>
       <ul className="divide-y divide-border">
-        {REQUESTS.map((request) => {
+        {requests.map((request) => {
           const state = states[request.id];
           return (
             <li key={request.id} className="flex flex-wrap items-start gap-3 px-5 py-4">

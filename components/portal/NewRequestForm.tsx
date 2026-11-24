@@ -4,18 +4,27 @@ import { useState } from "react";
 import { NativeSelect } from "@/components/shared/NativeSelect";
 import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { retainer } from "@/lib/portal-data";
+import { toast } from "sonner";
+import { createWorkRequest } from "@/app/portal/actions";
 import { Button } from "@/components/ui/button";
+
+type RetainerSummary = { plan: string; hours: number; used: number };
 
 export function NewRequestForm({
   plain = false,
   onDone,
-}: { plain?: boolean; onDone?: () => void } = {}) {
+  retainer,
+}: {
+  plain?: boolean;
+  onDone?: () => void;
+  retainer: RetainerSummary;
+}) {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
   const [project, setProject] = useState("Care dashboard and client portal");
   const [priority, setPriority] = useState("Normal");
   const [submitted, setSubmitted] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   if (submitted) {
     return (
@@ -42,8 +51,16 @@ export function NewRequestForm({
       className={plain ? undefined : "rounded-lg border border-border bg-card p-5"}
       onSubmit={(event) => {
         event.preventDefault();
-        if (!title.trim() || !detail.trim()) return;
-        setSubmitted(true);
+        if (!title.trim() || !detail.trim() || saving) return;
+        setSaving(true);
+        void createWorkRequest({ title, detail }).then((result) => {
+          setSaving(false);
+          if (!result.ok) {
+            toast.error(result.error);
+            return;
+          }
+          setSubmitted(true);
+        });
       }}
     >
       <div className="space-y-4">
@@ -109,8 +126,8 @@ export function NewRequestForm({
           Uses your {retainer.plan} hours first. {retainer.hours - retainer.used} h
           left this month.
         </p>
-        <Button type="submit" disabled={!title.trim() || !detail.trim()}>
-          Send request
+        <Button type="submit" disabled={!title.trim() || !detail.trim() || saving}>
+          {saving ? "Sending…" : "Send request"}
         </Button>
       </div>
     </form>

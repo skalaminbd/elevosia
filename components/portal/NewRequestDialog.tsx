@@ -5,7 +5,6 @@ import { Sparkles } from "lucide-react";
 import { z } from "zod";
 import { AppDialog } from "@/components/ui/app-dialog";
 import { FormField, FormSelect, FormTextarea } from "@/components/ui/form-field";
-import { retainer } from "@/lib/portal-data";
 
 const schema = z.object({
   title: z.string().trim().min(2, "Give the request a short name"),
@@ -17,7 +16,15 @@ const schema = z.object({
 type Values = z.infer<typeof schema>;
 type Errors = Partial<Record<keyof Values, string>>;
 
-export function NewRequestDialog({ children }: { children: ReactNode }) {
+type RetainerSummary = { plan: string; hours: number; used: number };
+
+export function NewRequestDialog({
+  children,
+  retainer,
+}: {
+  children: ReactNode;
+  retainer: RetainerSummary;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -27,12 +34,18 @@ export function NewRequestDialog({ children }: { children: ReactNode }) {
       trigger={children}
       size="md"
     >
-      <RequestForm onClose={() => setOpen(false)} />
+      <RequestForm onClose={() => setOpen(false)} retainer={retainer} />
     </AppDialog>
   );
 }
 
-function RequestForm({ onClose }: { onClose: () => void }) {
+function RequestForm({
+  onClose,
+  retainer,
+}: {
+  onClose: () => void;
+  retainer: RetainerSummary;
+}) {
   const [form, setForm] = useState<Values>({
     title: "",
     project: "Care dashboard and client portal",

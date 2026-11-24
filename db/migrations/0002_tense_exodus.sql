@@ -1,0 +1,1 @@
+ALTER TABLE "invoices" ADD COLUMN "line_item" text DEFAULT '' NOT NULL;

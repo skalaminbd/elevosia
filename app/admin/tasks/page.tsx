@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
-import { CheckCircle2, Clock, ListChecks, Timer } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { StatCard } from "@/components/admin/ui/StatCard";
-import { TasksView } from "@/components/admin/tasks/TasksView";
+import { TasksData } from "@/components/admin/tasks/TasksData";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -23,16 +22,30 @@ export default function TasksPage() {
         </Button>
       </PageHeader>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <StatCard label="Open this week" value={6} note="Across 4 projects" icon={ListChecks} />
-        <StatCard label="Due today" value={2} note="1 high priority" icon={Clock} tone="warning" />
-        <StatCard label="Logged this week" value="18.5 h" note="Of 22 h estimated" icon={Timer} />
-        <StatCard label="Done this week" value={2} note="Both client-visible" icon={CheckCircle2} tone="success" />
-      </div>
-
-      <div className="mt-4">
-        <TasksView />
-      </div>
+      <Suspense
+        fallback={
+          <div className="mt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+              {[0, 1, 2, 3].map((item) => (
+                <div
+                  key={item}
+                  className="h-24 rounded-lg border border-border bg-card"
+                />
+              ))}
+            </div>
+            <div className="rounded-lg border border-border bg-card p-5">
+              <div className="h-4 w-32 rounded bg-secondary" />
+              <div className="mt-4 space-y-2">
+                <div className="h-9 w-full rounded bg-secondary/60" />
+                <div className="h-9 w-full rounded bg-secondary/60" />
+                <div className="h-9 w-3/4 rounded bg-secondary/60" />
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <TasksData />
+      </Suspense>
     </div>
   );
 }

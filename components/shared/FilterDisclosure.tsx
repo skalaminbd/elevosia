@@ -24,12 +24,15 @@ export function FilterDisclosure({
   onChange,
   label = "Filter",
   className,
+  compact = false,
 }: {
   values: string[];
   options: FilterOption[];
   onChange: (values: string[]) => void;
   label?: string;
   className?: string;
+  /** Toolbar-sized trigger with a tighter popover. */
+  compact?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -69,7 +72,11 @@ export function FilterDisclosure({
         aria-expanded={open}
         aria-haspopup="listbox"
         onClick={() => setOpen((current) => !current)}
-        className={cn(buttonVariants({ variant: "outline" }), "gap-2")}
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "gap-2",
+          compact && "h-8 px-3 text-sm",
+        )}
       >
         <Funnel className="size-4 text-muted-foreground" aria-hidden="true" />
         <span>{label}</span>
@@ -97,7 +104,10 @@ export function FilterDisclosure({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduceMotion ? undefined : { opacity: 0, scale: 0.97, y: -6 }}
             transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
-            className="absolute right-0 z-50 mt-2 flex w-64 flex-col gap-2 overflow-hidden rounded-[16px] border border-border bg-popover p-2 text-popover-foreground shadow-md"
+            className={cn(
+              "absolute right-0 z-50 mt-1 flex flex-col overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md",
+              compact ? "w-52 gap-0.5 p-1.5" : "w-64 gap-2 rounded-[16px] p-2",
+            )}
           >
             {options.map((option, index) => {
               const Icon = option.icon;
@@ -116,23 +126,33 @@ export function FilterDisclosure({
                     delay: reduceMotion ? 0 : index * 0.03,
                   }}
                   className={cn(
-                    "flex w-full items-center gap-3 rounded-[10px] px-3 py-2.5 text-left transition-colors",
+                    "flex w-full items-center rounded-[10px] text-left transition-colors",
+                    compact ? "gap-2 px-2 py-1.5" : "gap-3 px-3 py-2.5",
                     selected
                       ? "bg-secondary/70 text-foreground"
                       : "text-foreground hover:bg-secondary/50",
                   )}
                 >
                   <Icon
-                    className="size-5 shrink-0 text-muted-foreground"
+                    className={cn(
+                      "shrink-0 text-muted-foreground",
+                      compact ? "size-4" : "size-5",
+                    )}
                     strokeWidth={1.9}
                     aria-hidden="true"
                   />
-                  <span className="flex-1 truncate text-sm font-medium">
+                  <span
+                    className={cn(
+                      "flex-1 truncate font-medium",
+                      compact ? "text-xs" : "text-sm",
+                    )}
+                  >
                     {option.label}
                   </span>
                   <span
                     className={cn(
-                      "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                      "flex shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                      compact ? "size-5" : "size-6",
                       selected
                         ? "border-success bg-success text-success-foreground"
                         : "border-muted-foreground/40 bg-transparent",
@@ -140,7 +160,7 @@ export function FilterDisclosure({
                   >
                     {selected ? (
                       <Check
-                        className="size-3.5"
+                        className={compact ? "size-3" : "size-3.5"}
                         strokeWidth={3.5}
                         aria-hidden="true"
                       />

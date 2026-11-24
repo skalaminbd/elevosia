@@ -4,9 +4,11 @@ import { useState } from "react";
 import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check } from "lucide-react";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { createClient, updateClient } from "@/app/admin/clients/actions";
 import type { AdminClient } from "@/lib/admin-data";
 
 export function ClientForm({
@@ -31,6 +33,7 @@ export function ClientForm({
   const [hipaa, setHipaa] = useState(client?.industry === "Care");
   const [invite, setInvite] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   if (saved) {
     return (
@@ -69,14 +72,53 @@ export function ClientForm({
 
   const valid = company.trim() && contact.trim() && email.includes("@");
 
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    if (!valid || saving) return;
+    const companies =
+      client && client.companies.length > 0
+        ? client.companies.map((entry, index) =>
+            index === 0 ? { ...entry, name: company } : entry,
+          )
+        : [
+            {
+              name: company,
+              address: "",
+              city: "",
+              region: "",
+              zip: "",
+              phone: "",
+              website: "",
+            },
+          ];
+    const payload = {
+      contact,
+      email,
+      phone: client?.phone ?? "",
+      status: status as "Lead" | "Onboarding" | "Active" | "Paused" | "Former",
+      industry,
+      pm,
+      timezone,
+      source,
+      companies,
+    };
+    setSaving(true);
+    const result =
+      mode === "edit" && client
+        ? await updateClient({ ...payload, id: client.id })
+        : await createClient(payload);
+    setSaving(false);
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    setSaved(true);
+  }
+
   return (
     <form
       className={plain ? undefined : "rounded-lg border border-border bg-card p-5 lg:p-6"}
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (!valid) return;
-        setSaved(true);
-      }}
+      onSubmit={submit}
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
@@ -150,8 +192,12 @@ export function ClientForm({
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
-        <Button type="submit" disabled={!valid}>
-          {mode === "new" ? "Create client" : "Save changes"}
+        <Button type="submit" disabled={!valid || saving}>
+          {saving
+            ? "Saving…"
+            : mode === "new"
+              ? "Create client"
+              : "Save changes"}
         </Button>
         <Button asChild variant="outline">
           <Link href={mode === "edit" && client ? `/admin/clients/${client.id}` : "/admin/clients"}>

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/admin/ui/Table";
-import { adminInvoices, type InvoiceStatus } from "@/lib/admin-data";
+import type { InvoiceStatus } from "@/lib/admin-data";
 
 const STATUS_OPTIONS = [
   { id: "Due", label: "Due", icon: Clock },
@@ -21,17 +21,30 @@ const TONE: Record<InvoiceStatus, BadgeTone> = {
   Overdue: "danger",
 };
 
-/** Invoice list with status filters. */
-export function InvoicesTable() {
+export type DbInvoiceRow = {
+  id: string;
+  client: string;
+  kind: string;
+  amount: number;
+  due: string;
+  status: InvoiceStatus;
+};
+
+/** Invoice list with status filters, from Postgres. */
+export function InvoicesTable({
+  dbInvoices = [],
+}: {
+  dbInvoices?: DbInvoiceRow[];
+}) {
   const [statuses, setStatuses] = useState<string[]>([]);
 
   const rows = useMemo(
     () =>
-      adminInvoices.filter(
+      dbInvoices.filter(
         (invoice) =>
           statuses.length === 0 || statuses.includes(invoice.status),
       ),
-    [statuses],
+    [statuses, dbInvoices],
   );
 
   return (

@@ -2,10 +2,26 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Check, Circle, GripVertical, ListChecks, SquareKanban } from "lucide-react";
+import {
+  CalendarDays,
+  Check,
+  Circle,
+  GripVertical,
+  ListChecks,
+  ListFilter,
+  SquareKanban,
+  User,
+} from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { adminTasks, type AdminTask, type TaskStatus } from "@/lib/admin-data";
+import type { AdminTask, TaskStatus } from "@/lib/admin-data";
 import { NativeSelect } from "@/components/shared/NativeSelect";
+import { AssigneePicker } from "@/components/admin/tasks/AssigneePicker";
+import { FilterDisclosure, type FilterOption } from "@/components/shared/FilterDisclosure";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useTeamOptions } from "@/hooks/use-team-options";
+import { projectTeamForName } from "@/lib/team-store";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -21,23 +37,93 @@ const COLUMNS: { id: TaskStatus; label: string }[] = [
 ];
 
 /** My tasks (checkable) and the four-column board. */
-export function TasksView() {
+export function TasksView({ tasks: initialTasks }: { tasks: AdminTask[] }) {
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("mine");
   const [done, setDone] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(adminTasks.filter((task) => task.status === "done").map((task) => [task.id, true])),
+    Object.fromEntries(initialTasks.filter((task) => task.status === "done").map((task) => [task.id, true])),
   );
-  const [tasks, setTasks] = useState<AdminTask[]>(adminTasks);
+  const [tasks, setTasks] = useState<AdminTask[]>(initialTasks);
   const [dragId, setDragId] = useState<string | null>(null);
   const [overColumn, setOverColumn] = useState<TaskStatus | null>(null);
+  const [personFilter, setPersonFilter] = useState<string[]>([]);
+  const [weekFilter, setWeekFilter] = useState<string[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const team = useTeamOptions();
+
+  const personOptions: FilterOption[] = team.map((member) => ({
+    id: member.name.split(" ")[0],
+    label: member.name,
+    icon: User,
+  }));
+  const weekOptions: FilterOption[] = [
+    ...new Set(tasks.map((task) => task.week)),
+  ].map((week) => ({ id: week, label: week, icon: CalendarDays }));
+  const statusOptions: FilterOption[] = COLUMNS.map((column) => ({
+    id: column.id,
+    label: column.label,
+    icon: ListFilter,
+  }));
+
+  const hasFilters =
+    personFilter.length > 0 ||
+    weekFilter.length > 0 ||
+    statusFilter.length > 0;
+
+  function matchesFilters(task: AdminTask, includePerson: boolean) {
+    const personOk =
+      !includePerson ||
+      personFilter.length === 0 ||
+      personFilter.includes(task.assignee);
+    const weekOk =
+      weekFilter.length === 0 || weekFilter.includes(task.week);
+    const statusOk =
+      statusFilter.length === 0 || statusFilter.includes(task.status);
+    return personOk && weekOk && statusOk;
+  }
+
+  function clearFilters() {
+    setPersonFilter([]);
+    setWeekFilter([]);
+    setStatusFilter([]);
+  }
+
+  function applyToSelected(patch: Partial<AdminTask>) {
+    setTasks((current) =>
+      current.map((task) =>
+        selected.includes(task.id) ? { ...task, ...patch } : task,
+      ),
+    );
+  }
+
+  function toggleSelected(id: string) {
+    setSelected((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id],
+    );
+  }
 
   const mine = useMemo(
-    () => tasks.filter((task) => task.assignee === "Alamin"),
-    [tasks],
+    () =>
+      tasks.filter(
+        (task) =>
+          task.assignee === "Alamin" &&
+          matchesFilters(task, false),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tasks, weekFilter, statusFilter],
   );
   const openCount =
     tab === "mine"
       ? mine.filter((task) => task.status !== "done").length
       : tasks.filter((task) => task.status !== "done").length;
+
+  function assignTask(id: string, name: string) {
+    setTasks((current) =>
+      current.map((task) => (task.id === id ? { ...task, assignee: name } : task)),
+    );
+  }
 
   function moveTask(id: string, status: TaskStatus) {
     setTasks((current) =>
@@ -78,6 +164,88 @@ export function TasksView() {
         </p>
       </div>
 
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2.5">
+        <FilterDisclosure
+          label="Person"
+          values={personFilter}
+          options={personOptions}
+          onChange={setPersonFilter}
+        />
+        <FilterDisclosure
+          label="Week"
+          values={weekFilter}
+          options={weekOptions}
+          onChange={setWeekFilter}
+        />
+        <FilterDisclosure
+          label="Status"
+          values={statusFilter}
+          options={statusOptions}
+          onChange={setStatusFilter}
+        />
+        {hasFilters ? (
+          <Button variant="ghost" size="sm" onClick={clearFilters}>
+            Clear
+          </Button>
+        ) : null}
+      </div>
+
+      {selected.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border bg-secondary/40 px-4 py-2.5">
+          <span className="text-xs font-medium">
+            {selected.length} selected
+          </span>
+          <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+            Assign
+            <AssigneePicker
+              compact
+              label="Bulk assignee"
+              value=""
+              onChange={(name) => applyToSelected({ assignee: name })}
+            />
+          </span>
+          <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+            Reviewer
+            <AssigneePicker
+              compact
+              label="Bulk reviewer"
+              value=""
+              onChange={(name) => applyToSelected({ reviewer: name })}
+            />
+          </span>
+          <NativeSelect
+            aria-label="Move selected tasks to week"
+            defaultValue=""
+            onChange={(event) => {
+              if (event.target.value) {
+                applyToSelected({ week: event.target.value });
+              }
+            }}
+            className="h-8 rounded-md border border-input bg-card px-2 text-xs"
+          >
+            <option value="">Move to week…</option>
+            {weekOptions.map((week) => (
+              <option key={week.id} value={week.id}>
+                {week.label}
+              </option>
+            ))}
+          </NativeSelect>
+          <Input
+            type="date"
+            aria-label="Set due date for selected tasks"
+            onChange={(event) => {
+              if (event.target.value) {
+                applyToSelected({ due: event.target.value });
+              }
+            }}
+            className="h-8 w-36 text-xs"
+          />
+          <Button variant="ghost" size="sm" onClick={() => setSelected([])}>
+            Clear
+          </Button>
+        </div>
+      ) : null}
+
       {tab === "mine" ? (
         <ul>
           {mine.length === 0 ? (
@@ -95,6 +263,12 @@ export function TasksView() {
                     index > 0 && "border-t border-border",
                   )}
                 >
+                  <Checkbox
+                    checked={selected.includes(task.id)}
+                    onCheckedChange={() => toggleSelected(task.id)}
+                    aria-label={`Select ${task.title}`}
+                    className="mt-0.5"
+                  />
                   <button
                     type="button"
                     onClick={() => {
@@ -148,7 +322,10 @@ export function TasksView() {
         <div className="overflow-x-auto p-3">
           <div className="flex min-w-max gap-3">
             {COLUMNS.map((column) => {
-              const items = tasks.filter((task) => task.status === column.id);
+              const items = tasks.filter(
+                (task) =>
+                  task.status === column.id && matchesFilters(task, true),
+              );
               return (
                 <div
                   key={column.id}
@@ -232,9 +409,17 @@ export function TasksView() {
                           <p className="mt-0.5 text-[10px] text-muted-foreground">
                             {task.client}
                           </p>
-                          <div className="mt-2.5 flex items-center justify-between text-[10px] text-muted-foreground">
-                            <span>{task.assignee}</span>
-                            <span className="font-mono">{task.due}</span>
+                          <div className="mt-2.5 flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
+                            <AssigneePicker
+                              compact
+                              value={task.assignee}
+                              onChange={(name) => assignTask(task.id, name)}
+                              label="Assignee"
+                              members={projectTeamForName(task.project)}
+                            />
+                            <span className="shrink-0 font-mono">
+                              {task.due}
+                            </span>
                           </div>
                           <div className="mt-2 md:hidden">
                             <NativeSelect

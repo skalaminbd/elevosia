@@ -43,10 +43,10 @@ import {
 import { FormField, FormSelect } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { PermissionSheet } from "@/components/admin/team/PermissionSheet";
+import { inviteStaff } from "@/app/admin/team/actions";
 import {
   TEAM_ROLES,
   formatTeamDate,
-  initialTeam,
   permissionsFor,
   type Permissions,
   type TeamMember,
@@ -93,8 +93,8 @@ function initialsOf(name: string) {
     .toUpperCase();
 }
 
-export function TeamManagement() {
-  const [members, setMembers] = useState<TeamMember[]>(initialTeam);
+export function TeamManagement({ initialMembers }: { initialMembers: TeamMember[] }) {
+  const [members, setMembers] = useState<TeamMember[]>(initialMembers);
   const [query, setQuery] = useState("");
   const [roleFilters, setRoleFilters] = useState<string[]>([]);
   const [sortDesc, setSortDesc] = useState(true);
@@ -107,9 +107,19 @@ export function TeamManagement() {
   const confirm = useConfirm();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetMemberId, setSheetMemberId] = useState(
-    initialTeam[0]?.id ?? "",
+    initialMembers[0]?.id ?? "",
   );
   const [permissionSession, setPermissionSession] = useState(0);
+  const [roleSheetOpen, setRoleSheetOpen] = useState(false);
+  const [roleSheetSession, setRoleSheetSession] = useState(0);
+  const [roleDefaults, setRoleDefaults] = useState<
+    Record<TeamRole, Permissions>
+  >(
+    () =>
+      Object.fromEntries(
+        TEAM_ROLES.map((role) => [role, permissionsFor(role)]),
+      ) as Record<TeamRole, Permissions>,
+  );
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -173,7 +183,21 @@ export function TeamManagement() {
     setSheetOpen(true);
   }
 
-  function addMember(values: MemberValues) {
+  function openRolePermissions() {
+    setRoleSheetSession((value) => value + 1);
+    setRoleSheetOpen(true);
+  }
+
+  async function addMember(values: MemberValues) {
+    const invited = await inviteStaff({
+      name: values.name,
+      email: values.email,
+      role: values.role,
+    });
+    if (!invited.ok) {
+      toast.error(invited.error);
+      return;
+    }
     const today = new Date().toISOString().slice(0, 10);
     const member: TeamMember = {
       id: `TM-${++memberIdSeq}`,
@@ -185,10 +209,13 @@ export function TeamManagement() {
       access: [],
       lastActive: today,
       added: today,
-      permissions: permissionsFor(values.role),
+      permissions: structuredClone(roleDefaults[values.role]),
     };
     setMembers((current) => [member, ...current]);
     setPage(1);
+    toast.success("Invite sent", {
+      description: `${values.email} can sign in with Google or an email code.`,
+    });
   }
 
   function updateMember(member: TeamMember, values: MemberValues) {
@@ -203,7 +230,7 @@ export function TeamManagement() {
           initials: initialsOf(values.name),
           role: values.role,
           permissions: roleChanged
-            ? permissionsFor(values.role)
+            ? structuredClone(roleDefaults[values.role])
             : item.permissions,
         };
       }),
@@ -250,13 +277,27 @@ export function TeamManagement() {
     );
   }
 
+  function saveRolePermissions(role: TeamRole, permissions: Permissions) {
+    setRoleDefaults((current) => ({
+      ...current,
+      [role]: structuredClone(permissions),
+    }));
+    setMembers((current) =>
+      current.map((item) =>
+        item.role === role
+          ? { ...item, permissions: structuredClone(permissions) }
+          : item,
+      ),
+    );
+  }
+
   return (
     <div className="mx-auto w-full max-w-[1920px]">
       <PageHeader
         title="Team management"
         description="Manage your team members and their account permissions here."
       >
-        <Button variant="outline" onClick={() => openPermissions()}>
+        <Button variant="outline" onClick={openRolePermissions}>
           <ShieldCheck className="size-4" aria-hidden="true" />
           Update role &amp; permissions
         </Button>
@@ -567,10 +608,23 @@ export function TeamManagement() {
         key={`permissions-${permissionSession}-${sheetMemberId}`}
         open={sheetOpen}
         onOpenChange={setSheetOpen}
+        mode="member"
         members={members}
         memberId={sheetMemberId}
-        onMemberChange={setSheetMemberId}
-        onSave={savePermissions}
+        roleDefaults={roleDefaults}
+        onSaveMember={savePermissions}
+        onSaveRole={saveRolePermissions}
+      />
+
+      <PermissionSheet
+        key={`role-permissions-${roleSheetSession}`}
+        open={roleSheetOpen}
+        onOpenChange={setRoleSheetOpen}
+        mode="role"
+        members={members}
+        roleDefaults={roleDefaults}
+        onSaveMember={savePermissions}
+        onSaveRole={saveRolePermissions}
       />
     </div>
   );

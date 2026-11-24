@@ -3,14 +3,36 @@
 import { useEffect, useRef, useState } from "react";
 import { FileText, Folder, Upload } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { portalContracts, portalFiles } from "@/lib/portal-data";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const TABS = ["Files", "Contracts"] as const;
 type Tab = (typeof TABS)[number];
 
-export function PortalFilesView() {
+type FileRow = {
+  id: string;
+  name: string;
+  folder: string;
+  project: string;
+  size: string;
+  updated: string;
+  version: string;
+};
+
+type ContractRow = {
+  id: string;
+  name: string;
+  status: string;
+  date: string;
+};
+
+export function PortalFilesView({
+  files,
+  contracts,
+}: {
+  files: FileRow[];
+  contracts: ContractRow[];
+}) {
   const [tab, setTab] = useState<Tab>("Files");
   const [chosen, setChosen] = useState<string[]>([]);
   const [uploaded, setUploaded] = useState<string[]>([]);
@@ -104,7 +126,7 @@ export function PortalFilesView() {
           ) : null}
 
           <div className="divide-y divide-border">
-            {portalFiles.map((file) => (
+            {files.map((file) => (
               <div key={file.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
                 <span className="flex size-8 items-center justify-center rounded-md bg-secondary text-muted-foreground">
                   <FileText className="size-3.5" aria-hidden="true" />
@@ -131,7 +153,7 @@ export function PortalFilesView() {
             </p>
           </div>
           <ul className="divide-y divide-border">
-            {portalContracts.map((contract) => (
+            {contracts.map((contract) => (
               <li key={contract.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
                 <FileText className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                 <div className="min-w-0 flex-1">

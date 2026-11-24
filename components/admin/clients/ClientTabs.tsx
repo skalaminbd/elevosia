@@ -2,21 +2,26 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, ChevronRight, FolderKanban, Mail, MapPin, ShieldCheck } from "lucide-react";
+import { Building2, ChevronRight, FolderKanban, Mail, MapPin, ShieldCheck } from "lucide-react";
 import { Progress } from "@/components/admin/ui/Progress";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import {
-  activity,
-  adminInvoices,
-  adminProjects,
-  adminClients,
-  calls,
-  files,
-  requirements,
-  threads,
-  tickets,
+import type {
+  AdminClient,
+  AdminProject,
+  AdminInvoice,
+  Requirement,
+  Ticket,
 } from "@/lib/admin-data";
 import { cn } from "@/lib/utils";
+
+type ClientTabsProps = {
+  client: AdminClient;
+  projects: AdminProject[];
+  requirements: Requirement[];
+  invoices: AdminInvoice[];
+  tickets: Ticket[];
+  activity: { id: string; title: string; detail: string; time: string }[];
+};
 
 const TABS = [
   "overview",
@@ -24,9 +29,6 @@ const TABS = [
   "requirements",
   "invoices",
   "tickets",
-  "files",
-  "messages",
-  "calls",
   "activity",
 ] as const;
 type Tab = (typeof TABS)[number];
@@ -37,14 +39,17 @@ const LABELS: Record<Tab, string> = {
   requirements: "Requirements",
   invoices: "Invoices",
   tickets: "Tickets",
-  files: "Files",
-  messages: "Messages",
-  calls: "Calls",
   activity: "Activity",
 };
 
-export function ClientTabs({ clientId }: { clientId: string }) {
-  const client = adminClients.find((item) => item.id === clientId) ?? adminClients[0];
+export function ClientTabs({
+  client,
+  projects,
+  requirements: reqs,
+  invoices,
+  tickets: clientTickets,
+  activity: clientActivity,
+}: ClientTabsProps) {
   const [tab, setTab] = useState<Tab>("overview");
 
   useEffect(() => {
@@ -65,14 +70,10 @@ export function ClientTabs({ clientId }: { clientId: string }) {
     );
   }
 
-  const projects = adminProjects.filter((project) => project.client === client.name);
-  const reqs = requirements.filter((requirement) => requirement.client === client.name);
-  const invoices = adminInvoices.filter((invoice) => invoice.client === client.name);
-  const clientTickets = tickets.filter((ticket) => ticket.client === client.name);
-  const clientFiles = files.filter((file) => file.client === client.name);
-  const clientThreads = threads.filter((thread) => thread.client === client.name);
-  const clientCalls = calls.filter((call) => call.client === client.name);
-  const clientActivity = activity.filter((item) => item.detail.includes(client.name));
+  const projectsByCompany = client.companies.map((company) => ({
+    company: company.name,
+    items: projects.filter((project) => project.client === company.name),
+  }));
 
   return (
     <div className="rounded-lg border border-border bg-card">
@@ -174,7 +175,7 @@ export function ClientTabs({ clientId }: { clientId: string }) {
           <div className="rounded-lg border border-border p-4 md:col-span-2 xl:col-span-1">
             <p className="text-xs font-semibold">Recent activity</p>
             <ul className="mt-2 space-y-2">
-              {(clientActivity.length > 0 ? clientActivity : activity.slice(0, 3)).map((item) => (
+              {(clientActivity.length > 0 ? clientActivity : []).map((item) => (
                 <li key={item.id} className="text-sm">
                   <span className="block">{item.title}</span>
                   <span className="text-[10px] text-muted-foreground">{item.time}</span>
@@ -186,43 +187,81 @@ export function ClientTabs({ clientId }: { clientId: string }) {
       ) : null}
 
       {tab === "projects" ? (
-        <ul className="divide-y divide-border">
-          {projects.length === 0 ? (
-            <EmptyRow text="No projects yet." />
-          ) : (
-            projects.map((project) => (
-              <li key={project.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
-                <span className="flex size-8 items-center justify-center rounded-md bg-secondary text-muted-foreground">
-                  <FolderKanban className="size-4" aria-hidden="true" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <Link
-                    href={`/admin/projects/${project.id}`}
-                    className="text-sm font-medium hover:underline"
-                  >
-                    {project.name}
-                  </Link>
-                  <p className="text-xs text-muted-foreground">{project.status} · {project.modules} modules</p>
+        projects.length === 0 ? (
+          <EmptyRow text="No projects yet." />
+        ) : (
+          <div className="divide-y divide-border">
+            {projectsByCompany.map(({ company, items }) => (
+              <div key={company} className="py-3">
+                <div className="flex items-center gap-2 px-5 pb-2">
+                  <Building2
+                    className="size-3.5 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  <p className="text-xs font-semibold">{company}</p>
+                  <span className="rounded-full bg-secondary px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
+                    {items.length}
+                  </span>
                 </div>
-                <div className="w-32">
-                  <Progress value={project.progress} />
-                </div>
-                <StatusBadge
-                  tone={
-                    project.health === "On track"
-                      ? "success"
-                      : project.health === "At risk"
-                        ? "warning"
-                        : "danger"
-                  }
-                >
-                  {project.health}
-                </StatusBadge>
-                <ChevronRight className="size-4 text-muted-foreground" aria-hidden="true" />
-              </li>
-            ))
-          )}
-        </ul>
+                {items.length === 0 ? (
+                  <p className="px-5 py-2 text-xs text-muted-foreground">
+                    No projects under this company yet.
+                  </p>
+                ) : (
+                  <ul className="space-y-1 px-2">
+                    {items.map((project) => (
+                      <li key={project.id}>
+                        <Link
+                          href={`/admin/projects/${project.id}`}
+                          className="group flex flex-wrap items-center gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-secondary/40"
+                        >
+                          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-muted-foreground transition-colors group-hover:text-foreground">
+                            <FolderKanban className="size-4" aria-hidden="true" />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium group-hover:underline">
+                              {project.name}
+                            </p>
+                            <p className="truncate text-xs text-muted-foreground">
+                              {project.status} · {project.modules} modules · due{" "}
+                              {project.due}
+                            </p>
+                          </div>
+                          <div className="hidden w-32 sm:block">
+                            <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                              <span>Progress</span>
+                              <span className="font-mono tabular-nums">
+                                {project.progress}%
+                              </span>
+                            </div>
+                            <div className="mt-1">
+                              <Progress value={project.progress} />
+                            </div>
+                          </div>
+                          <StatusBadge
+                            tone={
+                              project.health === "On track"
+                                ? "success"
+                                : project.health === "At risk"
+                                  ? "warning"
+                                  : "danger"
+                            }
+                          >
+                            {project.health}
+                          </StatusBadge>
+                          <ChevronRight
+                            className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
+                            aria-hidden="true"
+                          />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )
       ) : null}
 
       {tab === "requirements" ? (
@@ -264,62 +303,9 @@ export function ClientTabs({ clientId }: { clientId: string }) {
         />
       ) : null}
 
-      {tab === "files" ? (
-        <SimpleList
-          rows={clientFiles.map((file) => ({
-            id: file.id,
-            title: file.name,
-            meta: `${file.folder} · ${file.updated} · ${file.size}`,
-            href: "/admin/files",
-            badge: file.visible ? "Client-visible" : "Internal",
-          }))}
-          empty="No files shared yet."
-        />
-      ) : null}
-
-      {tab === "messages" ? (
-        <div className="p-5">
-          {clientThreads.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No messages with this client.</p>
-          ) : (
-            clientThreads.map((thread) => (
-              <div key={thread.id} className="rounded-md border border-border p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium">{thread.client}</p>
-                  <span className="font-mono text-[10px] text-muted-foreground">
-                    {thread.time}
-                  </span>
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">{thread.preview}</p>
-                <Link
-                  href="/admin/messages"
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                >
-                  Open thread
-                  <ArrowUpRight className="size-3" aria-hidden="true" />
-                </Link>
-              </div>
-            ))
-          )}
-        </div>
-      ) : null}
-
-      {tab === "calls" ? (
-        <SimpleList
-          rows={clientCalls.map((call) => ({
-            id: call.id,
-            title: call.title,
-            meta: `${call.day} · ${call.time} · ${call.owner}`,
-            href: "/admin/calls",
-            badge: call.kind,
-          }))}
-          empty="No calls booked yet."
-        />
-      ) : null}
-
       {tab === "activity" ? (
         <ul className="divide-y divide-border">
-          {(clientActivity.length > 0 ? clientActivity : activity).map((item) => (
+          {(clientActivity.length > 0 ? clientActivity : []).map((item) => (
             <li key={item.id} className="flex items-start gap-3 px-5 py-3.5">
               <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground">
                 <ShieldCheck className="size-3" aria-hidden="true" />

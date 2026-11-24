@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, FileText, Paperclip } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
 import { StatCard } from "@/components/admin/ui/StatCard";
-import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
+import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { RequirementActions } from "@/components/admin/requirements/RequirementActions";
-import { requirementDetails, requirements, type RequirementStatus } from "@/lib/admin-data";
+import { RequirementReviewSection } from "@/components/admin/requirements/RequirementReviewSection";
+import { DbRequirementDetail } from "@/components/admin/requirements/DbRequirementDetail";
+import { connection } from "next/server";
+import { getRequirementDetail } from "@/db/queries";
+import {
+  blueprints,
+  requirementDetails,
+  requirements,
+} from "@/lib/admin-data";
+import { buildMilestones } from "@/lib/blueprint-seed";
 
 type Params = Promise<{ id: string }>;
-
-const TONE: Record<RequirementStatus, BadgeTone> = {
-  Submitted: "info",
-  "In review": "warning",
-  "Changes needed": "danger",
-  Converted: "success",
-  Declined: "neutral",
-};
 
 export function generateStaticParams() {
   return requirements.map((requirement) => ({ id: requirement.id }));
@@ -29,11 +31,44 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return requirement ? { title: `${requirement.client} requirements | Elevosia Admin` } : {};
 }
 
+async function DbRequirementLoader({ id }: { id: string }) {
+  await connection();
+  const requirement = await getRequirementDetail(id);
+  if (!requirement) notFound();
+  return <DbRequirementDetail requirement={requirement} />;
+}
+
 export default async function RequirementDetailPage({ params }: { params: Params }) {
   const { id } = await params;
   const requirement = requirements.find((item) => item.id === id);
   const detail = requirementDetails[id];
-  if (!requirement || !detail) notFound();
+  if (!requirement || !detail) {
+    return (
+      <Suspense
+        fallback={
+          <div className="mx-auto w-full max-w-[1920px]">
+            <div className="h-3 w-32 rounded bg-secondary" />
+            <div className="mt-4 h-8 w-64 rounded bg-secondary" />
+            <div className="mt-6 h-64 rounded-lg border border-border bg-card" />
+          </div>
+        }
+      >
+        <DbRequirementLoader id={id} />
+      </Suspense>
+    );
+  }
+
+  const blueprint =
+    blueprints.find(
+      (item) =>
+        item.client === requirement.client && item.title === requirement.title,
+    ) ?? blueprints.find((item) => item.client === requirement.client);
+  const milestones = blueprint
+    ? buildMilestones(blueprint.milestones).map((milestone) => ({
+        id: milestone.id,
+        title: milestone.title,
+      }))
+    : [];
 
   const totalPoints = detail.sections.reduce((sum, section) => sum + section.points.length, 0);
 
@@ -53,7 +88,6 @@ export default async function RequirementDetailPage({ params }: { params: Params
         description={`Budget ${requirement.budget} · ${detail.deadline}`}
         className="mt-3"
       >
-        <StatusBadge tone={TONE[requirement.status]}>{requirement.status}</StatusBadge>
         <StatusBadge tone={requirement.overdue ? "danger" : "neutral"}>
           Blueprint due {requirement.due}
         </StatusBadge>
@@ -77,34 +111,29 @@ export default async function RequirementDetailPage({ params }: { params: Params
 
       <div className="mt-4 grid gap-4 xl:grid-cols-3">
         <div className="space-y-4 xl:col-span-2">
-          {detail.sections.map((section) => (
-            <SectionCard
-              key={section.id}
-              title={section.title}
-              description={`${section.points.length} points`}
-              bodyClassName="divide-y divide-border"
-            >
-              {section.points.map((point) => (
-                <div key={point.text} className="px-5 py-3.5">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
-                    <p className="min-w-0 flex-1 text-sm">{point.text}</p>
-                    <StatusBadge tone={point.must ? "accent" : "neutral"}>
-                      {point.must ? "Must-have" : "Nice-to-have"}
-                    </StatusBadge>
-                  </div>
-                  {point.comment ? (
-                    <div className="mt-2 ml-4 rounded-md bg-secondary/60 px-3 py-2">
-                      <p className="text-[10px] font-medium text-muted-foreground">
-                        Client comment
-                      </p>
-                      <p className="mt-0.5 text-xs">{point.comment}</p>
-                    </div>
-                  ) : null}
+          <Suspense
+            fallback={
+              <div className="rounded-lg border border-border bg-card p-5">
+                <div className="h-4 w-40 rounded bg-secondary" />
+                <div className="mt-4 space-y-2">
+                  <div className="h-3 w-full rounded bg-secondary/70" />
+                  <div className="h-3 w-3/4 rounded bg-secondary/70" />
+                  <div className="h-8 w-48 rounded bg-secondary/70" />
                 </div>
-              ))}
-            </SectionCard>
-          ))}
+              </div>
+            }
+          >
+            <RequirementReviewSection
+              requirementId={requirement.id}
+              blueprintId={blueprint?.id ?? null}
+              blueprintLabel={
+                blueprint ? `${blueprint.id} · ${blueprint.title}` : null
+              }
+              sections={detail.sections}
+              milestones={milestones}
+              fallbackStatus={requirement.status}
+            />
+          </Suspense>
         </div>
 
         <div className="space-y-4">

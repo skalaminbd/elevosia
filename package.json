@@ -7,13 +7,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:design": "! grep -rnE '\\-\\[(#|rgb|hsl|oklch)|style=\\{\\{[^}]*(color|background)|from \"framer-motion\"|react-icons' app components --include=*.tsx"
+    "check:design": "! grep -rnE '\\-\\[(#|rgb|hsl|oklch)|style=\\{\\{[^}]*(color|background)|from \"framer-motion\"|react-icons' app components --include=*.tsx",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx --env-file=.env.local db/seed.ts",
+    "db:seed-admin": "tsx --env-file=.env.local db/seed-admin.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.6",
+    "@neondatabase/serverless": "^1.2.1",
+    "@vercel/blob": "^2.9.0",
+    "better-auth": "^1.7.27",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "d3-geo": "^3.1.2",
+    "drizzle-orm": "^0.45.4",
     "input-otp": "^1.5.0",
     "lucide-react": "^1.73.0",
     "motion": "^14.14.0",
@@ -23,6 +31,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-hook-form": "^7.92.0",
+    "resend": "^6.39.0",
     "shadcn": "^4.23.0",
     "sonner": "^2.0.8",
     "svg-dotted-map": "^2.0.1",
@@ -36,9 +45,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true
   }
 }

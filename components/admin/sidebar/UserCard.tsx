@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, ChevronsUpDown, Clock, LogOut, Shield } from "lucide-react";
+import { Bell, ChevronsUpDown, Clock, Shield } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { LogoutMenuItem } from "@/components/shared/LogoutMenuItem";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { DEMO_USERS, ROLE_LABELS, type SidebarRole } from "./nav-config";
 
@@ -44,12 +45,7 @@ function AccountMenu({ role, children }: { role: SidebarRole; children: React.Re
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild variant="destructive">
-          <Link href="/login">
-            <LogOut aria-hidden="true" />
-            Log out
-          </Link>
-        </DropdownMenuItem>
+        <LogoutMenuItem label="Log out" />
       </DropdownMenuContent>
     </DropdownMenu>
   );

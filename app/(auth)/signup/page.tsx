@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowLeft,
@@ -23,6 +24,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { createClient } from "@/app/admin/clients/actions";
+import { attachClientToUser } from "@/app/(auth)/actions";
+import { authClient } from "@/lib/auth-client";
 
 const accountSchema = z.object({
   name: z.string().min(2, "Enter your full name"),
@@ -43,9 +47,13 @@ type BusinessValues = z.infer<typeof businessSchema>;
 type Step = "account" | "verify" | "business";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const [step, setStep] = useState<Step>("account");
+  const [account, setAccount] = useState({ name: "", email: "" });
   const [pendingEmail, setPendingEmail] = useState("");
   const [code, setCode] = useState("");
+  const [verifyKind, setVerifyKind] = useState<"email" | "signin">("email");
+  const [accountPassword, setAccountPassword] = useState("");
 
   const accountForm = useForm<AccountValues>({
     resolver: zodResolver(accountSchema),
@@ -60,31 +68,126 @@ export default function SignUpPage() {
   const accountErrors = accountForm.formState.errors;
   const businessErrors = businessForm.formState.errors;
 
-  function onAccountSubmit(values: AccountValues) {
+  async function onAccountSubmit(values: AccountValues) {
+    const result = await authClient.signUp.email({
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    });
+    if (result.error) {
+      toast.error(result.error.message ?? "Could not create the account");
+      return;
+    }
+    setAccount({ name: values.name, email: values.email });
+    setAccountPassword(values.password);
     setPendingEmail(values.email);
     setCode("");
+    setVerifyKind("email");
     setStep("verify");
     toast.success("Code sent", {
       description: `Check ${values.email} for the 6-digit code.`,
     });
   }
 
-  function onCodeComplete() {
+  async function onCodeComplete(otp: string) {
+    if (verifyKind === "email") {
+      const result = await authClient.emailOtp.verifyEmail({
+        email: pendingEmail,
+        otp,
+      });
+      if (result.error) {
+        toast.error(result.error.message ?? "That code is not valid");
+        return;
+      }
+      if (accountPassword) {
+        await authClient.signIn.email({
+          email: pendingEmail,
+          password: accountPassword,
+          rememberMe: true,
+        });
+      }
+    } else {
+      const result = await authClient.signIn.emailOtp({
+        email: pendingEmail,
+        otp,
+        name: account.name || undefined,
+      });
+      if (result.error) {
+        toast.error(result.error.message ?? "That code is not valid");
+        return;
+      }
+    }
     toast.success("Email verified");
     setStep("business");
   }
 
   function startWithProvider(provider: "Google" | "OTP") {
-    toast.success(`Continuing with ${provider}`, {
-      description: "Add your business details to finish setup.",
-    });
-    setStep("business");
+    if (provider === "Google") {
+      void authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/auth/redirect",
+      });
+      return;
+    }
+
+    const email = accountForm.getValues("email");
+    if (!email.includes("@")) {
+      toast.error("Enter your email first");
+      return;
+    }
+    void authClient.emailOtp
+      .sendVerificationOtp({ email, type: "sign-in" })
+      .then((result) => {
+        if (result.error) {
+          toast.error(result.error.message ?? "Could not send the code");
+          return;
+        }
+        setAccount((current) => ({ ...current, email }));
+        setPendingEmail(email);
+        setCode("");
+        setVerifyKind("signin");
+        setStep("verify");
+        toast.success("Code sent", { description: `Check ${email}.` });
+      });
   }
 
-  function onBusinessSubmit(values: BusinessValues) {
-    toast.success("Workspace ready", {
-      description: `${values.businessName} is all set up.`,
+  async function onBusinessSubmit(values: BusinessValues) {
+    // A signup is a client record from the start, the same shape the admin
+    // panel creates.
+    const result = await createClient({
+      contact: account.name || values.businessName,
+      email: account.email || pendingEmail,
+      phone: values.phone,
+      status: "Onboarding",
+      industry: "",
+      pm: "Alamin",
+      timezone: "America/New_York",
+      source: "Website",
+      companies: [
+        {
+          name: values.businessName,
+          address: values.address,
+          city: "",
+          region: "",
+          zip: "",
+          phone: values.phone,
+          website: "",
+        },
+      ],
     });
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+    const attached = await attachClientToUser(result.id);
+    if (!attached.ok) {
+      toast.error(attached.error);
+      return;
+    }
+    toast.success("Workspace ready", {
+      description: `${values.businessName} is all set up. Opening your portal.`,
+    });
+    router.push("/portal");
   }
 
   if (step === "verify") {
@@ -100,7 +203,7 @@ export default function SignUpPage() {
         <VerifyCode
           value={code}
           onChange={setCode}
-          onComplete={onCodeComplete}
+          onComplete={(otp) => void onCodeComplete(otp)}
         />
 
         <Button

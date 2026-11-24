@@ -3,22 +3,108 @@
 import { useState } from "react";
 import { Check, Clock, MessageSquareWarning } from "lucide-react";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { approvalHistory, portalApprovals } from "@/lib/portal-data";
+import { useStoredProjects } from "@/hooks/use-stored-projects";
+import { addStoredProject, type StoredProject } from "@/lib/project-store";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 type State = "pending" | "approved" | "changes";
 
+type ApprovalItem = {
+  id: string;
+  type: string;
+  title: string;
+  detail: string;
+  due: string;
+  amount?: number;
+  live?: { project: StoredProject; milestoneId: string };
+};
+
+type ApprovalRow = {
+  id: string;
+  type: string;
+  title: string;
+  detail: string;
+  due: string;
+  amount?: number;
+};
+
+type HistoryRow = {
+  id: string;
+  title: string;
+  action: string;
+  who: string;
+  date: string;
+};
+
 /** Approvals: approve or send a change request with a mandatory comment. */
-export function ApprovalsList() {
+export function ApprovalsList({
+  approvals,
+  history,
+}: {
+  approvals: ApprovalRow[];
+  history: HistoryRow[];
+}) {
   const [states, setStates] = useState<Record<string, State>>({});
   const [openComment, setOpenComment] = useState<string | null>(null);
   const [comments, setComments] = useState<Record<string, string>>({});
+  const projects = useStoredProjects();
+
+  const liveItems: ApprovalItem[] = projects.flatMap((project) =>
+    project.milestones
+      .filter(
+        (milestone) =>
+          milestone.approval === "requested" ||
+          states[`live-${project.id}-${milestone.id}`] !== undefined,
+      )
+      .map((milestone) => {
+        const done = milestone.tasks.filter((task) => task.done).length;
+        const hours = milestone.tasks.reduce(
+          (total, task) => total + task.hours,
+          0,
+        );
+        return {
+          id: `live-${project.id}-${milestone.id}`,
+          type: "Milestone",
+          title: milestone.title || "Milestone plan",
+          detail: `${project.name} · ${done}/${milestone.tasks.length} tasks done · ${hours} h`,
+          due: milestone.due ? `Due ${milestone.due}` : "Awaiting you",
+          live: { project, milestoneId: milestone.id },
+        };
+      }),
+  );
+
+  const items: ApprovalItem[] = [...liveItems, ...approvals];
+
+  function saveMilestone(
+    live: { project: StoredProject; milestoneId: string },
+    approval: "approved" | undefined,
+  ) {
+    addStoredProject({
+      ...live.project,
+      milestones: live.project.milestones.map((milestone) =>
+        milestone.id === live.milestoneId
+          ? { ...milestone, approval }
+          : milestone,
+      ),
+    });
+  }
+
+  function approve(item: ApprovalItem) {
+    if (item.live) {
+      saveMilestone(item.live, "approved");
+      toast.success("Milestone approved", {
+        description: "Your PM has been notified.",
+      });
+    }
+    setStates((current) => ({ ...current, [item.id]: "approved" }));
+  }
 
   return (
     <div className="space-y-4">
       <div className="space-y-3">
-        {portalApprovals.map((approval) => {
+        {items.map((approval) => {
           const state = states[approval.id] ?? "pending";
           return (
             <div
@@ -56,11 +142,7 @@ export function ApprovalsList() {
 
                 {state === "pending" ? (
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    <Button
-                      onClick={() =>
-                        setStates((current) => ({ ...current, [approval.id]: "approved" }))
-                      }
-                    >
+                    <Button onClick={() => approve(approval)}>
                       <Check className="size-4" aria-hidden="true" />
                       Approve
                     </Button>
@@ -92,6 +174,12 @@ export function ApprovalsList() {
                   onSubmit={(event) => {
                     event.preventDefault();
                     if (!comments[approval.id]?.trim()) return;
+                    if (approval.live) {
+                      saveMilestone(approval.live, undefined);
+                      toast.success("Sent to your PM", {
+                        description: "The plan stays open until they reply.",
+                      });
+                    }
                     setStates((current) => ({ ...current, [approval.id]: "changes" }));
                     setOpenComment(null);
                   }}
@@ -155,7 +243,7 @@ export function ApprovalsList() {
           <p className="text-xs text-muted-foreground">Everything you have approved</p>
         </div>
         <ul className="divide-y divide-border">
-          {approvalHistory.map((item) => (
+          {history.map((item) => (
             <li key={item.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
               <Clock className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
               <div className="min-w-0 flex-1">

@@ -1,24 +1,64 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { NativeSelect } from "@/components/shared/NativeSelect";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { createProject } from "@/app/admin/projects/actions";
+import {
+  useDirectory,
+  type DirectoryBlueprint,
+  type DirectoryClient,
+} from "@/hooks/use-directory";
 
 const MODULES = ["Scheduling", "Client CRM", "Care plans", "Invoicing", "Client portal", "Reports"];
 
-export function NewProjectForm({
+export function NewProjectForm(
+  props: { plain?: boolean; onDone?: () => void } = {},
+) {
+  const { clients, blueprints } = useDirectory();
+
+  if (clients.length === 0) {
+    return (
+      <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
+        Loading clients…
+      </div>
+    );
+  }
+
+  return <NewProjectFormInner {...props} clients={clients} blueprints={blueprints} />;
+}
+
+function NewProjectFormInner({
   plain = false,
   onDone,
-}: { plain?: boolean; onDone?: () => void } = {}) {
-  const [fromBlueprint, setFromBlueprint] = useState("BP-309");
+  clients,
+  blueprints,
+}: {
+  plain?: boolean;
+  onDone?: () => void;
+  clients: DirectoryClient[];
+  blueprints: DirectoryBlueprint[];
+}) {
+  const router = useRouter();
+  const [client, setClient] = useState(clients[0].name);
+  const [company, setCompany] = useState(
+    clients[0].companies[0]?.name ?? "",
+  );
+  const [fromBlueprint, setFromBlueprint] = useState(
+    blueprints[0]?.id ?? "internal",
+  );
+  const selectedClient = clients.find((item) => item.name === client);
   const [name, setName] = useState("Care dashboard and client portal");
   const [pm, setPm] = useState("Alamin");
   const [start, setStart] = useState("2026-11-24");
   const [modules, setModules] = useState<string[]>(["Scheduling", "Client CRM", "Invoicing", "Client portal"]);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   if (saved) {
     return (
@@ -50,15 +90,65 @@ export function NewProjectForm({
       className={plain ? undefined : "rounded-lg border border-border bg-card p-5 lg:p-6"}
       onSubmit={(event) => {
         event.preventDefault();
-        if (!name.trim()) return;
-        setSaved(true);
+        const selected = clients.find((item) => item.name === client);
+        if (!name.trim() || !selected || saving) return;
+        setSaving(true);
+        void createProject({
+          clientId: selected.id,
+          name,
+          blueprintId:
+            fromBlueprint && fromBlueprint !== "internal"
+              ? fromBlueprint
+              : null,
+          pm,
+          start,
+        }).then((result) => {
+          setSaving(false);
+          if (!result.ok) {
+            toast.error(result.error);
+            return;
+          }
+          setSaved(true);
+          toast.success("Project created", {
+            description: `${name} is under ${client}.`,
+          });
+          router.refresh();
+        });
       }}
     >
       <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="p-client" className="text-xs font-medium">Client</Label>
+          <NativeSelect id="p-client" value={client} onChange={(e) => {
+            const next = clients.find((item) => item.name === e.target.value);
+            setClient(e.target.value);
+            setCompany(next?.companies[0]?.name ?? "");
+          }} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+            {clients.map((item) => (
+              <option key={item.id}>{item.name}</option>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="p-company" className="text-xs font-medium">Company</Label>
+          <NativeSelect id="p-company" value={company} onChange={(e) => setCompany(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
+            {(selectedClient?.companies ?? []).map((item) => (
+              <option key={item.name}>{item.name}</option>
+            ))}
+          </NativeSelect>
+          <p className="text-[11px] text-muted-foreground">
+            The company under this client the work belongs to.
+          </p>
+        </div>
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="from" className="text-xs font-medium">Start from</Label>
           <NativeSelect id="from" value={fromBlueprint} onChange={(e) => setFromBlueprint(e.target.value)} className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:border-ring">
-            <option value="BP-309">BP-309 · Brightline Care · Approved · $16,000</option>
+            {blueprints.map((blueprint) => (
+              <option key={blueprint.id} value={blueprint.id}>
+                {blueprint.id} · {blueprint.client} · {blueprint.status} · $
+                {blueprint.price.toLocaleString("en-US")}
+              </option>
+            ))}
             <option value="internal">Internal project (no Blueprint)</option>
           </NativeSelect>
           <p className="text-[11px] text-muted-foreground">

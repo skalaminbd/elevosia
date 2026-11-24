@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Send } from "lucide-react";
+import Link from "next/link";
+import { Check, ListPlus, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function ChangeActions() {
+export function ChangeActions({ projectId }: { projectId?: string }) {
   const [stage, setStage] = useState<"draft" | "sent" | "approved">("draft");
 
   return (
@@ -29,10 +30,22 @@ export function ChangeActions() {
           </>
         ) : null}
         {stage === "approved" ? (
-          <p className="flex items-center gap-1.5 text-xs text-success">
-            <Check className="size-3.5" aria-hidden="true" />
-            Approved. This adds {3} days and creates the change invoice.
-          </p>
+          <>
+            <p className="flex items-center gap-1.5 text-xs text-success">
+              <Check className="size-3.5" aria-hidden="true" />
+              Approved. This adds {3} days and creates the change invoice.
+            </p>
+            {projectId ? (
+              <Button asChild variant="outline" className="w-full">
+                <Link
+                  href={`/admin/projects/${projectId}?tab=milestones`}
+                >
+                  <ListPlus className="size-4" aria-hidden="true" />
+                  Add it as a milestone
+                </Link>
+              </Button>
+            ) : null}
+          </>
         ) : null}
       </div>
       <p className="mt-3 text-[11px] text-muted-foreground">

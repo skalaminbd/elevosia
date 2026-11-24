@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { motion } from "motion/react";
+import { usePathname } from "next/navigation";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { CommandPalette } from "./CommandPalette";
@@ -26,6 +27,7 @@ export function Sidebar({
 }) {
   const reduceMotion = useReducedMotion();
   const { collapsed, setCollapsed, mobileOpen, setMobileOpen } = useSidebar();
+  const pathname = usePathname();
   const [counts, setCounts] = useState(initialCounts);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -44,15 +46,21 @@ export function Sidebar({
         /* keep the last good counts */
       }
     };
+    void load();
     const interval = window.setInterval(load, 60_000);
-    const onFocus = () => load();
+    const onFocus = () => void load();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void load();
+    };
     window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
       cancelled = true;
       window.clearInterval(interval);
       window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [role]);
+  }, [role, pathname]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

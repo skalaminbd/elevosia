@@ -1,0 +1,1 @@
+ALTER TABLE "blueprint_suggestions" ADD COLUMN "decision_note" text;

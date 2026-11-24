@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { FolderKanban, Layers, ShieldCheck } from "lucide-react";
+import { Suspense } from "react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { StatCard } from "@/components/admin/ui/StatCard";
-import { PortalProjectsList } from "@/components/portal/PortalProjectsList";
-import { portalProjects } from "@/lib/portal-data";
+import { PortalProjectsData } from "@/components/portal/PortalProjectsData";
 
 export const metadata: Metadata = {
   title: "Projects | Elevosia client portal",
@@ -18,15 +16,20 @@ export default function PortalProjectsPage() {
         description="Every project, from the first week to the warranty. Open one to see its weekly board."
       />
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatCard label="Projects" value={portalProjects.length} note="1 active, 1 complete" icon={FolderKanban} />
-        <StatCard label="Modules live" value={8} note="Across both projects" icon={Layers} />
-        <StatCard label="Warranty" value="30 days" note="To 18 Dec on booking" icon={ShieldCheck} />
-      </div>
-
-      <div className="mt-4">
-        <PortalProjectsList />
-      </div>
+      <Suspense
+        fallback={
+          <div className="mt-6 space-y-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {[0, 1, 2].map((item) => (
+                <div key={item} className="h-24 rounded-lg border border-border bg-card" />
+              ))}
+            </div>
+            <div className="h-64 rounded-lg border border-border bg-card" />
+          </div>
+        }
+      >
+        <PortalProjectsData />
+      </Suspense>
     </div>
   );
 }

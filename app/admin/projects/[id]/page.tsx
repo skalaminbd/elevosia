@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ExternalLink, Users } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { StatCard } from "@/components/admin/ui/StatCard";
 import { StatusBadge } from "@/components/admin/ui/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { AdminProjectTabs } from "@/components/admin/projects/AdminProjectTabs";
+import { AdminProjectTabsSection } from "@/components/admin/projects/AdminProjectTabsSection";
+import { DbProjectPage } from "@/components/admin/projects/DbProjectPage";
 import { adminClients, adminProjects } from "@/lib/admin-data";
+import { getProjectDetail } from "@/db/queries";
 
 type Params = Promise<{ id: string }>;
 
@@ -21,10 +25,40 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return project ? { title: `${project.name} | Elevosia Admin` } : {};
 }
 
+/** Projects not in the demo set: Postgres first, then the old browser store. */
+async function DbProjectLoader({ id }: { id: string }) {
+  await connection();
+  const detail = await getProjectDetail(id);
+  if (!detail) notFound();
+  return <DbProjectPage detail={detail} />;
+}
+
 export default async function AdminProjectPage({ params }: { params: Params }) {
   const { id } = await params;
   const project = adminProjects.find((item) => item.id === id);
-  if (!project) notFound();
+  // Projects converted from an approved Blueprint live in Postgres.
+  if (!project) {
+    return (
+      <Suspense
+        fallback={
+          <div className="mx-auto w-full max-w-[1920px]">
+            <div className="h-3 w-24 rounded bg-secondary" />
+            <div className="mt-4 h-8 w-64 rounded bg-secondary" />
+            <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+              {[0, 1, 2, 3].map((item) => (
+                <div
+                  key={item}
+                  className="h-24 rounded-lg border border-border bg-card"
+                />
+              ))}
+            </div>
+          </div>
+        }
+      >
+        <DbProjectLoader id={id} />
+      </Suspense>
+    );
+  }
   const client = adminClients.find((item) => item.name === project.client);
 
   return (
@@ -86,7 +120,13 @@ export default async function AdminProjectPage({ params }: { params: Params }) {
       </div>
 
       <div className="mt-4">
-        <AdminProjectTabs projectId={project.id} />
+        <Suspense
+          fallback={
+            <div className="h-96 rounded-lg border border-border bg-card" />
+          }
+        >
+          <AdminProjectTabsSection projectId={project.id} />
+        </Suspense>
       </div>
     </div>
   );

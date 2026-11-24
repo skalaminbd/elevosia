@@ -16,7 +16,10 @@ import {
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { StatusBadge, type BadgeTone } from "@/components/admin/ui/StatusBadge";
 import { Input } from "@/components/ui/input";
-import { adminClients, type ClientStatus } from "@/lib/admin-data";
+import {
+  type AdminClient,
+  type ClientStatus,
+} from "@/lib/admin-data";
 import { Button } from "@/components/ui/button";
 
 const STATUS_OPTIONS = [
@@ -27,6 +30,13 @@ const STATUS_OPTIONS = [
   { id: "Former", label: "Former", icon: Archive },
 ];
 
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("");
+
 const TONE: Record<ClientStatus, BadgeTone> = {
   Active: "success",
   Onboarding: "info",
@@ -36,13 +46,13 @@ const TONE: Record<ClientStatus, BadgeTone> = {
 };
 
 /** Clients table with live search and status filters. */
-export function ClientsTable() {
+export function ClientsTable({ clients }: { clients: AdminClient[] }) {
   const [query, setQuery] = useState("");
   const [statuses, setStatuses] = useState<string[]>([]);
 
   const rows = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return adminClients.filter((client) => {
+    return clients.filter((client) => {
       const matchesStatus =
         statuses.length === 0 || statuses.includes(client.status);
       const matchesQuery =
@@ -52,7 +62,7 @@ export function ClientsTable() {
         client.industry.toLowerCase().includes(needle);
       return matchesStatus && matchesQuery;
     });
-  }, [query, statuses]);
+  }, [query, statuses, clients]);
 
   function exportCsv() {
     const header = [
@@ -134,16 +144,16 @@ export function ClientsTable() {
           rows.map((client) => (
             <li key={client.id} className="px-4 py-3.5">
               <div className="flex items-start gap-3">
-                <Avatar initials={client.initials} />
+                <Avatar initials={initials(client.contact)} />
                 <div className="min-w-0 flex-1">
                   <Link
                     href={`/admin/clients/${client.id}`}
                     className="truncate text-sm font-medium hover:underline"
                   >
-                    {client.name}
+                    {client.contact}
                   </Link>
                   <p className="truncate text-xs text-muted-foreground">
-                    {client.industry} · {client.source}
+                    {client.name} · {client.industry}
                   </p>
                 </div>
                 <StatusBadge tone={TONE[client.status]}>{client.status}</StatusBadge>
@@ -168,7 +178,7 @@ export function ClientsTable() {
         <table className="w-full min-w-[860px] text-left text-sm">
           <thead className="bg-secondary/40 text-xs text-muted-foreground">
             <tr>
-              <th className="px-5 py-2.5 font-medium">Company</th>
+              <th className="px-5 py-2.5 font-medium">Client</th>
               <th className="px-4 py-2.5 font-medium">Status</th>
               <th className="px-4 py-2.5 font-medium">PM</th>
               <th className="px-4 py-2.5 font-medium">Projects</th>
@@ -192,16 +202,16 @@ export function ClientsTable() {
                 >
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      <Avatar initials={client.initials} />
+                      <Avatar initials={initials(client.contact)} />
                       <div className="min-w-0">
                         <Link
                           href={`/admin/clients/${client.id}`}
                           className="truncate font-medium hover:underline"
                         >
-                          {client.name}
+                          {client.contact}
                         </Link>
                         <p className="truncate text-xs text-muted-foreground">
-                          {client.industry} · {client.source}
+                          {client.name} · {client.industry}
                         </p>
                       </div>
                     </div>
@@ -242,7 +252,7 @@ export function ClientsTable() {
       </div>
 
       <p className="border-t border-border px-5 py-3 text-xs text-muted-foreground">
-        {rows.length} of {adminClients.length} clients · sample data
+        {rows.length} of {clients.length} clients · live data
       </p>
     </div>
   );

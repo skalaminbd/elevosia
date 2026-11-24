@@ -1,61 +1,66 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { connection } from "next/server";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ArrowLeft, Clock, ShieldCheck, User } from "lucide-react";
-import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { StatCard } from "@/components/admin/ui/StatCard";
-import { StatusBadge } from "@/components/admin/ui/StatusBadge";
-import { TicketConversation } from "@/components/admin/tickets/TicketConversation";
-import { tickets } from "@/lib/admin-data";
+import { TicketWorkspace } from "@/components/admin/tickets/TicketWorkspace";
+import { getTicket } from "@/db/queries";
+import { ticketRecords } from "@/lib/admin-data";
 
 type Params = Promise<{ id: string }>;
 
 export function generateStaticParams() {
-  return tickets.map((ticket) => ({ id: ticket.id }));
+  return ticketRecords.map((ticket) => ({ id: ticket.id }));
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
   const { id } = await params;
-  const ticket = tickets.find((item) => item.id === id);
-  return ticket ? { title: `${ticket.subject} | Elevosia Admin` } : {};
+  return { title: `${id} | Elevosia Admin` };
 }
 
-export default async function TicketDetailPage({ params }: { params: Params }) {
+async function TicketLoader({ id }: { id: string }) {
+  await connection();
+  const ticket = await getTicket(id);
+  if (!ticket) {
+    return (
+      <div className="mx-auto w-full max-w-[1400px]">
+        <Link
+          href="/admin/tickets"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          Back to tickets
+        </Link>
+        <p className="mt-6 text-sm text-muted-foreground">
+          That ticket does not exist yet.
+        </p>
+      </div>
+    );
+  }
+  return <TicketWorkspace initialTicket={ticket} />;
+}
+
+export default async function TicketDetailPage({
+  params,
+}: {
+  params: Params;
+}) {
   const { id } = await params;
-  const ticket = tickets.find((item) => item.id === id);
-  if (!ticket) notFound();
 
   return (
-    <div className="mx-auto w-full max-w-[1920px]">
-      <Link href="/admin/tickets" className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="size-3.5" aria-hidden="true" />
-        Ticket queue
-      </Link>
-      <PageHeader
-        title={ticket.subject}
-        meta={`${ticket.client} · ${ticket.id}`}
-        description="Reply to the client or leave an internal note. SLA timers reset on priority changes."
-        className="mt-3"
-      >
-        <StatusBadge tone={ticket.priority === "P1" ? "danger" : ticket.priority === "P2" ? "warning" : "neutral"}>
-          {ticket.priority}
-        </StatusBadge>
-        <StatusBadge tone={ticket.status === "Resolved" ? "success" : "accent"}>
-          {ticket.status}
-        </StatusBadge>
-        {ticket.warranty ? <StatusBadge tone="accent">Warranty</StatusBadge> : null}
-      </PageHeader>
-
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label="SLA" value={ticket.sla} note="From the care plan" icon={Clock} tone={ticket.close ? "danger" : "default"} />
-        <StatCard label="Care plan" value={ticket.care} note={ticket.warranty ? "Under warranty" : "Billable"} icon={ShieldCheck} />
-        <StatCard label="Assignee" value={ticket.assignee ?? "Unassigned"} note="Claim or reassign" icon={User} />
-        <StatCard label="Project" value="Care dashboard" note="Brightline Care" icon={ShieldCheck} />
-      </div>
-
-      <div className="mt-4">
-        <TicketConversation ticket={ticket} />
-      </div>
-    </div>
+    <Suspense
+      fallback={
+        <div className="mx-auto w-full max-w-[1600px]">
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="h-96 rounded-lg border border-border bg-card" />
+            <div className="hidden h-96 rounded-lg border border-border bg-card lg:block" />
+          </div>
+        </div>
+      }
+    >
+      <TicketLoader id={id} />
+    </Suspense>
   );
 }
